@@ -25,7 +25,8 @@ STRINGSRC	=	ft_strmapi.c ft_striteri.c \
 MEMSRC		=	ft_memset.c ft_bzero.c \
 				ft_memcpy.c ft_memmove.c \
 				ft_calloc.c ft_memcmp.c \
-				ft_memchr.c
+				ft_memchr.c stock_malloc.c \
+				stock_free.c
 
 WRITESRC	=	ft_putstr_fd.c ft_putchar_fd.c \
 				ft_putnbr_fd.c ft_putendl_fd.c
