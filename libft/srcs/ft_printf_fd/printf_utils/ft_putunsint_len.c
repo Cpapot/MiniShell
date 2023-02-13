@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 14:06:02 by cpapot            #+#    #+#             */
-/*   Updated: 2023/01/18 20:06:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/13 19:19:30 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	*ft_uitoa(unsigned int n)
 	return (result);
 }
 
-ssize_t	ft_putunsint_len(int fd, unsigned int nbr)
+ssize_t	ft_putunsint_len_fd(int fd, unsigned int nbr)
 {
 	char	*nbr_str;
 	ssize_t	len;

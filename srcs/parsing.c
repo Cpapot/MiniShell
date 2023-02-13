@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnull_len.c                                   :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/23 12:17:28 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/13 19:19:12 by cpapot           ###   ########.fr       */
+/*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
+/*   Updated: 2023/02/13 20:12:20 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_printf_fd.h"
+#include "../inc/minishell.h"
 
-ssize_t	ft_putnull_len_fd(int fd)
+void	parsing(t_info *info)
 {
-	ssize_t	len;
+	char	**split;
+	t_list	*start;
+	int		i;
 
-	len = write(fd, "(null)", 6);
-	return (len);
+	i = 1;
+	split = ft_split(info->prompt_string, ' ', &info->parsing);
+	if (split == NULL)
+		print_error(info, "Memory error");
+	start = ft_lstnew(split[0], &info->parsing);
+	while (split[i])
+	{
+		ft_lstadd_back(&start, ft_lstnew(split[i], &info->parsing));
+		i++;
+	}
+	info->command = &start;
 }

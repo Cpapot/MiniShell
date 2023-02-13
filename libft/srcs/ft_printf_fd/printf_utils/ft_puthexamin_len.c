@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 17:08:46 by cpapot            #+#    #+#             */
-/*   Updated: 2023/01/18 20:04:20 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/13 19:18:57 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	*ft_convert_hexa_min(unsigned int nbr)
 	return (result);
 }
 
-ssize_t	ft_puthexamin_len(int fd, unsigned int nbr)
+ssize_t	ft_puthexamin_len_fd(int fd, unsigned int nbr)
 {
 	ssize_t	len;
 	char	*str;

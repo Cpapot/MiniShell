@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/01 20:26:26 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/01 20:26:29 by cpapot           ###   ########.fr       */
+/*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
+/*   Updated: 2023/02/13 19:50:52 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	test(void)
+void	free_all(t_info *info)
 {
-	ft_printf("ok");
+	stock_free(&info->parsing);
+}
+
+void	print_error(t_info *info, char *error)
+{
+	ft_printf_fd(2, RED"%s\n"WHITE, error);
+	free_all(info);
+	exit(1);
+
 }

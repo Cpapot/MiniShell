@@ -7,9 +7,10 @@
 
 HEADERS 	=	minishell.h
 
-SRCS		=	minishell.c test.c
+SRCS		=	minishell.c minishell_utils.c \
+				parsing.c
 
-LIBFTSRC	=	libftprintf.a libft.a
+LIBFTSRC	=	libftprintf.a libft.a printffd.a
 
 #					Directories
 
