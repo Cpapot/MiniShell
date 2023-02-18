@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/15 18:05:06 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/18 18:56:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(void)
 
 	prompt(&info);
 	minishell_init(&info);
-	lexer(&info);
+	info.command = lexer(&info);
 	lst = *info.command;
 	while (lst)
 	{

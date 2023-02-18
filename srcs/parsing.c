@@ -6,16 +6,17 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/15 18:08:57 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/18 18:58:34 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	lexer(t_info *info)
+t_list	**lexer(t_info *info)
 {
 	char	**split;
 	t_list	*start;
+	t_list	**result;
 	int		i;
 
 	i = 1;
@@ -28,13 +29,14 @@ void	lexer(t_info *info)
 		ft_lstadd_back(&start, ft_lstnew(split[i], &info->parsing));
 		i++;
 	}
-	info->command = &start;
+	result = &start;
+	return (result);
 }
 
 // convert splitted list to tab whith the
 //command and another tab with the in ,out & err
-void	parser(t_info *info)
+/*void	parser(t_info *info)
 {
 	t_list	*start;
-	
-}
+
+}*/
