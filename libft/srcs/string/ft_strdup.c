@@ -6,13 +6,13 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 16:55:26 by cpapot            #+#    #+#             */
-/*   Updated: 2022/11/30 12:05:11 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/22 16:40:52 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(const char *s1, t_memlist **stock)
 {
 	char	*result;
 	int		len;
@@ -20,7 +20,7 @@ char	*ft_strdup(const char *s1)
 
 	len = ft_strlen(s1);
 	i = 0;
-	result = malloc(sizeof(char) * (len + 1));
+	result = stock_malloc(sizeof(char) * (len + 1), stock);
 	if (result == 0)
 		return (0);
 	while (i != len)

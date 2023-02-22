@@ -8,7 +8,7 @@
 HEADERS 	=	minishell.h
 
 SRCS		=	minishell.c minishell_utils.c \
-				parsing.c
+				parsing.c parsing_utils.c
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
 
@@ -51,7 +51,7 @@ NAME		=	minishell
 
 AR			=	ar rc
 
-CFLAGS		=	-Wall -Wextra -Werror -g3
+CFLAGS		=	-Wall -Wextra -Werror -lreadline5
 
 CC			=	cc
 
@@ -70,7 +70,7 @@ all : PRINTMINISHELL ${NAME}
 
 ${NAME}: $(OBJS)
 	@${MAKE} --no-print-directory lib
-	@${CC} ${OBJS} ${LIBFT} -o ${NAME}
+	@${CC} ${OBJS} ${LIBFT} -o ${NAME} -lreadline
 	@echo -n "${SUPPR}	${GREEN}${NAME} : 🆗${DEFAULT}\n\n"
 
 
