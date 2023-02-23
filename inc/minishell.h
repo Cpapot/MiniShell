@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/22 17:48:30 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/23 13:48:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,7 @@ void		free_all(t_info *info);
 
 /*						parsing							*/
 t_list		**lexer(t_info *info);
-void		parser(t_info *info);
 
 /*						parsing utils					*/
-char		**split_command(t_info *info);
-t_list		*skip_last_world(t_info *info, int i);
-int			count_commands_world(t_info *info, int i);
 
 #endif
