@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 15:20:49 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/22 16:41:23 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/24 16:08:20 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # define INT_MIN	-2147483647
 # define LLONG_MAX	9223372036854775807
 # define LLONG_MIN	-9223372036854775807
-
 
 # define RESET              "\x1b[0m"
 # define BLACK              "\x1b[30m"

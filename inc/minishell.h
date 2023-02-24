@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/23 13:48:21 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/24 16:12:59 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ void		free_all(t_info *info);
 
 /*						parsing							*/
 t_list		**lexer(t_info *info);
+
+/*						shell_split						*/
+char		**shell_split(char *str, t_memlist **stock);
 
 /*						parsing utils					*/
 

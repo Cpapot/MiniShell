@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 10:35:50 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/23 14:12:30 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/24 17:11:05 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	**ft_split(char const *str, char c, t_memlist **stock)
 	int		word_len;
 	int		i;
 	char	**result;
-	char	**result;
+	int		word_count;
 
 	if (!str)
 		return (NULL);

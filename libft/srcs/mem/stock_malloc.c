@@ -6,12 +6,11 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 19:40:10 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/12 19:40:37 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/24 16:08:33 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
-
 
 static void	lst_mem_add(t_memlist **lst, t_memlist *new)
 {
