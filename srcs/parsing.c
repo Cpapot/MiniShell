@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/27 17:13:53 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/27 23:32:06 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ t_list	**lexer(t_info *info)
 	int		i;
 
 	i = 1;
-	split = shell_split(info->prompt_string, &info->lexer);
+	split = shell_split(info->prompt_string, &info->parsing);
 	if (split == NULL)
 		print_error(info, "Memory error");
-	start = ft_lstnew(split[0], &info->lexer);
+	start = ft_lstnew(split[0], &info->parsing);
 	while (split[i])
 	{
-		ft_lstadd_back(&start, ft_lstnew(split[i], &info->lexer));
+		ft_lstadd_back(&start, ft_lstnew(split[i], &info->parsing));
 		i++;
 	}
 	result = &start;

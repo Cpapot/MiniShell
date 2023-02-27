@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/27 18:48:25 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/27 23:22:02 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	count_word(char const *str)
 			&& (str[i + 1] != '<' && str[i + 1] != '>'))
 			count++;
 		if ((str[i] != '<' && str[i] != '>' && str[i] != ' ')
-				&& (str[i + 1] == '<' || str[i + 1] == '>'))
+			&& (str[i + 1] == '<' || str[i + 1] == '>'))
 			count++;
 		i++;
 	}
@@ -69,6 +69,26 @@ static char	*ft_strndup(const char *s1, size_t n, t_memlist **stock)
 	return (result);
 }
 
+static int	world_len(char *str)
+{
+	int	u;
+
+	u = 0;
+	while ((str[u] != ' ' && str[u]))
+	{
+		if (u == 0 && (str[u] == '<' || str[u] == '>'))
+		{
+			while (str[u] == '<' || str[u] == '>')
+				u++;
+			break ;
+		}
+		if (str[u] == '<' || str[u] == '>')
+			break ;
+		u++;
+	}
+	return (u);
+}
+
 char	**shell_split(char *str, t_memlist **stock)
 {
 	int		u;
@@ -87,19 +107,7 @@ char	**shell_split(char *str, t_memlist **stock)
 	while (i != word_count)
 	{
 		str = ft_next_char((char *)&str[u]);
-		u = 0;
-		while ((str[u] != ' ' && str[u]))
-		{
-			if (u == 0 && (str[u] == '<' || str[u] == '>'))
-			{
-				while (str[u] == '<' || str[u] == '>')
-					u++;
-				break ;
-			}
-			if (str[u] == '<' || str[u] == '>')
-				break ;
-			u++;
-		}
+		u = world_len(str);
 		result[i] = ft_strndup(str, u, stock);
 		if (!result[i++])
 			return (stock_free(stock), NULL);

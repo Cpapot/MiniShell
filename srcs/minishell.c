@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/27 18:49:27 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/27 23:32:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ int	main(void)
 	t_info		info;
 	t_list		*lst;
 
-	info.prompt_string = readline(BLUE"Minishell: "WHITE);
-	//info.prompt_string = ft_strdup("cdd -n -c   tdest<<alrd", &qie);
+	info.prompt_string = readline(BLUE"Minishell $>"WHITE);
 	minishell_init(&info);
 	info.command = lexer(&info);
 	lst = *info.command;
@@ -34,5 +33,5 @@ int	main(void)
 		lst = lst->next;
 	}
 	free(info.prompt_string);
-	stock_free(&(info.parsing));
+	stock_free(&info.parsing);
 }
