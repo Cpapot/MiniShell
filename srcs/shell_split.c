@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/24 17:09:47 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/27 18:48:25 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ static int	count_word(char const *str)
 				&& str[i + 1] != '\0'))
 			count++;
 		if ((str[i] == '<' || str[i] == '>')
-			&& !(str[i + 1] == '<' || str[i + 1] == '>'))
+			&& (str[i + 1] != '<' && str[i + 1] != '>'))
+			count++;
+		if ((str[i] != '<' && str[i] != '>' && str[i] != ' ')
+				&& (str[i + 1] == '<' || str[i + 1] == '>'))
 			count++;
 		i++;
 	}
@@ -68,7 +71,7 @@ static char	*ft_strndup(const char *s1, size_t n, t_memlist **stock)
 
 char	**shell_split(char *str, t_memlist **stock)
 {
-	int		word_len;
+	int		u;
 	int		i;
 	char	**result;
 	int		word_count;
@@ -76,18 +79,28 @@ char	**shell_split(char *str, t_memlist **stock)
 	if (!str)
 		return (NULL);
 	i = 0;
-	word_len = 0;
+	u = 0;
 	word_count = count_word(str);
 	result = stock_malloc(sizeof(char *) * (word_count + 1), stock);
 	if (!result)
 		return (NULL);
 	while (i != word_count)
 	{
-		str = ft_next_char((char *)&str[word_len]);
-		word_len = 0;
-		while ((str[word_len] != ' ' || str[word_len] != '<' || str[word_len] != '>') && str[word_len])
-			word_len++;
-		result[i] = ft_strndup(str, word_len, stock);
+		str = ft_next_char((char *)&str[u]);
+		u = 0;
+		while ((str[u] != ' ' && str[u]))
+		{
+			if (u == 0 && (str[u] == '<' || str[u] == '>'))
+			{
+				while (str[u] == '<' || str[u] == '>')
+					u++;
+				break ;
+			}
+			if (str[u] == '<' || str[u] == '>')
+				break ;
+			u++;
+		}
+		result[i] = ft_strndup(str, u, stock);
 		if (!result[i++])
 			return (stock_free(stock), NULL);
 	}

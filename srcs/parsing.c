@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/24 17:17:08 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/27 17:13:53 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ t_list	**lexer(t_info *info)
 	start = ft_lstnew(split[0], &info->lexer);
 	while (split[i])
 	{
-		ft_printf("\"%s\"\n", split[i]);
 		ft_lstadd_back(&start, ft_lstnew(split[i], &info->lexer));
 		i++;
 	}

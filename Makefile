@@ -51,7 +51,7 @@ NAME		=	minishell
 
 AR			=	ar rc
 
-CFLAGS		=	-Wall -Wextra -Werror -lreadline5
+CFLAGS		=	-Wall -Wextra -Werror -lreadline5 -g3
 
 CC			=	cc
 
