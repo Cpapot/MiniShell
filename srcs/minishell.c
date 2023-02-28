@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/28 15:05:28 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/02/28 22:59:43 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,43 @@ void	minishell_init(t_info *info)
 {
 	info->parsing = NULL;
 	info->lexer = NULL;
+	info->fd.stderr = 2;
+	info->fd.stdin = 0;
+	info->fd.stdout = 1;
+}
+
+void	close_minishell(t_info	*info)
+{
+	t_list		*lst;
+
+	if (info->prompt_string != NULL && info->command != NULL)
+	{
+		lst = *info->command;
+		while (lst)
+		{
+			ft_printf("%s\n", lst->content);
+			lst = lst->next;
+		}
+	}
+	ft_printf("stdin :%d\n", info->fd.stdin);
+	ft_printf("stdout :%d\n", info->fd.stdout);
+	ft_printf("stderr :%d\n", info->fd.stderr);
+	stock_free(&info->parsing);
+	stock_free(&info->lexer);
 }
 
 int	main(void)
 {
 	t_info		info;
-	t_list		*lst;
 
-	info.prompt_string = readline(BLUE"Minishell $>"WHITE);
 	minishell_init(&info);
-	info.command = parsing(&info);
-	lst = *info.command;
-	while (lst)
+	//info.prompt_string = ft_strdup("shhhes",&info.parsing);
+	while (1)
 	{
-		ft_printf("%s\n", lst->content);
-		lst = lst->next;
+		info.prompt_string = readline(BLUE"Minishell $>"WHITE);
+		if (strlen(info.prompt_string) != 0)
+			break ;
 	}
-	ft_printf("stderr :%d\n", info.fd.stderr);
-	ft_printf("stdin :%d\n", info.fd.stdin);
-	ft_printf("stdout :%d\n", info.fd.stdout);
-	free(info.prompt_string);
-	stock_free(&info.parsing);
+	info.command = parsing(&info);
+	close_minishell(&info);
 }
