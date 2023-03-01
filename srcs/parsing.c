@@ -57,6 +57,10 @@ t_list	*find_redirection(t_list *lst, t_info *info)
 			lst = out_redirection(tmp, index, info);
 		else if (!ft_strncmp(lst->content, "<", ft_strlen(lst->content)))
 			lst = in_redirection(tmp, index, info);
+        else if (!ft_strncmp(lst->content, ">>", ft_strlen(lst->content)))
+            lst = out_double_redirection(tmp, index, info);
+        else if (!ft_strncmp(lst->content, "<<", ft_strlen(lst->content)))
+            lst = in_double_redirection(tmp, index, info);
 	}
 	lst = tmp;
 	return (lst);
