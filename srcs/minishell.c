@@ -37,6 +37,7 @@ void	close_minishell(t_info	*info)
 	ft_printf("stdin :%d\n", info->fd.stdin);
 	ft_printf("stdout :%d\n", info->fd.stdout);
 	ft_printf("stderr :%d\n", info->fd.stderr);
+    ft_printf_fd(info->fd.stdout, "sassslut\n");
 	stock_free(&info->parsing);
 	stock_free(&info->lexer);
 }

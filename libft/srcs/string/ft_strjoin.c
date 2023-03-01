@@ -12,7 +12,7 @@
 
 #include "../../includes/libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2, t_memlist **stock)
 {
 	char	*strs;
 	int		i;
@@ -22,7 +22,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	u = 0;
 	if (!s1 || !s2)
 		return (NULL);
-	strs = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	strs = stock_malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1), stock);
 	if (strs == NULL)
 		return (NULL);
 	while (s1[i] != '\0')

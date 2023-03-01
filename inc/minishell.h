@@ -21,19 +21,21 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 
-/*
-	si aucune redirection :
-		entrée standard (fd = 0)
-		sortie standard (fd = 1)
-		sortie erreur (fd = 2)
-*/
+# define NL         "\n"
+
 typedef struct s_fd
 {
 	int	stdout;
 	int	stdin;
 	int	stderr;
 }	t_fd;
-
+/*
+typedef struct s_commands
+{
+    t_list  *command;
+    t_fd    fd;
+}   t_commands;
+*/
 typedef struct s_info
 {
 	char		*prompt_string;
@@ -58,6 +60,9 @@ char		**shell_split(char *str, t_memlist **stock);
 /*						redirection						*/
 t_list		*out_redirection(t_list	*lst, int index, t_info *info);
 t_list		*in_redirection(t_list	*lst, int index, t_info *info);
+t_list	    *out_double_redirection(t_list	*lst, int index, t_info *info);
+t_list	    *in_double_redirection(t_list	*lst, int index, t_info *info);
+
 
 /*						parsing utils					*/
 
