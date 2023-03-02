@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/28 22:53:21 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/02 16:43:04 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ t_list	*find_redirection(t_list *lst, t_info *info)
 			lst = out_redirection(tmp, index, info);
 		else if (!ft_strncmp(lst->content, "<", ft_strlen(lst->content)))
 			lst = in_redirection(tmp, index, info);
-        else if (!ft_strncmp(lst->content, ">>", ft_strlen(lst->content)))
-            lst = out_double_redirection(tmp, index, info);
-        else if (!ft_strncmp(lst->content, "<<", ft_strlen(lst->content)))
-            lst = in_double_redirection(tmp, index, info);
+		else if (!ft_strncmp(lst->content, ">>", ft_strlen(lst->content)))
+			lst = out_double_redirection(tmp, index, info);
+		else if (!ft_strncmp(lst->content, "<<", ft_strlen(lst->content)))
+			lst = in_double_redirection(tmp, index, info);
 	}
 	lst = tmp;
 	return (lst);
@@ -72,8 +72,9 @@ t_list	**parsing(t_info *info)
 
 	if (ft_strlen(info->prompt_string) == 0)
 		return (NULL);
+	//gerer les quotes
 	result = lexer(info);
-	//avant ca gerer les pipes et avoir une structure pour chaque commande et les quote
+	//gerer les pipes
 	*result = find_redirection(*result, info);
 	return (result);
 }

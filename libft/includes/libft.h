@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 15:20:49 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/28 17:19:19 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/02 16:40:35 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@
 # define LLONG_MAX	9223372036854775807
 # define LLONG_MIN	-9223372036854775807
 
-# define RESET              "\x1b[0m"
-# define BLACK              "\x1b[30m"
-# define RED                "\x1b[31m"
-# define GREEN              "\x1b[32m"
-# define YELLOW             "\x1b[33m"
-# define BLUE               "\x1b[34m"
-# define MAGENTA            "\x1b[35m"
-# define CYAN               "\x1b[36m"
-# define WHITE              "\x1b[37m"
+# define RESET              "\001\x1b[0m\002"
+# define BLACK              "\001\x1b[30m\002"
+# define RED                "\001\x1b[31m\002"
+# define GREEN              "\001\x1b[32m\002"
+# define YELLOW             "\001\x1b[33m\002"
+# define BLUE               "\001\x1b[34m\002"
+# define MAGENTA            "\001\x1b[35m\002"
+# define CYAN               "\001\x1b[36m\002"
+# define WHITE              "\001\x1b[37m\002"
 
 typedef struct s_memstock
 {

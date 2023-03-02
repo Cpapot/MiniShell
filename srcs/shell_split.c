@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/27 23:22:02 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/02 16:07:16 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ static int	count_word(char const *str)
 		if (str[i] == ' ' && (!((str[i + 1] == ' '))
 				&& str[i + 1] != '\0'))
 			count++;
-		if ((str[i] == '<' || str[i] == '>')
-			&& (str[i + 1] != '<' && str[i + 1] != '>'))
+		if ((str[i] == '<' || str[i] == '>' || str[i] == '|')
+			&& (str[i + 1] != '<' && str[i + 1] != '>' && str[i + 1] != '|'))
 			count++;
-		if ((str[i] != '<' && str[i] != '>' && str[i] != ' ')
-			&& (str[i + 1] == '<' || str[i + 1] == '>'))
+		if ((str[i] != '<' && str[i] != '>' && str[i] != ' ' && str[i] != '|')
+			&& (str[i + 1] == '<' || str[i + 1] == '>' || str[i + 1] == '|'))
 			count++;
 		i++;
 	}
@@ -76,9 +76,9 @@ static int	world_len(char *str)
 	u = 0;
 	while ((str[u] != ' ' && str[u]))
 	{
-		if (u == 0 && (str[u] == '<' || str[u] == '>'))
+		if (u == 0 && (str[u] == '<' || str[u] == '>' || str[u] == '|'))
 		{
-			while (str[u] == '<' || str[u] == '>')
+			while (str[u] == '<' || str[u] == '>' || str[u] == '>')
 				u++;
 			break ;
 		}
