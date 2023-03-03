@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/02 16:43:04 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/03 16:21:51 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,16 @@ t_list	*find_redirection(t_list *lst, t_info *info)
 	return (lst);
 }
 
-t_list	**parsing(t_info *info)
+t_commands	*parsing(t_info *info)
 {
-	t_list	**result;
+	t_list		**lst;
+	t_commands	*result;
 
 	if (ft_strlen(info->prompt_string) == 0)
 		return (NULL);
 	//gerer les quotes
-	result = lexer(info);
-	//gerer les pipes
-	*result = find_redirection(*result, info);
+	lst = lexer(info);
+	result = split_pipe(info, *lst);
+	//*lst = find_redirection(*lst, info);
 	return (result);
 }
