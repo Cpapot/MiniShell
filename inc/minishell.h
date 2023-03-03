@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/03 16:22:06 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/04 00:48:15 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,18 @@ typedef struct s_fd
 
 typedef struct s_commands
 {
-	t_list	**command;
+	t_list	*command;
 	t_fd	fd;
 }	t_commands;
 
 typedef struct s_info
 {
 	char		*prompt_string;
-	t_commands	**final_parse;
+	t_commands	*final_parse;
 	t_fd		fd;
 	t_memlist	*parsing;
 	t_memlist	*lexer;
+	int			tmp;
 	t_list		**command;
 }	t_info;
 
@@ -55,7 +56,7 @@ t_list		**lexer(t_info *info);
 t_commands	*parsing(t_info *info);
 
 /*						split_pipe						*/
-t_commands	*split_pipe(t_info *info,t_list *lst);
+t_commands	*split_pipe(t_info *info, t_list *lst);
 
 /*						shell_split						*/
 char		**shell_split(char *str, t_memlist **stock);

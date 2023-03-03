@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/03 16:21:51 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/04 00:51:10 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,21 @@ t_list	**lexer(t_info *info)
 	return (result);
 }
 
-t_list	*find_redirection(t_list *lst, t_info *info)
+t_list	*check_redirection(t_list *lst, int index, t_list *tmp, t_info *info)
+{
+	if (lst && !ft_strncmp(lst->content, ">", ft_strlen(lst->content)))
+		lst = out_redirection(tmp, index, info);
+	else if (lst && !ft_strncmp(lst->content, "<", ft_strlen(lst->content)))
+		lst = in_redirection(tmp, index, info);
+	else if (lst && !ft_strncmp(lst->content, ">>", ft_strlen(lst->content)))
+		lst = out_double_redirection(tmp, index, info);
+	else if (lst && !ft_strncmp(lst->content, "<<", ft_strlen(lst->content)))
+		lst = in_double_redirection(tmp, index, info);
+	return (lst);
+}
+
+
+t_list	*find_redirection(t_list *lst, t_info *info, int id)
 {
 	t_list	*tmp;
 	int		index;
@@ -51,16 +65,8 @@ t_list	*find_redirection(t_list *lst, t_info *info)
 			lst = lst->next;
 			index++;
 		}
-		if (lst == NULL)
-			break ;
-		else if (!ft_strncmp(lst->content, ">", ft_strlen(lst->content)))
-			lst = out_redirection(tmp, index, info);
-		else if (!ft_strncmp(lst->content, "<", ft_strlen(lst->content)))
-			lst = in_redirection(tmp, index, info);
-		else if (!ft_strncmp(lst->content, ">>", ft_strlen(lst->content)))
-			lst = out_double_redirection(tmp, index, info);
-		else if (!ft_strncmp(lst->content, "<<", ft_strlen(lst->content)))
-			lst = in_double_redirection(tmp, index, info);
+		info->tmp = id;
+		lst = check_redirection(lst, index, tmp, info);
 	}
 	lst = tmp;
 	return (lst);
@@ -70,12 +76,20 @@ t_commands	*parsing(t_info *info)
 {
 	t_list		**lst;
 	t_commands	*result;
+	int			i;
 
+	i = 0;
 	if (ft_strlen(info->prompt_string) == 0)
 		return (NULL);
 	//gerer les quotes
 	lst = lexer(info);
 	result = split_pipe(info, *lst);
-	//*lst = find_redirection(*lst, info);
+	info->final_parse = result;
+	while (result[i].command != NULL)
+	{
+		result[i].command
+			= find_redirection(result[i].command, info, i);
+		i++;
+	}
 	return (result);
 }
