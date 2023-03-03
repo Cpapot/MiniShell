@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/27 23:22:02 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/03 16:37:18 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	world_len(char *str)
 	{
 		if (u == 0 && (str[u] == '<' || str[u] == '>'))
 		{
-			while (str[u] == '<' || str[u] == '>')
+			while (str[u] == '<' || str[u] == '>' || str[u] == '>')
 				u++;
 			break ;
 		}
