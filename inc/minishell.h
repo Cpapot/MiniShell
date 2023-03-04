@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/04 00:48:15 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/04 16:00:23 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,5 @@ t_list		*out_double_redirection(t_list	*lst, int index, t_info *info);
 t_list		*in_double_redirection(t_list	*lst, int index, t_info *info);
 
 /*						parsing utils					*/
-
 
 #endif

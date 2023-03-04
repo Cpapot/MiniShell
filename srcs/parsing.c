@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/04 00:51:10 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/04 18:53:02 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,14 @@ t_list	**lexer(t_info *info)
 		print_error(info, "Memory error");
 	if (split[0] != NULL)
 		start = ft_lstnew(split[0], &info->parsing);
+	printf("%s ", split[0]);
 	while (split[i] != NULL)
 	{
+		printf("%s ", split[i]);
 		ft_lstadd_back(&start, ft_lstnew(split[i], &info->parsing));
 		i++;
 	}
+	printf("\n\n");
 	result = &start;
 	return (result);
 }
@@ -47,7 +50,6 @@ t_list	*check_redirection(t_list *lst, int index, t_list *tmp, t_info *info)
 		lst = in_double_redirection(tmp, index, info);
 	return (lst);
 }
-
 
 t_list	*find_redirection(t_list *lst, t_info *info, int id)
 {
