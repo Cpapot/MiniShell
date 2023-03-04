@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/04 00:51:46 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/04 18:54:23 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ int	main(void)
 	t_info		info;
 
 	minishell_init(&info);
-	while (1)
+	/*while (1)
 	{
 		info.prompt_string = readline(BLUE"Minishell $>"WHITE);
 		if (strlen(info.prompt_string) != 0)
 			break ;
-	}
-	//info.prompt_string = ft_strdup("salut <test", &info.parsing);
+	}*/
+	info.prompt_string = ft_strdup("salut|ok>>ya|oui >ok ko|alors", &info.parsing);
 	info.final_parse = parsing(&info);
 	close_minishell(&info);
 }
