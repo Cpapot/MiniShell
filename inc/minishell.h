@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/04 16:00:23 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/07 16:28:07 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <fcntl.h>
 
 # define NL			"\n"
+# define SP			" "
 
 typedef struct s_fd
 {
@@ -59,7 +60,7 @@ t_commands	*parsing(t_info *info);
 t_commands	*split_pipe(t_info *info, t_list *lst);
 
 /*						shell_split						*/
-char		**shell_split(char *str, t_memlist **stock);
+t_list		*shell_split(char *str, t_memlist **stock);
 
 /*						redirection						*/
 t_list		*out_redirection(t_list	*lst, int index, t_info *info);
@@ -67,6 +68,11 @@ t_list		*in_redirection(t_list	*lst, int index, t_info *info);
 t_list		*out_double_redirection(t_list	*lst, int index, t_info *info);
 t_list		*in_double_redirection(t_list	*lst, int index, t_info *info);
 
+/*						quote							*/
+t_list		*regroup_quote(t_list	*lst, t_info *info);
+
+
 /*						parsing utils					*/
+char		*ft_strndup(const char *s1, size_t n, t_memlist **stock);
 
 #endif

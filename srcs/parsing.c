@@ -6,12 +6,12 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/04 18:53:02 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/07 16:38:19 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
+/*
 t_list	**lexer(t_info *info)
 {
 	char	**split;
@@ -37,7 +37,7 @@ t_list	**lexer(t_info *info)
 	result = &start;
 	return (result);
 }
-
+*/
 t_list	*check_redirection(t_list *lst, int index, t_list *tmp, t_info *info)
 {
 	if (lst && !ft_strncmp(lst->content, ">", ft_strlen(lst->content)))
@@ -76,16 +76,15 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 
 t_commands	*parsing(t_info *info)
 {
-	t_list		**lst;
+	t_list		*lst;
 	t_commands	*result;
 	int			i;
 
 	i = 0;
 	if (ft_strlen(info->prompt_string) == 0)
 		return (NULL);
-	//gerer les quotes
-	lst = lexer(info);
-	result = split_pipe(info, *lst);
+	lst = shell_split(info->prompt_string, &info->parsing);
+	result = split_pipe(info, lst);
 	info->final_parse = result;
 	while (result[i].command != NULL)
 	{
