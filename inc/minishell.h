@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/28 22:21:01 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/07 16:28:07 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 
-# define NL         "\n"
+# define NL			"\n"
+# define SP			" "
 
 typedef struct s_fd
 {
@@ -29,21 +30,22 @@ typedef struct s_fd
 	int	stdin;
 	int	stderr;
 }	t_fd;
-/*
+
 typedef struct s_commands
 {
-    t_list  *command;
-    t_fd    fd;
-}   t_commands;
-*/
+	t_list	*command;
+	t_fd	fd;
+}	t_commands;
+
 typedef struct s_info
 {
 	char		*prompt_string;
+	t_commands	*final_parse;
 	t_fd		fd;
 	t_memlist	*parsing;
 	t_memlist	*lexer;
+	int			tmp;
 	t_list		**command;
-	t_list		**final;
 }	t_info;
 
 /*						minishell_utils					*/
@@ -52,19 +54,25 @@ void		free_all(t_info *info);
 
 /*						parsing							*/
 t_list		**lexer(t_info *info);
-t_list		**parsing(t_info *info);
+t_commands	*parsing(t_info *info);
+
+/*						split_pipe						*/
+t_commands	*split_pipe(t_info *info, t_list *lst);
 
 /*						shell_split						*/
-char		**shell_split(char *str, t_memlist **stock);
+t_list		*shell_split(char *str, t_memlist **stock);
 
 /*						redirection						*/
 t_list		*out_redirection(t_list	*lst, int index, t_info *info);
 t_list		*in_redirection(t_list	*lst, int index, t_info *info);
-t_list	    *out_double_redirection(t_list	*lst, int index, t_info *info);
-t_list	    *in_double_redirection(t_list	*lst, int index, t_info *info);
+t_list		*out_double_redirection(t_list	*lst, int index, t_info *info);
+t_list		*in_double_redirection(t_list	*lst, int index, t_info *info);
+
+/*						quote							*/
+t_list		*regroup_quote(t_list	*lst, t_info *info);
 
 
 /*						parsing utils					*/
-
+char		*ft_strndup(const char *s1, size_t n, t_memlist **stock);
 
 #endif
