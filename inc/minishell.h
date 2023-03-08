@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/07 16:28:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/08 17:30:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,23 @@
 # define NL			"\n"
 # define SP			" "
 
-typedef struct s_fd
+typedef struct s_dir
 {
-	int	stdout;
-	int	stdin;
-	int	stderr;
-}	t_fd;
+	char			*type;
+	char			*dest;
+	struct s_dir	*next;
+}					t_dir;
 
 typedef struct s_commands
 {
 	t_list	*command;
-	t_fd	fd;
+	t_dir	*dir;
 }	t_commands;
 
 typedef struct s_info
 {
 	char		*prompt_string;
 	t_commands	*final_parse;
-	t_fd		fd;
 	t_memlist	*parsing;
 	t_memlist	*lexer;
 	int			tmp;
@@ -71,8 +70,9 @@ t_list		*in_double_redirection(t_list	*lst, int index, t_info *info);
 /*						quote							*/
 t_list		*regroup_quote(t_list	*lst, t_info *info);
 
-
 /*						parsing utils					*/
 char		*ft_strndup(const char *s1, size_t n, t_memlist **stock);
+void		ft_lstdiradd_back(t_dir **lst, t_dir *new);
+t_dir		*ft_lstdirnew(char *type, char *dest, t_memlist **mem);
 
 #endif

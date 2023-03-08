@@ -6,12 +6,12 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:21:28 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/04 18:53:59 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/08 16:55:06 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
+/*
 static char	*read_input(char *str, t_info *info)
 {
 	char	*result;
@@ -126,3 +126,4 @@ t_list	*in_redirection(t_list *lst, int index, t_info *info)
 	result->next = tmp->next->next;
 	return (result);
 }
+*/

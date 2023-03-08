@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/07 16:38:19 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/08 18:14:25 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_list	**lexer(t_info *info)
 	result = &start;
 	return (result);
 }
-*/
+
 t_list	*check_redirection(t_list *lst, int index, t_list *tmp, t_info *info)
 {
 	if (lst && !ft_strncmp(lst->content, ">", ft_strlen(lst->content)))
@@ -50,26 +50,36 @@ t_list	*check_redirection(t_list *lst, int index, t_list *tmp, t_info *info)
 		lst = in_double_redirection(tmp, index, info);
 	return (lst);
 }
-
+*/
+// add strcmp
 t_list	*find_redirection(t_list *lst, t_info *info, int id)
 {
+	t_dir	*dir;
 	t_list	*tmp;
-	int		index;
 
 	tmp = lst;
+	dir = ft_lstdirnew(NULL, NULL, &info->parsing);
+	if (lst->content[0] == '<' || lst->content[0] == '>')
+	{
+		ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content, lst->next->content, &info->parsing));
+		tmp = lst->next->next;
+	}
 	while (lst)
 	{
-		lst = tmp;
-		index = 0;
-		while (lst && lst->content[0] != '<'
-			&& lst->content[0] != '>')
-		{
+		while (lst->next && lst->next->content[0] != '2'
+			&& lst->next->content[0] != '>')
 			lst = lst->next;
-			index++;
+		if (lst->next && (lst->next->content[0] == '<'
+			|| lst->next->content[0] == '>'))
+		{
+			ft_lstdiradd_back(&dir, ft_lstdirnew(lst->next->content
+				, lst->next->next->content, &info->parsing));
+			lst->next = lst->next->next->next;
 		}
-		info->tmp = id;
-		lst = check_redirection(lst, index, tmp, info);
+		else
+			lst = lst->next;
 	}
+	info->final_parse[id].dir = dir->next;
 	lst = tmp;
 	return (lst);
 }

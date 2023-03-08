@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/07 17:09:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/08 16:58:41 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,44 +22,41 @@ static char	*ft_next_char(char *str)
 	return (&str[i]);
 }
 
-static int	quote_size(char *str)
+static int	quote_size(char *str, int mode)
 {
-	int	i;
+	int			i;
 
 	i = 0;
-	if (str[0] == '\'')
+	if (mode == 0)
 	{
 		i++;
 		while (str[i] && str[i] != '\'')
 			i++;
-		if (str[i] == '\'')
-			i++;
 		return (i);
 	}
-	else
+	else if (mode == 1)
 	{
 		i++;
 		while (str[i] && str[i] != '\"')
 			i++;
-		if (str[i] == '\"')
-			i++;
 		return (i);
 	}
+	return (0);
 }
 
 static int	word_len(char *str)
 {
-	int	u;
+	int			u;
 
 	u = 0;
 	if (str[0] == '\'' || str[0] == '\"')
-		return (quote_size(str));
-	while ((str[u] != ' ' && str[u] && str[u] != '\'' && str[u] != '\"'))
+		return (1);
+	while ((str[u] != ' ' && str[u] && str[u + 1] != '\'' && str[u + 1] != '\"'))
 	{
 		if (u == 0 && (str[u] == '<' || str[u] == '>'))
 		{
 			while ((str[u] == '<' || str[u] == '>' || str[u] == '>')
-				&& str[u] != '|' && str[u] != '\'' && str[u] != '\"')
+				&& str[u] != '|' && str[u + 1] != '\'' && str[u + 1] != '\"')
 				u++;
 			break ;
 		}
@@ -69,6 +66,19 @@ static int	word_len(char *str)
 		if (str[u - 1] == '|' || (str[u] == '|'))
 			break ;
 	}
+	return (u);
+}
+
+static int	splited_word(char *str, char *tmp)
+{
+	int		u;
+
+	if (ft_strncmp(tmp, "\"", ft_strlen(tmp)) == 0)
+		u = quote_size(str, 1);
+	else if (ft_strncmp(tmp, "\'", ft_strlen(tmp)) == 0)
+		u = quote_size(str, 0);
+	else
+		u = word_len(str);
 	return (u);
 }
 
@@ -85,7 +95,7 @@ t_list	*shell_split(char *str, t_memlist **stock)
 	while (str[0])
 	{
 		str = ft_next_char((char *)&str[u]);
-		u = word_len(str);
+		u = splited_word(str, tmp);
 		tmp = ft_strndup(str, u, stock);
 		if (!tmp)
 			return (stock_free(stock), NULL);
