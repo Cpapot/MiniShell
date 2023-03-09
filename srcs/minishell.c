@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 16:10:45 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/09 20:20:05 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static void	prompt(t_info *info)
 			break ;
 	}*/
 	info->prompt_string = ft_strdup("salut |>>ya \"slt|oui >ok >ko|\"\'yes sir	errrralo    rs", &info->parsing);
+	addto_logs(info->prompt_string, info);
 }
 
 int	main(void)

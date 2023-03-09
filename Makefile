@@ -9,7 +9,7 @@ HEADERS 	=	minishell.h
 
 SRCS		=	minishell.c minishell_utils.c \
 				parsing.c parsing_utils.c shell_split.c \
-				split_pipe.c
+				split_pipe.c history.c
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
 
@@ -87,6 +87,7 @@ clean:
 
 fclean:
 	@echo "${RED}🗑  ${NAME} cleanded"
+	@${RM} .log
 	@${RM} ${OBJS}
 	@${RM} ${OBJSDIR}
 	@${RM} ${NAME}
