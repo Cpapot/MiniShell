@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 15:17:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/08 16:56:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/09 14:45:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ static	void	go_next_cmd(t_list **lst)
 	}
 }
 
+/*
+ *The split_pipe function is used to divide a linked list of commands into
+ *multiple sublists, using the "|" symbol as a separator. This allows for
+ *executing multiple commands in parallel using the shell pipe feature.
+*/
 t_commands	*split_pipe(t_info *info, t_list *lst)
 {
 	int			i;

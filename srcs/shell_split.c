@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/08 16:58:41 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/09 16:17:09 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ static int	word_len(char *str)
 	u = 0;
 	if (str[0] == '\'' || str[0] == '\"')
 		return (1);
-	while ((str[u] != ' ' && str[u] && str[u + 1] != '\'' && str[u + 1] != '\"'))
+	while ((str[u] != ' ' && str[u] && str[u + 1] != '\''
+			&& str[u + 1] != '\"'))
 	{
 		if (u == 0 && (str[u] == '<' || str[u] == '>'))
 		{
@@ -71,17 +72,31 @@ static int	word_len(char *str)
 
 static int	splited_word(char *str, char *tmp)
 {
-	int		u;
+	int			u;
+	static int	buff = 0;
 
-	if (ft_strncmp(tmp, "\"", ft_strlen(tmp)) == 0)
+	if (tmp && ft_strncmp(tmp, "\"", ft_strlen(tmp)) == 0 && buff % 2)
 		u = quote_size(str, 1);
-	else if (ft_strncmp(tmp, "\'", ft_strlen(tmp)) == 0)
+	else if (tmp && ft_strncmp(tmp, "\'", ft_strlen(tmp)) == 0 && buff % 2)
 		u = quote_size(str, 0);
 	else
+	{
 		u = word_len(str);
+		if (ft_strncmp(str, "\"", ft_strlen(str))
+			|| ft_strncmp(str, "\'", ft_strlen(str)))
+			buff++;
+	}
 	return (u);
 }
 
+/*
+ *The shell_split function takes in a string and a pointer to a memory
+ *list. It then separates the string into individual words, based on
+ *whitespace, quotes, and special characters such as redirection symbols
+ *and pipes. The function returns a linked list of t_list structs, with
+ *each node containing a pointer to a null-terminated string that
+ *represents a single word.
+*/
 t_list	*shell_split(char *str, t_memlist **stock)
 {
 	int		u;
@@ -92,14 +107,19 @@ t_list	*shell_split(char *str, t_memlist **stock)
 		return (NULL);
 	u = 0;
 	start = ft_lstnew(NULL, stock);
+	tmp = NULL;
 	while (str[0])
 	{
 		str = ft_next_char((char *)&str[u]);
 		u = splited_word(str, tmp);
+		/*if (!str[u] && ft_strcmp(tmp, "\""))
+			str = prompt_until_char('\"', stock, str);
+		else if (!str[u] && ft_strcmp(tmp, "\'"))
+			str = prompt_until_char('\"', stock, str);*/
 		tmp = ft_strndup(str, u, stock);
 		if (!tmp)
 			return (stock_free(stock), NULL);
-		printf("%s ", tmp);
+		printf("%s\n", tmp);
 		ft_lstadd_back(&start, ft_lstnew(tmp, stock));
 	}
 	printf("\n\n");

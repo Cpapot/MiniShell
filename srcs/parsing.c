@@ -6,52 +6,26 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/08 18:14:25 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/09 15:46:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-/*
-t_list	**lexer(t_info *info)
-{
-	char	**split;
-	t_list	*start;
-	t_list	**result;
-	int		i;
 
-	start = NULL;
-	i = 1;
-	split = shell_split(info->prompt_string, &info->parsing);
-	if (split == NULL)
-		print_error(info, "Memory error");
-	if (split[0] != NULL)
-		start = ft_lstnew(split[0], &info->parsing);
-	printf("%s ", split[0]);
-	while (split[i] != NULL)
-	{
-		printf("%s ", split[i]);
-		ft_lstadd_back(&start, ft_lstnew(split[i], &info->parsing));
-		i++;
-	}
-	printf("\n\n");
-	result = &start;
-	return (result);
-}
-
-t_list	*check_redirection(t_list *lst, int index, t_list *tmp, t_info *info)
+static t_list	*go_next_redirection(t_list *lst)
 {
-	if (lst && !ft_strncmp(lst->content, ">", ft_strlen(lst->content)))
-		lst = out_redirection(tmp, index, info);
-	else if (lst && !ft_strncmp(lst->content, "<", ft_strlen(lst->content)))
-		lst = in_redirection(tmp, index, info);
-	else if (lst && !ft_strncmp(lst->content, ">>", ft_strlen(lst->content)))
-		lst = out_double_redirection(tmp, index, info);
-	else if (lst && !ft_strncmp(lst->content, "<<", ft_strlen(lst->content)))
-		lst = in_double_redirection(tmp, index, info);
+	while (lst->next && !is_redirection(lst->next->content))
+		lst = lst->next;
 	return (lst);
 }
+
+/*
+ *This function takes in a linked list lst of parsed command arguments,
+ *along with a pointer to a t_info struct and an integer id. It searches and
+ *delete for any redirection tokens (e.g. <, >) within lst and creates a new
+ *linked list dir of t_dir nodes, where each node represents a redirection and
+ *contains the relevant input/output filepaths.
 */
-// add strcmp
 t_list	*find_redirection(t_list *lst, t_info *info, int id)
 {
 	t_dir	*dir;
@@ -59,31 +33,34 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 
 	tmp = lst;
 	dir = ft_lstdirnew(NULL, NULL, &info->parsing);
-	if (lst->content[0] == '<' || lst->content[0] == '>')
+	if (is_redirection(lst->content))
 	{
-		ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content, lst->next->content, &info->parsing));
+		ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content,
+				lst->next->content, &info->parsing));
 		tmp = lst->next->next;
 	}
 	while (lst)
 	{
-		while (lst->next && lst->next->content[0] != '2'
-			&& lst->next->content[0] != '>')
-			lst = lst->next;
-		if (lst->next && (lst->next->content[0] == '<'
-			|| lst->next->content[0] == '>'))
+		lst = go_next_redirection(lst);
+		if (lst->next && is_redirection(lst->next->content))
 		{
-			ft_lstdiradd_back(&dir, ft_lstdirnew(lst->next->content
-				, lst->next->next->content, &info->parsing));
+			ft_lstdiradd_back(&dir, ft_lstdirnew(lst->next->content,
+					lst->next->next->content, &info->parsing));
 			lst->next = lst->next->next->next;
 		}
 		else
 			lst = lst->next;
 	}
 	info->final_parse[id].dir = dir->next;
-	lst = tmp;
-	return (lst);
+	return (tmp);
 }
 
+/*
+ *This function takes in a t_info struct pointer info and performs parsing
+ *of the command string in info->prompt_string. It returns a pointer to a
+ *t_commands struct, which contains an array of parsed commands and their
+ *redirections
+*/
 t_commands	*parsing(t_info *info)
 {
 	t_list		*lst;
@@ -102,5 +79,7 @@ t_commands	*parsing(t_info *info)
 			= find_redirection(result[i].command, info, i);
 		i++;
 	}
+	//varibale d'env
+	//remove quote
 	return (result);
 }
