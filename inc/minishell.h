@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 20:19:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/10 18:28:23 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <signal.h>
+
+
 
 # define NL			"\n"
 # define SP			" "
@@ -70,4 +73,5 @@ t_dir		*ft_lstdirnew(char *type, char *dest, t_memlist **mem);
 int			is_redirection(char *str);
 char		*prompt_until_char(char c, t_memlist **stock, char *str);
 
+void		catch_signals(int sig);
 #endif
