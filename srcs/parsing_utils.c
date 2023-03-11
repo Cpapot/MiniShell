@@ -6,13 +6,13 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:51:08 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 16:16:21 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/11 02:27:35 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*prompt_until_char(char c, t_memlist **stock, char *str)
+/*char	*prompt_until_char(char c, t_memlist **stock, char *str)
 {
 	char	*result;
 	char	*tmp;
@@ -35,7 +35,7 @@ char	*prompt_until_char(char c, t_memlist **stock, char *str)
 		tmp = ft_strjoin(tmp, result, stock);
 		tmp = ft_strjoin(tmp, NL, stock);
 	}
-}
+}*/
 
 char	*ft_strndup(const char *s1, size_t n, t_memlist **stock)
 {

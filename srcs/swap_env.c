@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/11 01:43:47 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/11 02:15:19 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ static char	*swap_envstr(char *str, t_info *info)
 		{
 			i++;
 			u = i;
-			while (result[u] && result[u] != ' ')
+			while (result[u] && result[u] != ' ' && result[u] != '$')
 				u++;
 			tmp = ft_strjoin(getenv_instr(&result[i], u, info), &result[u], &info->parsing);
-			result = ft_strjoin(return_start(result, i, info), tmp, &info->parsing);
+			result = ft_strjoin(return_start(result, i - 1, info), tmp, &info->parsing);
 			if (result == NULL)
 				print_error(info, ERROR1);
 			i = i + ft_strlen(tmp);
@@ -89,11 +89,10 @@ void	swap_env(t_list *lst, t_info *info)
 {
 	char *tmp;
 
-	tmp = ft_strdup("", &info->parsing);
+	tmp = ft_strdup(" ", &info->parsing);
 	while (lst)
 	{
-		if (!ft_strcmp(lst->next->content, "'")
-			&& !ft_strcmp(tmp, "'")
+		if (lst->next && !ft_strcmp(lst->next->content, "'") && !ft_strcmp(tmp, "'")
 			&& is_contain_env(lst->content))
 			lst->content = swap_envstr(lst->content, info);
 		tmp = lst->content;

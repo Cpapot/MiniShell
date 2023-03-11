@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/11 01:33:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/11 02:24:48 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	prompt(t_info *info)
 		if (strlen(info->prompt_string) != 0)
 			break ;
 	}*/
-	info->prompt_string = ft_strdup("salut |>>ya \"slt|oui >ok >ko| login $LOGNAME\"yes sir	errrralo    rs", &info->parsing);
+	info->prompt_string = ft_strdup("salut n   |>>ya \" slt|oui >ok >ko| login \" yes sir	errrralo    rs", &info->parsing);
 	addto_logs(info->prompt_string, info);
 }
 
