@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 16:17:09 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/11 01:34:18 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ t_list	*shell_split(char *str, t_memlist **stock)
 		tmp = ft_strndup(str, u, stock);
 		if (!tmp)
 			return (stock_free(stock), NULL);
-		printf("%s\n", tmp);
+		printf("%s ", tmp);
 		ft_lstadd_back(&start, ft_lstnew(tmp, stock));
 	}
 	printf("\n\n");

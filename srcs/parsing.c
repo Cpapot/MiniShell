@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 16:55:29 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/11 01:32:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,10 @@ t_commands	*parsing(t_info *info)
 	{
 		result[i].command
 			= find_redirection(result[i].command, info, i);
+		swap_env(result[i].command, info);
 		i++;
 	}
+	//variable env
+
 	return (result);
 }

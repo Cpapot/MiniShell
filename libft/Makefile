@@ -104,7 +104,7 @@ AR			=	ar rcs
 
 NAME		=	libft.a
 
-CFLAGS		=	-Wall -Wextra -Werror -g3
+CFLAGS		=	-Wall -Wextra -Werror -g3 -g
 
 CC			=	gcc
 
