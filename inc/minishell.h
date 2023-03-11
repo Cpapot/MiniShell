@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 20:19:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/11 01:04:19 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,13 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <signal.h>
+
+
 
 # define NL			"\n"
 # define SP			" "
+# define ERROR1		"Cannot Allocate Memory"
 
 typedef struct s_dir
 {
@@ -60,6 +64,9 @@ t_commands	*split_pipe(t_info *info, t_list *lst);
 /*						shell_split						*/
 t_list		*shell_split(char *str, t_memlist **stock);
 
+/*						swap_env						*/
+void		swap_env(t_list *lst, t_info *info);
+
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);
 
@@ -70,4 +77,5 @@ t_dir		*ft_lstdirnew(char *type, char *dest, t_memlist **mem);
 int			is_redirection(char *str);
 char		*prompt_until_char(char c, t_memlist **stock, char *str);
 
+void		catch_signals(int sig);
 #endif

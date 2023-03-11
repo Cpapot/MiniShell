@@ -6,11 +6,50 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 16:55:29 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/11 18:13:52 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+static void	remove_quote(t_list *lst, t_memlist **stock)
+{
+	while (lst)
+	{
+		if (ft_strcmp(lst->content, "\"")
+			|| ft_strcmp(lst->content, "\'"))
+			lst->content = ft_strdup("", stock);
+		lst = lst->next;
+	}
+}
+
+static t_list	*remove_empty_node(t_list *lst)
+{
+	t_list	*start;
+	t_list	*tmp;
+
+	start = lst;
+	tmp = NULL;
+	while (ft_strcmp("", lst->content))
+	{
+		start = lst->next;
+		lst = lst->next;
+	}
+	while (lst)
+	{
+		if (tmp && ft_strcmp("", lst->content))
+		{
+			tmp->next = lst->next;
+			lst = tmp;
+		}
+		else
+		{
+			tmp = lst;
+			lst = lst->next;
+		}
+	}
+	return (start);
+}
 
 static t_list	*go_next_redirection(t_list *lst)
 {
@@ -77,6 +116,9 @@ t_commands	*parsing(t_info *info)
 	{
 		result[i].command
 			= find_redirection(result[i].command, info, i);
+		swap_env(result[i].command, info);
+		remove_quote(result[i].command, &info->parsing);
+		result[i].command = remove_empty_node(result[i].command);
 		i++;
 	}
 	return (result);

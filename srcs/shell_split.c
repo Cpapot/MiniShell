@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 16:17:09 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/11 18:26:28 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static char	*ft_next_char(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] == ' ')
+	while (str[i] == ' ' && str[i + 1] != '\"' && str[i + 1] != '\'')
 		i++;
 	return (&str[i]);
 }
@@ -46,13 +46,15 @@ static int	quote_size(char *str, int mode)
 
 static int	word_len(char *str)
 {
-	int			u;
+	int		u;
 
 	u = 0;
 	if (str[0] == '\'' || str[0] == '\"')
 		return (1);
-	while ((str[u] != ' ' && str[u] && str[u + 1] != '\''
-			&& str[u + 1] != '\"'))
+	if (str[1] == '\'' || str[1] == '\"')
+		return (1);
+	while ((str[u] != ' ' && str[u] && str[u] != '\''
+			&& str[u] != '\"'))
 	{
 		if (u == 0 && (str[u] == '<' || str[u] == '>'))
 		{
@@ -75,17 +77,14 @@ static int	splited_word(char *str, char *tmp)
 	int			u;
 	static int	buff = 0;
 
-	if (tmp && ft_strncmp(tmp, "\"", ft_strlen(tmp)) == 0 && buff % 2)
+	if (tmp && (ft_strcmp(tmp, "\'") || ft_strcmp(tmp, "\"")))
+		buff++;
+	if (tmp && ft_strncmp(tmp, "\"", ft_strlen(tmp)) == 0 && buff % 2 == 1)
 		u = quote_size(str, 1);
-	else if (tmp && ft_strncmp(tmp, "\'", ft_strlen(tmp)) == 0 && buff % 2)
+	else if (tmp && ft_strncmp(tmp, "\'", ft_strlen(tmp)) == 0 && buff % 2 == 1)
 		u = quote_size(str, 0);
 	else
-	{
 		u = word_len(str);
-		if (ft_strncmp(str, "\"", ft_strlen(str))
-			|| ft_strncmp(str, "\'", ft_strlen(str)))
-			buff++;
-	}
 	return (u);
 }
 
@@ -112,14 +111,10 @@ t_list	*shell_split(char *str, t_memlist **stock)
 	{
 		str = ft_next_char((char *)&str[u]);
 		u = splited_word(str, tmp);
-		/*if (!str[u] && ft_strcmp(tmp, "\""))
-			str = prompt_until_char('\"', stock, str);
-		else if (!str[u] && ft_strcmp(tmp, "\'"))
-			str = prompt_until_char('\"', stock, str);*/
 		tmp = ft_strndup(str, u, stock);
 		if (!tmp)
 			return (stock_free(stock), NULL);
-		printf("%s\n", tmp);
+		printf("%s ", tmp);
 		ft_lstadd_back(&start, ft_lstnew(tmp, stock));
 	}
 	printf("\n\n");
