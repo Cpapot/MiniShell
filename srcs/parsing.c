@@ -6,74 +6,100 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/07 16:38:19 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/11 18:13:52 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-/*
-t_list	**lexer(t_info *info)
-{
-	char	**split;
-	t_list	*start;
-	t_list	**result;
-	int		i;
 
-	start = NULL;
-	i = 1;
-	split = shell_split(info->prompt_string, &info->parsing);
-	if (split == NULL)
-		print_error(info, "Memory error");
-	if (split[0] != NULL)
-		start = ft_lstnew(split[0], &info->parsing);
-	printf("%s ", split[0]);
-	while (split[i] != NULL)
-	{
-		printf("%s ", split[i]);
-		ft_lstadd_back(&start, ft_lstnew(split[i], &info->parsing));
-		i++;
-	}
-	printf("\n\n");
-	result = &start;
-	return (result);
-}
-*/
-t_list	*check_redirection(t_list *lst, int index, t_list *tmp, t_info *info)
+static void	remove_quote(t_list *lst, t_memlist **stock)
 {
-	if (lst && !ft_strncmp(lst->content, ">", ft_strlen(lst->content)))
-		lst = out_redirection(tmp, index, info);
-	else if (lst && !ft_strncmp(lst->content, "<", ft_strlen(lst->content)))
-		lst = in_redirection(tmp, index, info);
-	else if (lst && !ft_strncmp(lst->content, ">>", ft_strlen(lst->content)))
-		lst = out_double_redirection(tmp, index, info);
-	else if (lst && !ft_strncmp(lst->content, "<<", ft_strlen(lst->content)))
-		lst = in_double_redirection(tmp, index, info);
-	return (lst);
-}
-
-t_list	*find_redirection(t_list *lst, t_info *info, int id)
-{
-	t_list	*tmp;
-	int		index;
-
-	tmp = lst;
 	while (lst)
 	{
-		lst = tmp;
-		index = 0;
-		while (lst && lst->content[0] != '<'
-			&& lst->content[0] != '>')
-		{
-			lst = lst->next;
-			index++;
-		}
-		info->tmp = id;
-		lst = check_redirection(lst, index, tmp, info);
+		if (ft_strcmp(lst->content, "\"")
+			|| ft_strcmp(lst->content, "\'"))
+			lst->content = ft_strdup("", stock);
+		lst = lst->next;
 	}
-	lst = tmp;
+}
+
+static t_list	*remove_empty_node(t_list *lst)
+{
+	t_list	*start;
+	t_list	*tmp;
+
+	start = lst;
+	tmp = NULL;
+	while (ft_strcmp("", lst->content))
+	{
+		start = lst->next;
+		lst = lst->next;
+	}
+	while (lst)
+	{
+		if (tmp && ft_strcmp("", lst->content))
+		{
+			tmp->next = lst->next;
+			lst = tmp;
+		}
+		else
+		{
+			tmp = lst;
+			lst = lst->next;
+		}
+	}
+	return (start);
+}
+
+static t_list	*go_next_redirection(t_list *lst)
+{
+	while (lst->next && !is_redirection(lst->next->content))
+		lst = lst->next;
 	return (lst);
 }
 
+/*
+ *This function takes in a linked list lst of parsed command arguments,
+ *along with a pointer to a t_info struct and an integer id. It searches and
+ *delete for any redirection tokens (e.g. <, >) within lst and creates a new
+ *linked list dir of t_dir nodes, where each node represents a redirection and
+ *contains the relevant input/output filepaths.
+*/
+t_list	*find_redirection(t_list *lst, t_info *info, int id)
+{
+	t_dir	*dir;
+	t_list	*tmp;
+
+	tmp = lst;
+	dir = ft_lstdirnew(NULL, NULL, &info->parsing);
+	if (is_redirection(lst->content))
+	{
+		ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content,
+				lst->next->content, &info->parsing));
+		tmp = lst->next->next;
+	}
+	while (lst)
+	{
+		lst = go_next_redirection(lst);
+		if (lst->next && is_redirection(lst->next->content))
+		{
+			ft_lstdiradd_back(&dir, ft_lstdirnew(lst->next->content,
+					lst->next->next->content, &info->parsing));
+			lst->next = lst->next->next->next;
+		}
+		else
+			lst = lst->next;
+	}
+	info->final_parse[id].dir = dir->next;
+	return (tmp);
+}
+
+/*
+ *This function takes in a t_info struct pointer info and performs parsing
+ *of the command string in info->prompt_string. It returns a pointer to a
+ *t_commands struct, which contains an array of parsed commands and their
+ *redirections
+*/
 t_commands	*parsing(t_info *info)
 {
 	t_list		*lst;
@@ -90,6 +116,9 @@ t_commands	*parsing(t_info *info)
 	{
 		result[i].command
 			= find_redirection(result[i].command, info, i);
+		swap_env(result[i].command, info);
+		remove_quote(result[i].command, &info->parsing);
+		result[i].command = remove_empty_node(result[i].command);
 		i++;
 	}
 	return (result);

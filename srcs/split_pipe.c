@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 15:17:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/03 23:55:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/09 14:45:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,6 @@ static t_list	*first_command(t_list *lst, t_info *info)
 	return (start);
 }
 
-static t_fd	set_start_fd(void)
-{
-	t_fd	result;
-
-	result.stderr = 2;
-	result.stdin = 0;
-	result.stdout = 1;
-	return (result);
-}
-
 static	void	go_next_cmd(t_list **lst)
 {
 	t_list	*tmp;
@@ -70,6 +60,11 @@ static	void	go_next_cmd(t_list **lst)
 	}
 }
 
+/*
+ *The split_pipe function is used to divide a linked list of commands into
+ *multiple sublists, using the "|" symbol as a separator. This allows for
+ *executing multiple commands in parallel using the shell pipe feature.
+*/
 t_commands	*split_pipe(t_info *info, t_list *lst)
 {
 	int			i;
@@ -85,13 +80,10 @@ t_commands	*split_pipe(t_info *info, t_list *lst)
 		print_error(info, "Memory error");
 	while (++i != count)
 	{
-		result[i].fd = set_start_fd();
 		result[i].command = first_command(tmp, info);
 		tmp = lst;
 		go_next_cmd(&tmp);
 		lst = tmp;
-		if (i != 0)
-			result[i].fd.stdin = result[i - 1].fd.stdout;
 	}
 	result[i].command = NULL;
 	return (result);
