@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/11 18:26:51 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/13 14:02:36 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	minishell_init(t_info *info)
+void	minishell_init(t_info *info, int argc, char **argv)
 {
 	//signal(SIGINT, catch_signals);
+	(void)argc;
+	(void)argv;
 	info->parsing = NULL;
 }
 
@@ -56,10 +58,10 @@ static void	prompt(t_info *info)
 		if (strlen(info->prompt_string) != 0)
 			break ;
 	}*/
-	info->prompt_string = ft_strdup("salut $PATH |$PDWD >>ya $XDG_SESSION_DESKTOP uwu \"slt|oui >ok >ko| $LOGNAME\"yes $PDWD sir errrralo   $PDWD rs $PDWD", &info->parsing);
+	info->prompt_string = ft_strdup("salut >>ya | uwu slt|oui >ok >ko| wc", &info->parsing);
 	addto_logs(info->prompt_string, info);
 }
-
+/*
 int	main(void)
 {
 	t_info		info;
@@ -68,6 +70,20 @@ int	main(void)
 
 		prompt(&info);
 		info.final_parse = parsing(&info);
+
+	close_minishell(&info);
+}
+*/
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_info		info;
+
+	minishell_init(&info, argc, argv);
+
+		prompt(&info);
+		info.final_parse = parsing(&info);
+		execution(&info, envp);
 
 	close_minishell(&info);
 }
