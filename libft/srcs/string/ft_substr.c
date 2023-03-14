@@ -6,13 +6,13 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 15:30:42 by cpapot            #+#    #+#             */
-/*   Updated: 2022/11/30 12:05:37 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/14 16:40:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_stsubstr(char const *s, unsigned int start, size_t len, t_memlist **st)
 {
 	char	*result;
 	size_t	i;
@@ -21,7 +21,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	i = 0;
 	if (len == 0 || start > ft_strlen(s))
 	{
-		result = malloc(sizeof(char));
+		result = stock_malloc(sizeof(char), st);
 		result[0] = '\0';
 		return (result);
 	}
@@ -29,7 +29,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		malloc_size = ft_strlen(s) - start;
 	else
 		malloc_size = (len);
-	result = malloc(sizeof(char) * malloc_size + 1);
+	result = stock_malloc(sizeof(char) * malloc_size + 1, st);
 	if (result == NULL)
 		return (NULL);
 	while (i != malloc_size)

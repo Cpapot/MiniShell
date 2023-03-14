@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/11 18:13:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/14 17:59:04 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,31 @@
 
 static void	remove_quote(t_list *lst, t_memlist **stock)
 {
+	int		i;
+	char	*str;
+
 	while (lst)
 	{
-		if (ft_strcmp(lst->content, "\"")
-			|| ft_strcmp(lst->content, "\'"))
-			lst->content = ft_strdup("", stock);
+		str = lst->content;
+		i = 0;
+		while (str[i])
+		{
+			if (str[i] == '\'')
+			{
+				str = ft_strjoin(ft_stsubstr(str, 0, i, stock), &str[i + 1]
+					, stock);
+				i += quote_size(&str[i], 0);
+			}
+			else if (str[i] == '\"')
+			{
+				str = ft_strjoin(ft_stsubstr(str, 0, i, stock), &str[i + 1]
+					, stock);
+				i += quote_size(&str[i], 1);
+			}
+			else
+				i++;
+		}
+		lst->content = str;
 		lst = lst->next;
 	}
 }
