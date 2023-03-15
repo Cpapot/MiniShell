@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/14 16:29:51 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/15 17:45:10 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,9 @@ static char	*ft_next_char(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] == ' ' && str[i + 1] != '\"' && str[i + 1] != '\'')
+	while (str[i] == ' ')
 		i++;
 	return (&str[i]);
-}
-
-int	quote_size(char *str, int mode)
-{
-	int			i;
-
-	i = 0;
-	if (mode == 0)
-	{
-		i++;
-		while (str[i] && str[i] != '\'')
-			i++;
-		return (i);
-	}
-	else if (mode == 1)
-	{
-		i++;
-		while (str[i] && str[i] != '\"')
-			i++;
-		return (i);
-	}
-	return (0);
 }
 
 static int	word_len(char *str)

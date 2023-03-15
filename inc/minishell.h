@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/14 16:30:02 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/15 17:38:50 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <signal.h>
-
-
 
 # define NL			"\n"
 # define SP			" "
@@ -63,7 +61,6 @@ t_commands	*split_pipe(t_info *info, t_list *lst);
 
 /*						shell_split						*/
 t_list		*shell_split(char *str, t_memlist **stock);
-int			quote_size(char *str, int mode);
 
 /*						swap_env						*/
 void		swap_env(t_list *lst, t_info *info);
@@ -77,6 +74,12 @@ void		ft_lstdiradd_back(t_dir **lst, t_dir *new);
 t_dir		*ft_lstdirnew(char *type, char *dest, t_memlist **mem);
 int			is_redirection(char *str);
 char		*prompt_until_char(char c, t_memlist **stock, char *str);
+
+/*						quote						*/
+char		*remove_actual_quote(char *str, t_memlist **stock);
+void		remove_quote(t_list *lst, t_memlist **stock);
+t_list		*remove_empty_node(t_list *lst);
+int			quote_size(char *str, int mode);
 
 void		catch_signals(int sig);
 #endif

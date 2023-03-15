@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/14 17:59:49 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/15 17:50:03 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	prompt(t_info *info)
 		if (strlen(info->prompt_string) != 0)
 			break ;
 	}*/
-	info->prompt_string = ft_strdup("$XDG_SESSION_DESKTOP uwu\'yes\'\"slt|oui >ok >ko|$USER $USER\"uwu\'yes\'", &info->parsing);
+	info->prompt_string = ft_strdup("\"||\"", &info->parsing);
 	addto_logs(info->prompt_string, info);
 }
 
