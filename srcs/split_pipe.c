@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 15:17:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/16 03:09:25 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/16 14:58:05 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ static t_list	*first_command(t_list *lst, t_info *info)
 		if (ft_strncmp("|", lst->content, ft_strlen(lst->content)) == 0)
 			break ;
 		if (start != NULL)
-			ft_lstadd_back(&start, ft_lstnew(lst->content, &info->parsing));
+			ft_lstadd_back(&start, ft_lstnew(lst->content,
+					&info->final_memparse));
 		else
-			start = ft_lstnew(lst->content, &info->parsing);
+			start = ft_lstnew(lst->content, &info->final_memparse);
 		lst = lst->next;
 	}
 	return (start);
@@ -75,7 +76,7 @@ t_commands	*split_pipe(t_info *info, t_list *lst)
 	tmp = lst;
 	info->com_count = com_count(tmp);
 	result = stock_malloc(sizeof(t_commands) * (info->com_count + 1),
-			&info->parsing);
+			&info->final_memparse);
 	if (result == NULL)
 		print_error(info, "Memory error");
 	while (++i != info->com_count)

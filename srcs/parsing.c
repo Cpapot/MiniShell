@@ -6,11 +6,29 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/15 17:36:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/16 16:20:22 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+static void	cpy_final_parse(t_commands command, t_info *info)
+{
+	while (command.command)
+	{
+		command.command->content = ft_strdup(command.command->content,
+				&info->final_memparse);
+		command.command = command.command->next;
+	}
+	while (command.dir)
+	{
+		command.dir->dest = ft_strdup(command.dir->dest,
+				&info->final_memparse);
+		command.dir->type = ft_strdup(command.dir->type,
+				&info->final_memparse);
+		command.dir = command.dir->next;
+	}
+}
 
 static t_list	*go_next_redirection(t_list *lst)
 {
@@ -32,11 +50,11 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 	t_list	*tmp;
 
 	tmp = lst;
-	dir = ft_lstdirnew(NULL, NULL, &info->parsing);
+	dir = ft_lstdirnew(NULL, NULL, &info->final_memparse);
 	if (is_redirection(lst->content))
 	{
 		ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content,
-				lst->next->content, &info->parsing));
+				lst->next->content, &info->final_memparse));
 		tmp = lst->next->next;
 	}
 	while (lst)
@@ -45,7 +63,7 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 		if (lst->next && is_redirection(lst->next->content))
 		{
 			ft_lstdiradd_back(&dir, ft_lstdirnew(lst->next->content,
-					lst->next->next->content, &info->parsing));
+					lst->next->next->content, &info->final_memparse));
 			lst->next = lst->next->next->next;
 		}
 		else
@@ -71,6 +89,8 @@ t_commands	*parsing(t_info *info)
 	if (ft_strlen(info->prompt_string) == 0)
 		return (NULL);
 	lst = shell_split(info->prompt_string, &info->parsing);
+	if (is_command_valid(lst))
+		exit(1);
 	result = split_pipe(info, lst);
 	info->final_parse = result;
 	while (result[i].command != NULL)
@@ -80,7 +100,9 @@ t_commands	*parsing(t_info *info)
 		swap_env(result[i].command, info);
 		remove_quote(result[i].command, &info->parsing);
 		result[i].command = remove_empty_node(result[i].command);
+		cpy_final_parse(result[i], info);
 		i++;
 	}
+	stock_free(&info->parsing);
 	return (result);
 }

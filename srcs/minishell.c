@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/16 03:11:25 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/16 16:46:17 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	minishell_init(t_info *info)
 {
 	//signal(SIGINT, catch_signals);
 	info->parsing = NULL;
+	info->final_memparse = NULL;
 }
 
 void	close_minishell(t_info	*info)
@@ -48,6 +49,7 @@ void	close_minishell(t_info	*info)
 		i++;
 	}
 	stock_free(&info->parsing);
+	stock_free(&info->final_memparse);
 }
 
 static void	prompt(t_info *info)
@@ -58,7 +60,7 @@ static void	prompt(t_info *info)
 		if (strlen(info->prompt_string) != 0)
 			break ;
 	}*/
-	info->prompt_string = ft_strdup(">ok|cat shh", &info->parsing);
+	info->prompt_string = ft_strdup("cat |cat shh <<", &info->parsing);
 	addto_logs(info->prompt_string, info);
 }
 

@@ -6,13 +6,14 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/16 03:04:21 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/16 16:17:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "error.h"
 # include "../libft/includes/libft.h"
 # include <stdio.h>
 # include <readline/readline.h>
@@ -24,7 +25,6 @@
 
 # define NL			"\n"
 # define SP			" "
-# define ERROR99	"[ERROR:99] Malloc cannot be created"
 
 typedef struct s_dir
 {
@@ -44,7 +44,7 @@ typedef struct s_info
 	char		*prompt_string;
 	t_commands	*final_parse;
 	t_memlist	*parsing;
-	t_memlist	*lexer;
+	t_memlist	*final_memparse;
 	int			com_count;
 	t_list		**command;
 }	t_info;
@@ -80,6 +80,9 @@ char		*remove_actual_quote(char *str, t_memlist **stock);
 void		remove_quote(t_list *lst, t_memlist **stock);
 t_list		*remove_empty_node(t_list *lst);
 int			quote_size(char *str, int mode);
+
+/*						check_error					*/
+int			is_command_valid(t_list *lst);
 
 void		catch_signals(int sig);
 #endif

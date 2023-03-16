@@ -1,35 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   check_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/09 16:55:26 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/16 15:04:58 by cpapot           ###   ########.fr       */
+/*   Created: 2023/03/16 14:06:38 by cpapot            #+#    #+#             */
+/*   Updated: 2023/03/16 16:49:30 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/libft.h"
+#include "../inc/minishell.h"
 
-char	*ft_strdup(const char *s1, t_memlist **stock)
+static int	is_text(char *str)
 {
-	char	*result;
-	int		len;
-	int		i;
+	if (is_redirection(str))
+		return (1);
+	if (ft_strcmp("|", str))
+		return (1);
+	return (0);
+}
 
-	if (s1 == NULL)
-		return (NULL);
-	len = ft_strlen(s1);
-	i = 0;
-	result = stock_malloc(sizeof(char) * (len + 1), stock);
-	if (result == 0)
-		return (0);
-	while (i != len)
+int	is_command_valid(t_list *lst)
+{
+	while (lst)
 	{
-		result[i] = s1[i];
-		i++;
+		if (is_redirection(lst->content)
+			&& ((lst->next != NULL && is_text(lst->next->content))))
+		{
+			perror(ERROR5);
+			return (1);
+		}
+		lst = lst->next;
 	}
-	result[len] = '\0';
-	return (result);
+	return (1);
 }
