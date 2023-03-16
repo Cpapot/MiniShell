@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/15 17:38:50 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/16 03:04:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 # define NL			"\n"
 # define SP			" "
-# define ERROR1		"Cannot Allocate Memory"
+# define ERROR99	"[ERROR:99] Malloc cannot be created"
 
 typedef struct s_dir
 {
@@ -45,7 +45,7 @@ typedef struct s_info
 	t_commands	*final_parse;
 	t_memlist	*parsing;
 	t_memlist	*lexer;
-	int			tmp;
+	int			com_count;
 	t_list		**command;
 }	t_info;
 

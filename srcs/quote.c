@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:20:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/15 17:39:11 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/16 03:00:15 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,24 @@
 char	*remove_actual_quote(char *str, t_memlist **stock)
 {
 	int			i;
+	char		c;
 	static int	save = 0;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
+		if (str[i] == '\'' || str[i] == '\"')
 		{
+			c = str[i];
 			save++;
-			str = ft_strjoin(ft_stsubstr(str, 0, i, stock), &str[i + 1]
-				, stock);
+			str = ft_strjoin(ft_stsubstr(str, 0, i, stock), &str[i + 1], stock);
 			if (save % 2)
-				i += quote_size(&str[i], 0);
-		}
-		else if (str[i] == '\"')
-		{
-			save++;
-			str = ft_strjoin(ft_stsubstr(str, 0, i, stock), &str[i + 1]
-				, stock);
-			if (save % 2)
-				i += quote_size(&str[i], 1);
+			{
+				if (c == '\'')
+					i += quote_size(&str[i], 0);
+				else
+					i += quote_size(&str[i], 1);
+			}
 		}
 		else
 			i++;
@@ -58,14 +56,14 @@ t_list	*remove_empty_node(t_list *lst)
 
 	start = lst;
 	tmp = NULL;
-	while (ft_strcmp("", lst->content))
+	while (lst && ft_strcmp("", lst->content))
 	{
 		start = lst->next;
 		lst = lst->next;
 	}
 	while (lst)
 	{
-		if (tmp && ft_strcmp("", lst->content))
+		if (tmp && lst && ft_strcmp("", lst->content))
 		{
 			tmp->next = lst->next;
 			lst = tmp;

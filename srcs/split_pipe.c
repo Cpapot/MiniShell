@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 15:17:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 14:45:58 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/16 03:09:25 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,17 @@ static	void	go_next_cmd(t_list **lst)
 t_commands	*split_pipe(t_info *info, t_list *lst)
 {
 	int			i;
-	int			count;
 	t_list		*tmp;
 	t_commands	*result;
 
 	i = -1;
 	tmp = lst;
-	count = com_count(tmp);
-	result = stock_malloc(sizeof(t_commands) * (count + 1), &info->parsing);
+	info->com_count = com_count(tmp);
+	result = stock_malloc(sizeof(t_commands) * (info->com_count + 1),
+			&info->parsing);
 	if (result == NULL)
 		print_error(info, "Memory error");
-	while (++i != count)
+	while (++i != info->com_count)
 	{
 		result[i].command = first_command(tmp, info);
 		tmp = lst;

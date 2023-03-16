@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/15 17:18:46 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/16 02:53:14 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static char	*getenv_instr(char *str, int size, t_info *info)
 	i = 0;
 	env = malloc((size + 1) + sizeof(char));
 	if (env == NULL)
-		print_error(info, ERROR1);
+		print_error(info, ERROR99);
 	while (i != size)
 	{
 		env[i] = str[i];
@@ -46,7 +46,7 @@ static char	*getenv_instr(char *str, int size, t_info *info)
 	if (result == NULL)
 		result = ft_strdup("", &info->parsing);
 	if (result == NULL)
-		print_error(info, ERROR1);
+		print_error(info, ERROR99);
 	free (env);
 	return (result);
 }
@@ -57,7 +57,7 @@ static char	*return_start(char *str, int size, t_info *info)
 
 	result = ft_strdup(str, &info->parsing);
 	if (result == NULL)
-		print_error(info, ERROR1);
+		print_error(info, ERROR99);
 	result[size] = '\0';
 	return (result);
 }
@@ -77,14 +77,13 @@ static char	*swap_envstr(char *str, t_info *info)
 		else if (str[i] == '$')
 		{
 			u = ++i;
-			while (str[u] && str[u] != ' ' && str[u] != '$' && str[u] != '\'' && str[u] != '\"')
+			while (str[u] && str[u] != ' ' && str[u] != '$' && str[u] != '\''
+				&& str[u] != '\"')
 				u++;
 			buff = getenv_instr(&str[i], u - i, info);
 			tmp = ft_strjoin(buff, &str[u], &info->parsing);
 			str = ft_strjoin(return_start(str, i - 1, info),
 					tmp, &info->parsing);
-			if (str == NULL)
-				print_error(info, ERROR1);
 			i += ft_strlen(buff) - 1;
 		}
 	}
