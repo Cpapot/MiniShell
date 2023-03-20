@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 16:55:26 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/22 16:40:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/16 15:04:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(const char *s1, t_memlist **stock)
 	int		len;
 	int		i;
 
+	if (s1 == NULL)
+		return (NULL);
 	len = ft_strlen(s1);
 	i = 0;
 	result = stock_malloc(sizeof(char) * (len + 1), stock);

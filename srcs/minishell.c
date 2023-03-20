@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/11 18:26:51 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/20 19:03:33 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	minishell_init(t_info *info)
 {
 	//signal(SIGINT, catch_signals);
 	info->parsing = NULL;
+	info->final_memparse = NULL;
 }
 
 void	close_minishell(t_info	*info)
@@ -27,11 +28,13 @@ void	close_minishell(t_info	*info)
 
 	i = 0;
 	result = info->final_parse;
-	while (result[i].command != NULL)
+	while (i + 1 < info->com_count)
 	{
 		tmp = (result[i]).command;
 		printf("\nCommande %d :\n", i + 1);
-		while (tmp)
+		if (tmp == NULL)
+			printf("(null)");
+		while (tmp && tmp->content)
 		{
 			printf("%s ", tmp->content);
 			tmp = tmp->next;
@@ -45,19 +48,22 @@ void	close_minishell(t_info	*info)
 		}
 		i++;
 	}
+	rl_clear_history();
 	stock_free(&info->parsing);
+	stock_free(&info->final_memparse);
 }
 
 static void	prompt(t_info *info)
 {
-	/*while (1)
+	while (1)
 	{
 		info->prompt_string = readline(BLUE"Minishell $>"WHITE);
 		if (strlen(info->prompt_string) != 0)
 			break ;
-	}*/
-	info->prompt_string = ft_strdup("salut $PATH |$PDWD >>ya $XDG_SESSION_DESKTOP uwu \"slt|oui >ok >ko| $LOGNAME\"yes $PDWD sir errrralo   $PDWD rs $PDWD", &info->parsing);
+	}
+	//info->prompt_string = ft_strdup("cat |cat shh << |", &info->parsing);
 	addto_logs(info->prompt_string, info);
+	add_history(info->prompt_string);
 }
 
 int	main(void)
@@ -65,9 +71,12 @@ int	main(void)
 	t_info		info;
 
 	minishell_init(&info);
-
+	while (42)
+	{
 		prompt(&info);
 		info.final_parse = parsing(&info);
-
+		if (info.final_parse != NULL)
+			break ;
+	}
 	close_minishell(&info);
 }

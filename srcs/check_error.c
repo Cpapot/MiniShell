@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_utils.c                                  :+:      :+:    :+:   */
+/*   check_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/20 19:03:52 by cpapot           ###   ########.fr       */
+/*   Created: 2023/03/16 14:06:38 by cpapot            #+#    #+#             */
+/*   Updated: 2023/03/20 18:16:48 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	free_all(t_info *info)
+static int	is_text(char *str)
 {
-	rl_clear_history();
-	stock_free(&info->parsing);
-	stock_free(&info->final_memparse);
+	if (str == NULL)
+		return (1);
+	if (is_redirection(str))
+		return (1);
+	if (ft_strcmp("|", str))
+		return (1);
+	if (ft_strcmp("", str))
+		return (1);
+	return (0);
 }
 
-void	print_error_exit(t_info *info, char *error)
+int	is_command_valid(t_list *lst)
 {
-	ft_printf_fd(2, "\n%s\n", error);
-	free_all(info);
-	exit(1);
-}
-
-void	print_error(char *error)
-{
-	ft_printf_fd(2, "\n%s\n", error);
+	while (lst)
+	{
+		if (is_redirection(lst->content)
+			&& (lst->next == NULL || is_text(lst->next->content)))
+			return (print_error(ERROR5), 1);
+		lst = lst->next;
+	}
+	return (0);
 }

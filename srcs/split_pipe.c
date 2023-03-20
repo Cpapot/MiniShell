@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 15:17:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/09 14:45:58 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/20 18:17:05 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ static t_list	*first_command(t_list *lst, t_info *info)
 		if (ft_strncmp("|", lst->content, ft_strlen(lst->content)) == 0)
 			break ;
 		if (start != NULL)
-			ft_lstadd_back(&start, ft_lstnew(lst->content, &info->parsing));
+			ft_lstadd_back(&start, ft_lstnew(lst->content,
+					&info->final_memparse));
 		else
-			start = ft_lstnew(lst->content, &info->parsing);
+			start = ft_lstnew(lst->content, &info->final_memparse);
 		lst = lst->next;
 	}
 	return (start);
@@ -68,19 +69,21 @@ static	void	go_next_cmd(t_list **lst)
 t_commands	*split_pipe(t_info *info, t_list *lst)
 {
 	int			i;
-	int			count;
 	t_list		*tmp;
 	t_commands	*result;
 
 	i = -1;
 	tmp = lst;
-	count = com_count(tmp);
-	result = stock_malloc(sizeof(t_commands) * (count + 1), &info->parsing);
+	info->com_count = com_count(tmp);
+	result = stock_malloc(sizeof(t_commands) * (info->com_count + 1),
+			&info->final_memparse);
 	if (result == NULL)
-		print_error(info, "Memory error");
-	while (++i != count)
+		print_error_exit(info, ERROR99);
+	while (++i != info->com_count)
 	{
 		result[i].command = first_command(tmp, info);
+		if (result[i].command == NULL && i + 1 != info->com_count)
+			return (print_error(ERROR4), NULL);
 		tmp = lst;
 		go_next_cmd(&tmp);
 		lst = tmp;
