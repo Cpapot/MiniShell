@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/15 17:45:10 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/20 18:16:59 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ static int	splited_word(char *str)
 			i += quote_size(&str[i], 2);
 			buff = 1;
 		}
+		if (str[i] == 0)
+			return (-1);
 		i++;
 	}
 	if (buff == 0)
@@ -96,6 +98,8 @@ t_list	*shell_split(char *str, t_memlist **stock)
 	{
 		str = ft_next_char((char *)&str[u]);
 		u = splited_word(str);
+		if (u == -1)
+			return (print_error(ERROR3), NULL);
 		tmp = ft_strndup(str, u, stock);
 		if (!tmp)
 			return (stock_free(stock), NULL);

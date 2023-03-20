@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/16 16:17:58 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/20 18:19:14 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ typedef struct s_info
 }	t_info;
 
 /*						minishell_utils					*/
-void		print_error(t_info *info, char *error);
+void		print_error_exit(t_info *info, char *error);
+void		print_error(char *error);
 void		free_all(t_info *info);
 
 /*						parsing							*/

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/16 02:53:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/20 18:13:14 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static char	*getenv_instr(char *str, int size, t_info *info)
 	i = 0;
 	env = malloc((size + 1) + sizeof(char));
 	if (env == NULL)
-		print_error(info, ERROR99);
+		print_error_exit(info, ERROR99);
 	while (i != size)
 	{
 		env[i] = str[i];
@@ -46,7 +46,7 @@ static char	*getenv_instr(char *str, int size, t_info *info)
 	if (result == NULL)
 		result = ft_strdup("", &info->parsing);
 	if (result == NULL)
-		print_error(info, ERROR99);
+		print_error_exit(info, ERROR99);
 	free (env);
 	return (result);
 }
@@ -57,7 +57,7 @@ static char	*return_start(char *str, int size, t_info *info)
 
 	result = ft_strdup(str, &info->parsing);
 	if (result == NULL)
-		print_error(info, ERROR99);
+		print_error_exit(info, ERROR99);
 	result[size] = '\0';
 	return (result);
 }

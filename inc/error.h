@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 14:23:17 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/16 16:39:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/20 16:28:15 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,5 @@
 # define ERROR15	"\e[31m\e[1m[ERROR:15]\e[0m Can't create file"
 # define ERROR20	"\e[31m\e[ERROR:20]\e[0m No such file or directory"
 # define ERROR99	"\e[31m\e[1m[ERROR:99]\e[0m Malloc cannot be created"
-
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/16 16:20:22 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/20 17:53:49 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,12 @@ t_commands	*parsing(t_info *info)
 	int			i;
 
 	i = 0;
-	if (ft_strlen(info->prompt_string) == 0)
-		return (NULL);
 	lst = shell_split(info->prompt_string, &info->parsing);
-	if (is_command_valid(lst))
-		exit(1);
+	if (lst == NULL || is_command_valid(lst))
+		return (NULL);
 	result = split_pipe(info, lst);
+	if (result == NULL)
+		return (NULL);
 	info->final_parse = result;
 	while (result[i].command != NULL)
 	{
