@@ -88,6 +88,7 @@ clean:
 
 fclean:
 	@echo "${RED}🗑  ${NAME} cleanded"
+	@echo "${RED}🗑  .log cleanded"
 	@${RM} .log
 	@${RM} ${OBJS}
 	@${RM} ${OBJSDIR}
