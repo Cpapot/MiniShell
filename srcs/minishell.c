@@ -6,15 +6,18 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/20 19:03:33 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/21 17:04:57 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	minishell_init(t_info *info)
+void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 {
 	//signal(SIGINT, catch_signals);
+	(void)argc;
+	(void)argv;
+	info->envp = envp;
 	info->parsing = NULL;
 	info->final_memparse = NULL;
 }
@@ -66,11 +69,11 @@ static void	prompt(t_info *info)
 	add_history(info->prompt_string);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	t_info		info;
 
-	minishell_init(&info);
+	minishell_init(&info, argc, argv, envp);
 	while (42)
 	{
 		prompt(&info);

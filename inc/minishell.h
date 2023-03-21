@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/20 18:19:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/21 17:54:51 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@
 # include <fcntl.h>
 # include <signal.h>
 
-# define NL			"\n"
-# define SP			" "
+# define INV_ID_EXPORT	" !#$%&()*+-.<>=:;`/\'\"@{}[]^|~\n?"
+# define INVID			" !#$%&()*+-.<>=:;`/'\"@{}[]^|~\n"
+# define NL				"\n"
+# define SP				" "
 
 typedef struct s_dir
 {
@@ -42,6 +44,7 @@ typedef struct s_commands
 typedef struct s_info
 {
 	char		*prompt_string;
+	char		**envp;
 	t_commands	*final_parse;
 	t_memlist	*parsing;
 	t_memlist	*final_memparse;
@@ -53,6 +56,7 @@ typedef struct s_info
 void		print_error_exit(t_info *info, char *error);
 void		print_error(char *error);
 void		free_all(t_info *info);
+char		*ft_getenv(char *env, char **envp, t_memlist **stock);
 
 /*						parsing							*/
 t_commands	*parsing(t_info *info);
@@ -64,7 +68,7 @@ t_commands	*split_pipe(t_info *info, t_list *lst);
 t_list		*shell_split(char *str, t_memlist **stock);
 
 /*						swap_env						*/
-void		swap_env(t_list *lst, t_info *info);
+void		swap_env(t_list *lst, t_info *info, char **envp);
 
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);

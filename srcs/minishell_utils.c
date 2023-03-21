@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/20 19:03:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/21 16:43:23 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,22 @@ void	print_error_exit(t_info *info, char *error)
 void	print_error(char *error)
 {
 	ft_printf_fd(2, "\n%s\n", error);
+}
+
+char	*ft_getenv(char *env, char **envp, t_memlist **stock)
+{
+	int		i;
+	int		u;
+
+	i = 0;
+	while (envp[i])
+	{
+		u = 0;
+		while (envp[i][u] != '=')
+			u++;
+		if (ft_strcmp(env, ft_stsubstr(envp[i], 0, u, stock)))
+			return (ft_stsubstr(envp[i], u + 1, ft_strlen(envp[i]), stock));
+		i++;
+	}
+	return (NULL);
 }
