@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/21 16:43:23 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 14:58:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,20 @@ void	free_all(t_info *info)
 	rl_clear_history();
 	stock_free(&info->parsing);
 	stock_free(&info->final_memparse);
+}
+
+int	is_char_in_str(char c, const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 void	print_error_exit(t_info *info, char *error)

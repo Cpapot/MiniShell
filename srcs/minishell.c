@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/21 17:04:57 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 14:22:51 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	prompt(t_info *info)
 		if (strlen(info->prompt_string) != 0)
 			break ;
 	}
-	//info->prompt_string = ft_strdup("cat |cat shh << |", &info->parsing);
+	//info->prompt_string = ft_strdup("<>", &info->parsing);
 	addto_logs(info->prompt_string, info);
 	add_history(info->prompt_string);
 }

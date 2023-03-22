@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/21 17:54:51 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 15:22:48 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <signal.h>
 
 # define INV_ID_EXPORT	" !#$%&()*+-.<>=:;`/\'\"@{}[]^|~\n?"
-# define INVID			" !#$%&()*+-.<>=:;`/'\"@{}[]^|~\n"
+# define INVID			" !#$%&()*+-.<>=:;`/\'\"@{}[]^|~\n"
 # define NL				"\n"
 # define SP				" "
 
@@ -48,6 +48,7 @@ typedef struct s_info
 	t_commands	*final_parse;
 	t_memlist	*parsing;
 	t_memlist	*final_memparse;
+	t_memlist	*envp_mem;
 	int			com_count;
 	t_list		**command;
 }	t_info;
@@ -57,6 +58,7 @@ void		print_error_exit(t_info *info, char *error);
 void		print_error(char *error);
 void		free_all(t_info *info);
 char		*ft_getenv(char *env, char **envp, t_memlist **stock);
+int			is_char_in_str(char c, const char *str);
 
 /*						parsing							*/
 t_commands	*parsing(t_info *info);

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/20 22:26:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 14:22:05 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	word_len(char *str)
 		{
 			while (str[u] == '<' && u < 2)
 				u++;
-			if (u == 2)
+			if (u)
 				break ;
 			while (str[u] == '>' && u < 2)
 				u++;
