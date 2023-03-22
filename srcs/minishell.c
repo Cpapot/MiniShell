@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 14:22:51 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 21:34:14 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 	//signal(SIGINT, catch_signals);
 	(void)argc;
 	(void)argv;
+	info->lastprompt_string = NULL;
 	info->envp = envp;
 	info->parsing = NULL;
 	info->final_memparse = NULL;
@@ -24,36 +25,12 @@ void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 
 void	close_minishell(t_info	*info)
 {
-	t_commands	*result;
-	t_list		*tmp;
-	t_dir		*tmp2;
-	int			i;
-
-	i = 0;
-	result = info->final_parse;
-	while (i + 1 < info->com_count)
-	{
-		tmp = (result[i]).command;
-		printf("\nCommande %d :\n", i + 1);
-		if (tmp == NULL)
-			printf("(null)");
-		while (tmp && tmp->content)
-		{
-			printf("%s ", tmp->content);
-			tmp = tmp->next;
-		}
-		printf("\n\n");
-		tmp2 = (result[i]).dir;
-		while (tmp2)
-		{
-			printf("%s %s	", tmp2->type, tmp2->dest);
-			tmp2 = tmp2->next;
-		}
-		i++;
-	}
 	rl_clear_history();
+	stock_free(&info->envp_mem);
+	stock_free(&info->exec_mem);
 	stock_free(&info->parsing);
 	stock_free(&info->final_memparse);
+	exit(1);
 }
 
 static void	prompt(t_info *info)
@@ -64,9 +41,12 @@ static void	prompt(t_info *info)
 		if (strlen(info->prompt_string) != 0)
 			break ;
 	}
-	//info->prompt_string = ft_strdup("<>", &info->parsing);
+	//info->prompt_string = ft_strdup("\"\"\"\"", &info->parsing);
+	if (info->lastprompt_string
+		&& !ft_strcmp(info->lastprompt_string, info->prompt_string))
+		add_history(info->prompt_string);
 	addto_logs(info->prompt_string, info);
-	add_history(info->prompt_string);
+	info->lastprompt_string = info->prompt_string;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -79,7 +59,7 @@ int	main(int argc, char **argv, char **envp)
 		prompt(&info);
 		info.final_parse = parsing(&info);
 		if (info.final_parse != NULL)
-			break ;
+			printtest(&info);
 	}
 	close_minishell(&info);
 }

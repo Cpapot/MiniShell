@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 14:06:38 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/20 18:16:48 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 20:39:10 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	is_text(char *str)
 	return (0);
 }
 
-int	is_command_valid(t_list *lst)
+int	is_line_valid(t_list *lst)
 {
 	while (lst)
 	{
@@ -35,4 +35,11 @@ int	is_command_valid(t_list *lst)
 		lst = lst->next;
 	}
 	return (0);
+}
+
+int	is_command_line(t_list *lst)
+{
+	if (lst == NULL || lst->content == NULL)
+		return (print_error(ERROR2), 0);
+	return (1);
 }

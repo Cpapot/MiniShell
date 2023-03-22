@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/21 17:15:13 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 20:38:06 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,15 @@ t_commands	*parsing(t_info *info)
 	t_commands	*result;
 	int			i;
 
-	i = 0;
+	i = -1;
 	lst = shell_split(info->prompt_string, &info->parsing);
-	if (lst == NULL || ft_strcmp("", lst->content) || is_command_valid(lst))
+	if (lst == NULL || ft_strcmp("", lst->content) || is_line_valid(lst))
 		return (NULL);
 	result = split_pipe(info, lst);
 	if (result == NULL)
 		return (NULL);
 	info->final_parse = result;
-	while (result[i].command != NULL)
+	while (result[++i].command != NULL)
 	{
 		result[i].command
 			= find_redirection(result[i].command, info, i);
@@ -101,7 +101,8 @@ t_commands	*parsing(t_info *info)
 		remove_quote(result[i].command, &info->parsing);
 		result[i].command = remove_empty_node(result[i].command);
 		cpy_final_parse(result[i], info);
-		i++;
+		if (!is_command_line(result[i].command))
+			return (NULL);
 	}
 	stock_free(&info->parsing);
 	return (result);

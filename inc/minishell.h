@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 17:30:18 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 21:33:22 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_commands
 typedef struct s_info
 {
 	char		*prompt_string;
+	char		*lastprompt_string;
 	char		**envp;
 	t_commands	*final_parse;
 	t_memlist	*exec_mem;
@@ -53,6 +54,9 @@ typedef struct s_info
 	int			com_count;
 	t_list		**command;
 }	t_info;
+
+/*						MINISHELL						*/
+void		close_minishell(t_info	*info);
 
 /*						minishell_utils					*/
 void		print_error_exit(t_info *info, char *error);
@@ -90,7 +94,11 @@ t_list		*remove_empty_node(t_list *lst);
 int			quote_size(char *str, int mode);
 
 /*						check_error					*/
-int			is_command_valid(t_list *lst);
+int			is_line_valid(t_list *lst);
+int			is_command_line(t_list *lst);
 
 void		catch_signals(int sig);
+
+void	printtest(t_info *info);
+
 #endif

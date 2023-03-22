@@ -10,7 +10,8 @@ HEADERS 	=	minishell.h error.h
 SRCS		=	minishell.c minishell_utils.c \
 				parsing.c parsing_utils.c shell_split.c \
 				split_pipe.c history.c signals.c \
-				swap_env.c quote.c check_error.c
+				swap_env.c quote.c check_error.c \
+				TEST.c
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
 
