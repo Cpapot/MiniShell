@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 15:39:59 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 18:02:04 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 static char	**add_to_envp(char **envp, char *name, char *var, t_info *info)
 {
 	int		i;
-	char	*tmp;
 	char	**result;
 
 	i = 0;
@@ -31,8 +30,7 @@ static char	**add_to_envp(char **envp, char *name, char *var, t_info *info)
 		result[i] = envp[i];
 		i++;
 	}
-	tmp = ft_strjoin(name, "=", &info->envp_mem);
-	result[i] = ft_strjoin(tmp, var, &info->envp_mem);
+	result[i] = ft_strjoin(name, var, &info->envp_mem);
 	if (result[i] == NULL)
 		print_error_exit(info, ERROR99);
 	result[i + 1] = NULL;
@@ -40,7 +38,7 @@ static char	**add_to_envp(char **envp, char *name, char *var, t_info *info)
 
 }
 
-static void	print_env(char **envp)
+void	print_env(char **envp)
 {
 	int	i;
 
@@ -52,7 +50,46 @@ static void	print_env(char **envp)
 	}
 }
 
-static int	export_parsing(char *str, t_info *info)
+char	*find_name(char *str, t_info *info)
+{
+	char	*result;
+	int		i;
+
+	i = 0;
+	while (str[i] && (i == 0 || str[i - 1] != '='))
+		i++;
+	result = ft_stsubstr(str, 0, i, &info->exec_mem);
+	if (str == NULL)
+		print_error_exit(info, ERROR99);
+	return (result);
+}
+
+char	*find_var(char *str, t_info *info)
+{
+	int		i;
+	int		u;
+	char	*result;
+
+	i = 0;
+	while (str[i] && (i == 0 || str[i - 1] != '='))
+		i++;
+	if (str[i] == 0)
+	{
+		result = ft_strdup("", &info->exec_mem);
+		if (result == NULL)
+			print_error_exit(info, ERROR99);
+		return (result);
+	}
+	u = i;
+	while (str[i])
+		i++;
+	result = ft_stsubstr(str, u, i, &info->exec_mem);
+	if (result == NULL)
+		print_error_exit(info, ERROR99);
+	return (result);
+}
+
+static int	export_parsing(char *str)
 {
 	int	i;
 
@@ -65,6 +102,7 @@ static int	export_parsing(char *str, t_info *info)
 			return (1);
 		i++;
 	}
+	return (0);
 }
 
 int	export(char *str, t_info *info)
@@ -72,12 +110,11 @@ int	export(char *str, t_info *info)
 	int	parsing_res;
 
 	parsing_res = export_parsing(str);
-	if (parsing_res == 0)
-		return (0);
 	if (parsing_res == 1)
 		return (print_error(EXPORTERROR1), 0);
 	if (parsing_res == 2)
 		return (print_env(info->envp), 1);
-	//ajouter fonction qui renvoie name et var
-	info->envp = add_to_envp(info->envp, info);
+	info->envp = add_to_envp(info->envp, find_name(str, info),
+			find_var(str, info), info);
+	return (1);
 }
