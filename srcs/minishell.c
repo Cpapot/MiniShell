@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/23 16:26:04 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/23 17:37:41 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 	info->lastprompt_string = NULL;
 	info->envp = envp;
 	info->parsing = NULL;
+	info->final_memparse = NULL;
+	info->envp_mem = NULL;
+	info->exec_mem = NULL;
 	info->final_memparse = NULL;
 	signal(SIGINT, catch_signals);
 	signal(SIGQUIT, SIG_IGN);
