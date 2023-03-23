@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 20:43:50 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/23 14:53:12 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	splited_word(char *str)
 		}
 		else if (str[i] == '\'')
 		{
-			i += quote_size(&str[i], 2);
+			i += quote_size(&str[i], 0);
 			buff = 1;
 		}
 		if (str[i] == 0)

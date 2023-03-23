@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 21:34:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/23 16:26:04 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 {
-	//signal(SIGINT, catch_signals);
+
 	(void)argc;
 	(void)argv;
 	info->lastprompt_string = NULL;
 	info->envp = envp;
 	info->parsing = NULL;
 	info->final_memparse = NULL;
+	signal(SIGINT, catch_signals);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	close_minishell(t_info	*info)
@@ -38,6 +40,8 @@ static void	prompt(t_info *info)
 	while (1)
 	{
 		info->prompt_string = readline(BLUE"Minishell $>"WHITE);
+		if (info->prompt_string == NULL)
+			close_minishell(info);
 		if (strlen(info->prompt_string) != 0)
 			break ;
 	}
@@ -63,3 +67,4 @@ int	main(int argc, char **argv, char **envp)
 	}
 	close_minishell(&info);
 }
+
