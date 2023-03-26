@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 21:33:22 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/26 18:58:25 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "error.h"
 # include "../libft/includes/libft.h"
+# include "builtins.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>

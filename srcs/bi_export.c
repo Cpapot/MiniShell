@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 18:02:04 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/26 18:52:49 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static int	export_parsing(char *str)
 	return (0);
 }
 
-int	export(char *str, t_info *info)
+int		bi_export(char *str, t_info *info)
 {
 	int	parsing_res;
 
