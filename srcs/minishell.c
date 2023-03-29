@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
 /*   Updated: 2023/03/20 19:03:33 by cpapot           ###   ########.fr       */
@@ -12,9 +12,11 @@
 
 #include "../inc/minishell.h"
 
-void	minishell_init(t_info *info)
+void	minishell_init(t_info *info, int argc, char **argv)
 {
 	//signal(SIGINT, catch_signals);
+	(void)argc;
+	(void)argv;
 	info->parsing = NULL;
 	info->final_memparse = NULL;
 }
@@ -65,7 +67,7 @@ static void	prompt(t_info *info)
 	addto_logs(info->prompt_string, info);
 	add_history(info->prompt_string);
 }
-
+/*
 int	main(void)
 {
 	t_info		info;
@@ -78,5 +80,19 @@ int	main(void)
 		if (info.final_parse != NULL)
 			break ;
 	}
+	close_minishell(&info);
+}
+*/
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_info		info;
+
+	minishell_init(&info, argc, argv);
+
+		prompt(&info);
+		info.final_parse = parsing(&info);
+		execution(&info, envp);
+
 	close_minishell(&info);
 }
