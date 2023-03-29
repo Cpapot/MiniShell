@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 14:09:34 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/26 18:52:54 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/29 15:42:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	check_flag(char *str)
 	return (0);
 }
 
-void	bi_echo(t_list *lst, int out_fd)
+int	bi_echo(t_list *lst, int out_fd)
 {
 	int	is_nl;
 
@@ -49,5 +49,5 @@ void	bi_echo(t_list *lst, int out_fd)
 	}
 	if (is_nl == 1)
 		ft_printf_fd(out_fd, "\n");
-	return ;
+	return (1);
 }

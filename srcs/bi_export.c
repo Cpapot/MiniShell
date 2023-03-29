@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/26 18:52:49 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/29 15:45:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,6 @@ static char	**add_to_envp(char **envp, char *name, char *var, t_info *info)
 	result[i + 1] = NULL;
 	return (result);
 
-}
-
-void	print_env(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
 }
 
 char	*find_name(char *str, t_info *info)
@@ -111,9 +99,9 @@ int		bi_export(char *str, t_info *info)
 
 	parsing_res = export_parsing(str);
 	if (parsing_res == 1)
-		return (print_error(EXPORTERROR1), 0);
+		return (print_error(EXPORTERROR1), -1);
 	if (parsing_res == 2)
-		return (print_env(info->envp), 1);
+		return (print_export(info->envp), 1);
 	info->envp = add_to_envp(info->envp, find_name(str, info),
 			find_var(str, info), info);
 	return (1);

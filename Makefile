@@ -1,4 +1,3 @@
-
 #				______ _ _
 #				|  ____(_) |
 #				| |__   _| | ___  ___
@@ -12,7 +11,8 @@ SRCS		=	minishell.c minishell_utils.c \
 				parsing.c parsing_utils.c shell_split.c \
 				split_pipe.c history.c signals.c \
 				swap_env.c quote.c check_error.c \
-				TEST.c bi_echo.c
+				TEST.c bi_echo.c bi_utils.c bi_env.c \
+				bi_pwd.c
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
 
