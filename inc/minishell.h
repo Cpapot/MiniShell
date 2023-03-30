@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
 /*   Updated: 2023/03/29 15:22:25 by cpapot           ###   ########.fr       */
@@ -54,6 +54,7 @@ typedef struct s_info
 	t_memlist	*envp_mem;
 	int			com_count;
 	t_list		**command;
+	char		*path;
 }	t_info;
 
 /*						MINISHELL						*/
@@ -80,6 +81,9 @@ void		swap_env(t_list *lst, t_info *info, char **envp);
 
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);
+
+/*						execution						*/
+void		execution(t_info *info, char **envp);
 
 /*						parsing utils					*/
 char		*ft_strndup(const char *s1, size_t n, t_memlist **stock);
