@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/03/13 14:07:14 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/03/30 14:13:54 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ char	*get_path(char **envp, t_memlist *exec)
 /*
 This function handles all the execution process of the commands
 */
+/*
 void	execution(t_info *info, char **envp)
 {
 	t_memlist	*exec;
@@ -52,4 +53,4 @@ void	execution(t_info *info, char **envp)
 	exec = NULL;
 	path = get_path(envp, exec);
 	return ;
-}
+}*/
