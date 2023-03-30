@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/20 18:13:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/21 16:41:52 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	is_contain_env(char *str)
 	return (0);
 }
 
-static char	*getenv_instr(char *str, int size, t_info *info)
+static char	*getenv_instr(char *str, int size, t_info *info, char **envp)
 {
 	char	*env;
 	char	*result;
@@ -42,7 +42,7 @@ static char	*getenv_instr(char *str, int size, t_info *info)
 		i++;
 	}
 	env[i] = '\0';
-	result = getenv(env);
+	result = ft_getenv(env, envp, &info->parsing);
 	if (result == NULL)
 		result = ft_strdup("", &info->parsing);
 	if (result == NULL)
@@ -62,7 +62,7 @@ static char	*return_start(char *str, int size, t_info *info)
 	return (result);
 }
 
-static char	*swap_envstr(char *str, t_info *info)
+static char	*swap_envstr(char *str, t_info *info, char **envp)
 {
 	int		i;
 	int		u;
@@ -80,7 +80,7 @@ static char	*swap_envstr(char *str, t_info *info)
 			while (str[u] && str[u] != ' ' && str[u] != '$' && str[u] != '\''
 				&& str[u] != '\"')
 				u++;
-			buff = getenv_instr(&str[i], u - i, info);
+			buff = getenv_instr(&str[i], u - i, info, envp);
 			tmp = ft_strjoin(buff, &str[u], &info->parsing);
 			str = ft_strjoin(return_start(str, i - 1, info),
 					tmp, &info->parsing);
@@ -90,12 +90,12 @@ static char	*swap_envstr(char *str, t_info *info)
 	return (str);
 }
 
-void	swap_env(t_list *lst, t_info *info)
+void	swap_env(t_list *lst, t_info *info, char **envp)
 {
 	while (lst)
 	{
 		if (is_contain_env(lst->content))
-			lst->content = swap_envstr(lst->content, info);
+			lst->content = swap_envstr(lst->content, info, envp);
 		lst = lst->next;
 	}
 }

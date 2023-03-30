@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/20 22:26:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/23 14:53:12 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	word_len(char *str)
 		{
 			while (str[u] == '<' && u < 2)
 				u++;
-			if (u == 2)
+			if (u)
 				break ;
 			while (str[u] == '>' && u < 2)
 				u++;
@@ -66,7 +66,7 @@ static int	splited_word(char *str)
 		}
 		else if (str[i] == '\'')
 		{
-			i += quote_size(&str[i], 2);
+			i += quote_size(&str[i], 0);
 			buff = 1;
 		}
 		if (str[i] == 0)
@@ -105,9 +105,11 @@ t_list	*shell_split(char *str, t_memlist **stock)
 			return (print_error(ERROR3), NULL);
 		tmp = ft_strndup(str, u, stock);
 		if (!tmp)
-			return (stock_free(stock), NULL);
+			return (print_error(ERROR3), NULL);
 		ft_lstadd_back(&start, ft_lstnew(tmp, stock));
+		printf("%s ", tmp);
 	}
+	printf("\n");
 	start = start->next;
 	return (start);
 }

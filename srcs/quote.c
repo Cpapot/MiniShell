@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:20:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/20 16:38:38 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 21:05:29 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ char	*remove_actual_quote(char *str, t_memlist **stock)
 			if (save % 2)
 			{
 				if (c == '\'')
-					i += quote_size(&str[i], 0);
+					i += quote_size(&str[i], 0) - 1;
 				else
-					i += quote_size(&str[i], 1);
+					i += quote_size(&str[i], 1) - 1;
 			}
 		}
 		else

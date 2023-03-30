@@ -1,22 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   bi_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 18:23:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/23 15:43:27 by cpapot           ###   ########.fr       */
+/*   Created: 2023/03/29 15:54:17 by cpapot            #+#    #+#             */
+/*   Updated: 2023/03/29 16:52:11 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	catch_signals(int sig)
+#define PWDERROR "Error while calling \"getcwd\""
+
+int	bi_pwd(t_info *info, int out_fd)
 {
-	(void)sig;
-	rl_on_new_line();
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_redisplay();
+	char	*str;
+
+	str = malloc(2048);
+	if (str == NULL)
+		print_error_exit(info, ERROR99);
+	if (getcwd(str, 2048) == NULL)
+	{
+		print_error(PWDERROR);
+		return (free (str), -1);
+	}
+	ft_printf_fd(out_fd, "%s\n", str);
+	free (str);
+	return (1);
 }
+

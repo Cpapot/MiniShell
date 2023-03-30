@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   bi_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 18:23:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/23 15:43:27 by cpapot           ###   ########.fr       */
+/*   Created: 2023/03/29 15:23:37 by cpapot            #+#    #+#             */
+/*   Updated: 2023/03/29 15:45:48 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	catch_signals(int sig)
+#define	ENVERROR	"No such file or directory"
+
+int	bi_env(t_list *lst, t_info *info)
 {
-	(void)sig;
-	rl_on_new_line();
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (lst != NULL || lst->content != NULL)
+		return (print_error(ENVERROR), -1);
+	else
+		return (print_env(info->envp), 1);
+	return ;
 }
