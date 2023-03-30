@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/21 16:41:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/30 16:09:36 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static char	*getenv_instr(char *str, int size, t_info *info, char **envp)
 	i = 0;
 	env = malloc((size + 1) + sizeof(char));
 	if (env == NULL)
-		print_error_exit(info, ERROR99);
+		return (NULL);
 	while (i != size)
 	{
 		env[i] = str[i];
@@ -46,7 +46,7 @@ static char	*getenv_instr(char *str, int size, t_info *info, char **envp)
 	if (result == NULL)
 		result = ft_strdup("", &info->parsing);
 	if (result == NULL)
-		print_error_exit(info, ERROR99);
+		return (NULL);
 	free (env);
 	return (result);
 }
@@ -57,7 +57,7 @@ static char	*return_start(char *str, int size, t_info *info)
 
 	result = ft_strdup(str, &info->parsing);
 	if (result == NULL)
-		print_error_exit(info, ERROR99);
+		return (NULL);
 	result[size] = '\0';
 	return (result);
 }
@@ -84,6 +84,7 @@ static char	*swap_envstr(char *str, t_info *info, char **envp)
 			tmp = ft_strjoin(buff, &str[u], &info->parsing);
 			str = ft_strjoin(return_start(str, i - 1, info),
 					tmp, &info->parsing);
+			if (!buff || !tmp || !str)
 			i += ft_strlen(buff) - 1;
 		}
 	}

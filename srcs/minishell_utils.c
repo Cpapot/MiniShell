@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 21:34:35 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/30 16:05:45 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ int	is_char_in_str(char c, const char *str)
 void	print_error_exit(t_info *info, char *error)
 {
 	ft_printf_fd(2, "\n%s\n", error);
-	close_minishell(info);
-	exit(1);
+	info->is_finish = 1;
 }
 
 void	print_error(char *error)

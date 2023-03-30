@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/30 14:14:05 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/30 15:59:28 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_info
 	t_memlist	*final_memparse;
 	t_memlist	*envp_mem;
 	int			com_count;
+	int			is_finish;
 	t_list		**command;
 	char		*path;
 }	t_info;
@@ -107,6 +108,7 @@ int			bi_echo(t_list *lst, int out_fd);
 int			bi_export(char *str, t_info *info);
 int			bi_env(t_list *lst, t_info *info);
 int			bi_pwd(t_info *info, int out_fd);
+int			bi_cd(t_list *lst, t_info *info);
 
 /*						UTILS						*/
 void		print_export(char **envp);

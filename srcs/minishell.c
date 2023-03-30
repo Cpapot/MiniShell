@@ -6,11 +6,13 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/30 14:14:21 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/30 16:05:00 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+int		exit_status;
 
 void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 {
@@ -23,7 +25,8 @@ void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 	info->final_memparse = NULL;
 	info->envp_mem = NULL;
 	info->exec_mem = NULL;
-	info->final_memparse = NULL;
+	exit_status = 0;
+	info->is_finish = 0;
 	signal(SIGINT, catch_signals);
 	signal(SIGQUIT, SIG_IGN);
 }
@@ -35,7 +38,6 @@ void	close_minishell(t_info	*info)
 	stock_free(&info->exec_mem);
 	stock_free(&info->parsing);
 	stock_free(&info->final_memparse);
-	exit(1);
 }
 
 static void	prompt(t_info *info)
@@ -56,20 +58,30 @@ static void	prompt(t_info *info)
 	info->lastprompt_string = info->prompt_string;
 }
 
+int	loop(t_info *info)
+{
+	while (42)
+	{
+		prompt(info);
+		info->final_parse = parsing(info);
+		if (info->is_finish != 0)
+			break ;
+		if (info->final_parse != NULL)
+		{
+			printtest(info);
+			//execution(info);
+		}
+		if (info->is_finish != 0)
+			break ;
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_info		info;
 
 	minishell_init(&info, argc, argv, envp);
-	while (42)
-	{
-		prompt(&info);
-		info.final_parse = parsing(&info);
-		if (info.final_parse != NULL)
-		{
-			printtest(&info);
-			//execution(&info, envp);
-		}
-	}
+	loop(&info);
 	close_minishell(&info);
+	return (exit_status);
 }
