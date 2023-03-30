@@ -6,14 +6,16 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/13 14:04:51 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/03/29 15:22:25 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "error.h"
 # include "../libft/includes/libft.h"
+# include "builtins.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -22,11 +24,10 @@
 # include <fcntl.h>
 # include <signal.h>
 
-
-
-# define NL			"\n"
-# define SP			" "
-# define ERROR1		"Cannot Allocate Memory"
+# define INV_ID_EXPORT	" !#$%&()*+-.<>=:;`/\'\"@{}[]^|~\n?"
+# define INVID			" !#$%&()*+-.<>=:;`/\'\"@{}[]^|~\n"
+# define NL				"\n"
+# define SP				" "
 
 typedef struct s_dir
 {
@@ -44,17 +45,27 @@ typedef struct s_commands
 typedef struct s_info
 {
 	char		*prompt_string;
+	char		*lastprompt_string;
+	char		**envp;
 	t_commands	*final_parse;
+	t_memlist	*exec_mem;
 	t_memlist	*parsing;
-	t_memlist	*lexer;
-	int			tmp;
+	t_memlist	*final_memparse;
+	t_memlist	*envp_mem;
+	int			com_count;
 	t_list		**command;
 	char		*path;
 }	t_info;
 
+/*						MINISHELL						*/
+void		close_minishell(t_info	*info);
+
 /*						minishell_utils					*/
-void		print_error(t_info *info, char *error);
+void		print_error_exit(t_info *info, char *error);
+void		print_error(char *error);
 void		free_all(t_info *info);
+char		*ft_getenv(char *env, char **envp, t_memlist **stock);
+int			is_char_in_str(char c, const char *str);
 
 /*						parsing							*/
 t_commands	*parsing(t_info *info);
@@ -66,7 +77,7 @@ t_commands	*split_pipe(t_info *info, t_list *lst);
 t_list		*shell_split(char *str, t_memlist **stock);
 
 /*						swap_env						*/
-void		swap_env(t_list *lst, t_info *info);
+void		swap_env(t_list *lst, t_info *info, char **envp);
 
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);
@@ -81,5 +92,18 @@ t_dir		*ft_lstdirnew(char *type, char *dest, t_memlist **mem);
 int			is_redirection(char *str);
 char		*prompt_until_char(char c, t_memlist **stock, char *str);
 
+/*						quote						*/
+char		*remove_actual_quote(char *str, t_memlist **stock);
+void		remove_quote(t_list *lst, t_memlist **stock);
+t_list		*remove_empty_node(t_list *lst);
+int			quote_size(char *str, int mode);
+
+/*						check_error					*/
+int			is_line_valid(t_list *lst);
+int			is_command_line(t_list *lst);
+
 void		catch_signals(int sig);
+
+void	printtest(t_info *info);
+
 #endif

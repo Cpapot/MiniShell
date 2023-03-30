@@ -6,49 +6,28 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/11 18:13:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/22 20:38:06 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	remove_quote(t_list *lst, t_memlist **stock)
+static void	cpy_final_parse(t_commands command, t_info *info)
 {
-	while (lst)
+	while (command.command)
 	{
-		if (ft_strcmp(lst->content, "\"")
-			|| ft_strcmp(lst->content, "\'"))
-			lst->content = ft_strdup("", stock);
-		lst = lst->next;
+		command.command->content = ft_strdup(command.command->content,
+				&info->final_memparse);
+		command.command = command.command->next;
 	}
-}
-
-static t_list	*remove_empty_node(t_list *lst)
-{
-	t_list	*start;
-	t_list	*tmp;
-
-	start = lst;
-	tmp = NULL;
-	while (ft_strcmp("", lst->content))
+	while (command.dir)
 	{
-		start = lst->next;
-		lst = lst->next;
+		command.dir->dest = ft_strdup(command.dir->dest,
+				&info->final_memparse);
+		command.dir->type = ft_strdup(command.dir->type,
+				&info->final_memparse);
+		command.dir = command.dir->next;
 	}
-	while (lst)
-	{
-		if (tmp && ft_strcmp("", lst->content))
-		{
-			tmp->next = lst->next;
-			lst = tmp;
-		}
-		else
-		{
-			tmp = lst;
-			lst = lst->next;
-		}
-	}
-	return (start);
 }
 
 static t_list	*go_next_redirection(t_list *lst)
@@ -71,11 +50,11 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 	t_list	*tmp;
 
 	tmp = lst;
-	dir = ft_lstdirnew(NULL, NULL, &info->parsing);
+	dir = ft_lstdirnew(NULL, NULL, &info->final_memparse);
 	if (is_redirection(lst->content))
 	{
 		ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content,
-				lst->next->content, &info->parsing));
+				lst->next->content, &info->final_memparse));
 		tmp = lst->next->next;
 	}
 	while (lst)
@@ -84,7 +63,7 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 		if (lst->next && is_redirection(lst->next->content))
 		{
 			ft_lstdiradd_back(&dir, ft_lstdirnew(lst->next->content,
-					lst->next->next->content, &info->parsing));
+					lst->next->next->content, &info->final_memparse));
 			lst->next = lst->next->next->next;
 		}
 		else
@@ -106,20 +85,25 @@ t_commands	*parsing(t_info *info)
 	t_commands	*result;
 	int			i;
 
-	i = 0;
-	if (ft_strlen(info->prompt_string) == 0)
-		return (NULL);
+	i = -1;
 	lst = shell_split(info->prompt_string, &info->parsing);
+	if (lst == NULL || ft_strcmp("", lst->content) || is_line_valid(lst))
+		return (NULL);
 	result = split_pipe(info, lst);
+	if (result == NULL)
+		return (NULL);
 	info->final_parse = result;
-	while (result[i].command != NULL)
+	while (result[++i].command != NULL)
 	{
 		result[i].command
 			= find_redirection(result[i].command, info, i);
-		swap_env(result[i].command, info);
+		swap_env(result[i].command, info, info->envp);
 		remove_quote(result[i].command, &info->parsing);
 		result[i].command = remove_empty_node(result[i].command);
-		i++;
+		cpy_final_parse(result[i], info);
+		if (!is_command_line(result[i].command))
+			return (NULL);
 	}
+	stock_free(&info->parsing);
 	return (result);
 }
