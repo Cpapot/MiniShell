@@ -5,14 +5,14 @@
 #				| |    | | |  __/\__ \.
 #				|_|    |_|_|\___||___/
 
-HEADERS 	=	minishell.h error.h builtins.h
+HEADERS 	=	minishell.h error.h
 
 SRCS		=	minishell.c minishell_utils.c \
 				parsing.c parsing_utils.c shell_split.c \
 				split_pipe.c history.c signals.c \
 				swap_env.c quote.c check_error.c \
 				TEST.c bi_echo.c bi_utils.c bi_env.c \
-				bi_pwd.c
+				bi_pwd.c bi_export.c execution.c
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
 
