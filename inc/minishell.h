@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/30 15:59:28 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/31 12:48:30 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_commands	*parsing(t_info *info);
 t_commands	*split_pipe(t_info *info, t_list *lst);
 
 /*						shell_split						*/
-t_list		*shell_split(char *str, t_memlist **stock);
+t_list		*shell_split(t_info *info, char *str, t_memlist **stock);
 
 /*						swap_env						*/
 void		swap_env(t_list *lst, t_info *info, char **envp);

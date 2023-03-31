@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 20:38:06 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/31 12:48:57 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_commands	*parsing(t_info *info)
 	int			i;
 
 	i = -1;
-	lst = shell_split(info->prompt_string, &info->parsing);
+	lst = shell_split(info, info->prompt_string, &info->parsing);
 	if (lst == NULL || ft_strcmp("", lst->content) || is_line_valid(lst))
 		return (NULL);
 	result = split_pipe(info, lst);
