@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/29 15:45:58 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/03 17:08:13 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	**add_to_envp(char **envp, char *name, char *var, t_info *info)
 		i++;
 	result = stock_malloc(sizeof(char *) * (i + 2), &info->envp_mem);
 	if (result == NULL)
-		print_error_exit(info, ERROR99);
+		print_error_exit(info, ERROR99, 0);
 	i = 0;
 	while (envp[i])
 	{
@@ -32,7 +32,7 @@ static char	**add_to_envp(char **envp, char *name, char *var, t_info *info)
 	}
 	result[i] = ft_strjoin(name, var, &info->envp_mem);
 	if (result[i] == NULL)
-		print_error_exit(info, ERROR99);
+		print_error_exit(info, ERROR99, 0);
 	result[i + 1] = NULL;
 	return (result);
 
@@ -48,7 +48,7 @@ char	*find_name(char *str, t_info *info)
 		i++;
 	result = ft_stsubstr(str, 0, i, &info->exec_mem);
 	if (str == NULL)
-		print_error_exit(info, ERROR99);
+		print_error_exit(info, ERROR99, 0);
 	return (result);
 }
 
@@ -65,7 +65,7 @@ char	*find_var(char *str, t_info *info)
 	{
 		result = ft_strdup("", &info->exec_mem);
 		if (result == NULL)
-			print_error_exit(info, ERROR99);
+			print_error_exit(info, ERROR99, 0);
 		return (result);
 	}
 	u = i;
@@ -73,7 +73,7 @@ char	*find_var(char *str, t_info *info)
 		i++;
 	result = ft_stsubstr(str, u, i, &info->exec_mem);
 	if (result == NULL)
-		print_error_exit(info, ERROR99);
+		print_error_exit(info, ERROR99, 0);
 	return (result);
 }
 

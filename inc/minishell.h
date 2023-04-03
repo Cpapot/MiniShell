@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/31 12:48:30 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/03 17:47:18 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ typedef struct s_info
 }	t_info;
 
 /*						MINISHELL						*/
-void		close_minishell(t_info	*info);
+void		close_minishell(t_info	*info, int status);
 
 /*						minishell_utils					*/
-void		print_error_exit(t_info *info, char *error);
+void		print_error_exit(t_info *info, char *error, int status);
 void		print_error(char *error);
 void		free_all(t_info *info);
 char		*ft_getenv(char *env, char **envp, t_memlist **stock);
@@ -109,6 +109,7 @@ int			bi_export(char *str, t_info *info);
 int			bi_env(t_list *lst, t_info *info);
 int			bi_pwd(t_info *info, int out_fd);
 int			bi_cd(t_list *lst, t_info *info);
+int			bi_exit(t_list *lst, t_info *info);
 
 /*						UTILS						*/
 void		print_export(char **envp);

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:54:17 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/29 16:52:11 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/03 17:08:19 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	bi_pwd(t_info *info, int out_fd)
 
 	str = malloc(2048);
 	if (str == NULL)
-		print_error_exit(info, ERROR99);
+		print_error_exit(info, ERROR99, 0);
 	if (getcwd(str, 2048) == NULL)
 	{
 		print_error(PWDERROR);
