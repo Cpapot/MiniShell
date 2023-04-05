@@ -3,25 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/30 14:14:05 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/05 04:27:15 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "error.h"
 # include "../libft/includes/libft.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <signal.h>
+# include "error.h"
+# include "exec.h"
 
 # define INV_ID_EXPORT	" !#$%&()*+-.<>=:;`/\'\"@{}[]^|~\n?"
 # define INVID			" !#$%&()*+-.<>=:;`/\'\"@{}[]^|~\n"
@@ -52,8 +54,8 @@ typedef struct s_info
 	t_memlist	*final_memparse;
 	t_memlist	*envp_mem;
 	int			com_count;
+	int			is_finish;
 	t_list		**command;
-	char		*path;
 }	t_info;
 
 /*						MINISHELL						*/
@@ -82,7 +84,7 @@ void		swap_env(t_list *lst, t_info *info, char **envp);
 void		addto_logs(char *commands, t_info *info);
 
 /*						execution						*/
-//void		execution(t_info *info, char **envp);
+void		execution(t_info *info);
 
 /*						parsing utils					*/
 char		*ft_strndup(const char *s1, size_t n, t_memlist **stock);
@@ -100,7 +102,6 @@ int			quote_size(char *str, int mode);
 /*						check_error					*/
 int			is_line_valid(t_list *lst);
 int			is_command_line(t_list *lst);
-
 
 /*						BUILTINS					*/
 int			bi_echo(t_list *lst, int out_fd);

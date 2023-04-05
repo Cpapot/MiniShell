@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/30 14:14:21 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/03/30 16:06:12 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 {
-
 	(void)argc;
 	(void)argv;
 	info->lastprompt_string = NULL;
@@ -24,6 +23,7 @@ void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 	info->envp_mem = NULL;
 	info->exec_mem = NULL;
 	info->final_memparse = NULL;
+	info->is_finish = 0;
 	signal(SIGINT, catch_signals);
 	signal(SIGQUIT, SIG_IGN);
 }
@@ -68,7 +68,7 @@ int	main(int argc, char **argv, char **envp)
 		if (info.final_parse != NULL)
 		{
 			printtest(&info);
-			//execution(&info, envp);
+			execution(&info);
 		}
 	}
 	close_minishell(&info);
