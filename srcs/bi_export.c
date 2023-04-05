@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/03 17:08:13 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/05 16:06:26 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*find_var(char *str, t_info *info)
 		return (result);
 	}
 	u = i;
-	while (str[i])
+	while (str[i] && str[i] != '$')
 		i++;
 	result = ft_stsubstr(str, u, i, &info->exec_mem);
 	if (result == NULL)

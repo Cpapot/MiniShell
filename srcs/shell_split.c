@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/03 17:08:41 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/05 16:31:55 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_list	*shell_split(t_info *info, char *str, t_memlist **stock)
 		str = ft_next_char((char *)&str[u]);
 		u = splited_word(str);
 		if (u == -1)
-			return (print_error(ERROR3), NULL);
+			return (ft_error(ERROR3, info), NULL);
 		tmp = ft_strndup(str, u, stock);
 		if (!tmp)
 			return (print_error_exit(info, ERROR99, 0), NULL);

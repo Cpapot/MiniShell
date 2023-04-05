@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/03 17:47:18 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/05 16:31:10 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ typedef struct s_info
 
 /*						MINISHELL						*/
 void		close_minishell(t_info	*info, int status);
+
+/*						error							*/
+void		ft_error(const char *error, t_info *info);
+
 
 /*						minishell_utils					*/
 void		print_error_exit(t_info *info, char *error, int status);
@@ -114,6 +118,11 @@ int			bi_exit(t_list *lst, t_info *info);
 /*						UTILS						*/
 void		print_export(char **envp);
 void		print_env(char **envp);
+char		*start(char *str, int size, t_info *info);
+
+/*						exit_status					*/
+char		*swap_exit(char *str, t_info *info);
+void		set_exitstatus(int status);
 
 void		catch_signals(int sig);
 
