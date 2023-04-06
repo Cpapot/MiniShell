@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/03 17:06:47 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/06 18:50:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*ft_getenv(char *env, char **envp, t_memlist **stock)
 	while (envp[i])
 	{
 		u = 0;
-		while (envp[i][u] != '=')
+		while (envp[i][u] && envp[i][u] != '=')
 			u++;
 		if (ft_strcmp(env, ft_stsubstr(envp[i], 0, u, stock)))
 			return (ft_stsubstr(envp[i], u + 1, ft_strlen(envp[i]), stock));

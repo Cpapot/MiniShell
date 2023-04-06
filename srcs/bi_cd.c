@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:19:03 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/06 13:22:39 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/06 17:10:12 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	bi_cd(t_list *lst, t_info *info)
 	if (size == 0 || lst->content == NULL)
 	{
 		if (chdir(ft_getenv("HOME", info->envp, & info->exec_mem)) == -1)
-				return (ft_error(ERROR20, info), -1);
+			return (ft_error(ERROR20, info), -1);
 		return (1);
 	}
 	if (size > 1)
