@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/05 16:31:10 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/06 14:34:59 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void		close_minishell(t_info	*info, int status);
 /*						error							*/
 void		ft_error(const char *error, t_info *info);
 
-
 /*						minishell_utils					*/
 void		print_error_exit(t_info *info, char *error, int status);
 void		print_error(char *error);
@@ -103,11 +102,12 @@ t_list		*remove_empty_node(t_list *lst);
 int			quote_size(char *str, int mode);
 
 /*						check_error					*/
-int			is_line_valid(t_list *lst);
-int			is_command_line(t_list *lst);
+int			is_line_valid(t_list *lst, t_info *info);
+int			is_command_line(t_list *lst, t_info *info);
 
 
 /*						BUILTINS					*/
+int			find_builtins(t_list *lst, t_info *info, int out_fd);
 int			bi_echo(t_list *lst, int out_fd);
 int			bi_export(char *str, t_info *info);
 int			bi_env(t_list *lst, t_info *info);
