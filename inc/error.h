@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 14:23:17 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/07 14:52:17 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:20:49 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@
 # define ERROR98		"\e[31m\e[1m[ERROR:99]\e[0m Failure to acces or create logs"
 # define ERROR99		"\e[31m\e[1m[ERROR:99]\e[0m Malloc cannot be created"
 # define EXPORTERROR1	"\e[31m\e[1mexport\e[0m: not a valid identifier"
-
+# define UNSETERROR1	"\e[31m\e[1munset\e[0m: not a valid identifier"
 
 #endif

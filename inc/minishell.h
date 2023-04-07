@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/06 19:40:41 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:08:16 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int			bi_env(t_list *lst, t_info *info);
 int			bi_pwd(t_info *info, int out_fd);
 int			bi_cd(t_list *lst, t_info *info);
 int			bi_exit(t_list *lst, t_info *info);
+int			bi_unset(t_list *lst, t_info *info);
 
 /*						bi_UTILS						*/
 void		print_export(char **envp, t_info *info);
@@ -128,6 +129,7 @@ void		print_env(char **envp);
 char		*start(char *str, int size, t_info *info);
 char		*find_var(char *str, t_info *info);
 char		*find_name(char *str, t_info *info);
+int			is_var_already_exist(char *name, char **envp, t_info *info);
 
 /*						exit_status					*/
 char		*swap_exit(char *str, t_info *info);

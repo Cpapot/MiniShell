@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/06 19:49:33 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/07 17:53:44 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static int	export_parsing(char *str, t_list *lst)
 	return (0);
 }
 
-static int	is_var_already_exist(char *name, char **envp, t_info *info)
+int	is_var_already_exist(char *name, char **envp, t_info *info)
 {
 	int	i;
 
