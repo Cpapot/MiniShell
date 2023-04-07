@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 15:20:49 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/14 16:41:05 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/05 11:07:12 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,6 @@ size_t		ft_strlen(const char *str);
 t_list		*ft_lstnew(void *content, t_memlist **mem);
 t_list		*ft_lstlast(t_list *lst);
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), t_memlist **mem);
+long long	ft_atoll(const char *str);
 
 #endif

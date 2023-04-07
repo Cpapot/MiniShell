@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/23 14:53:12 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/05 16:31:55 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,30 +86,30 @@ static int	splited_word(char *str)
  *each node containing a pointer to a null-terminated string that
  *represents a single word.
 */
-t_list	*shell_split(char *str, t_memlist **stock)
+t_list	*shell_split(t_info *info, char *str, t_memlist **stock)
 {
 	int		u;
 	char	*tmp;
 	t_list	*start;
+	t_list	*node;
 
 	if (!str)
 		return (NULL);
 	u = 0;
-	start = ft_lstnew(NULL, stock);
-	tmp = NULL;
+	start = NULL;
 	while (str[0])
 	{
 		str = ft_next_char((char *)&str[u]);
 		u = splited_word(str);
 		if (u == -1)
-			return (print_error(ERROR3), NULL);
+			return (ft_error(ERROR3, info), NULL);
 		tmp = ft_strndup(str, u, stock);
 		if (!tmp)
-			return (print_error(ERROR3), NULL);
-		ft_lstadd_back(&start, ft_lstnew(tmp, stock));
-		printf("%s ", tmp);
+			return (print_error_exit(info, ERROR99, 0), NULL);
+		node = ft_lstnew(tmp, stock);
+		if (!node)
+			return (print_error_exit(info, ERROR99, 0), NULL);
+		ft_lstadd_back(&start, node);
 	}
-	printf("\n");
-	start = start->next;
 	return (start);
 }

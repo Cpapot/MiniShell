@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 21:34:35 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/06 18:50:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,10 @@ int	is_char_in_str(char c, const char *str)
 	return (0);
 }
 
-void	print_error_exit(t_info *info, char *error)
+void	print_error_exit(t_info *info, char *error, int status)
 {
 	ft_printf_fd(2, "\n%s\n", error);
-	close_minishell(info);
-	exit(1);
+	close_minishell(info, status);
 }
 
 void	print_error(char *error)
@@ -47,7 +46,7 @@ char	*ft_getenv(char *env, char **envp, t_memlist **stock)
 	while (envp[i])
 	{
 		u = 0;
-		while (envp[i][u] != '=')
+		while (envp[i][u] && envp[i][u] != '=')
 			u++;
 		if (ft_strcmp(env, ft_stsubstr(envp[i], 0, u, stock)))
 			return (ft_stsubstr(envp[i], u + 1, ft_strlen(envp[i]), stock));

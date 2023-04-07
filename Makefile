@@ -12,7 +12,8 @@ SRCS		=	minishell.c minishell_utils.c \
 				split_pipe.c history.c signals.c \
 				swap_env.c quote.c check_error.c \
 				TEST.c bi_echo.c bi_utils.c bi_env.c \
-				bi_pwd.c bi_export.c execution.c
+				bi_pwd.c bi_export.c execution.c bi_cd.c \
+				bi_exit.c exit_status.c error.c
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
 

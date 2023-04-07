@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/21 16:41:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/05 16:29:06 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@ static int	is_contain_env(char *str)
 	while (str[i])
 	{
 		if (str[i] == '$')
+		{
+			if (str[i + 1] == '?' && (str[i + 2] == 0 || str[i + 2] == ' ' ||\
+				str[i + 2] == '$' || str[i + 2] == '\'' || str[i + 2] == '\"'))
+				return (2);
 			return (1);
+		}
 		i++;
 	}
 	return (0);
@@ -35,7 +40,7 @@ static char	*getenv_instr(char *str, int size, t_info *info, char **envp)
 	i = 0;
 	env = malloc((size + 1) + sizeof(char));
 	if (env == NULL)
-		print_error_exit(info, ERROR99);
+		return (NULL);
 	while (i != size)
 	{
 		env[i] = str[i];
@@ -46,18 +51,18 @@ static char	*getenv_instr(char *str, int size, t_info *info, char **envp)
 	if (result == NULL)
 		result = ft_strdup("", &info->parsing);
 	if (result == NULL)
-		print_error_exit(info, ERROR99);
+		return (NULL);
 	free (env);
 	return (result);
 }
 
-static char	*return_start(char *str, int size, t_info *info)
+char	*start(char *str, int size, t_info *info)
 {
 	char	*result;
 
 	result = ft_strdup(str, &info->parsing);
 	if (result == NULL)
-		print_error_exit(info, ERROR99);
+		return (NULL);
 	result[size] = '\0';
 	return (result);
 }
@@ -82,8 +87,9 @@ static char	*swap_envstr(char *str, t_info *info, char **envp)
 				u++;
 			buff = getenv_instr(&str[i], u - i, info, envp);
 			tmp = ft_strjoin(buff, &str[u], &info->parsing);
-			str = ft_strjoin(return_start(str, i - 1, info),
-					tmp, &info->parsing);
+			str = ft_strjoin(start(str, i - 1, info), tmp, &info->parsing);
+			if (!buff || !tmp || !str)
+				print_error_exit(info, ERROR99, EXIT_FAILURE);
 			i += ft_strlen(buff) - 1;
 		}
 	}
@@ -94,8 +100,10 @@ void	swap_env(t_list *lst, t_info *info, char **envp)
 {
 	while (lst)
 	{
-		if (is_contain_env(lst->content))
+		if (is_contain_env(lst->content) == 1)
 			lst->content = swap_envstr(lst->content, info, envp);
+		else if (is_contain_env(lst->content) == 2)
+			lst->content = swap_exit(lst->content, info);
 		lst = lst->next;
 	}
 }
