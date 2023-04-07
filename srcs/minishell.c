@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/30 16:06:12 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/07 04:45:11 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ int	main(int argc, char **argv, char **envp)
 	while (42)
 	{
 		prompt(&info);
+		printf("bonsoir ?\n");
 		info.final_parse = parsing(&info);
 		if (info.final_parse != NULL)
 		{
-			printtest(&info);
+			// printtest(&info);
 			execution(&info);
 		}
 	}

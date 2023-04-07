@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 15:02:33 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/05 04:25:53 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/07 00:53:57 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_exec
 	char	**envp;
 	pid_t	*pid_tab;
 	int		*fd_tab;
+	int		end;
 	// int		in_fd;
 	// int		out_fd;
 }				t_exec;
