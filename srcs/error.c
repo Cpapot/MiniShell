@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 14:33:31 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/07 18:21:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/08 19:20:13 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 */
 void	ft_error(const char *error, t_info *info)
 {
-	ft_printf_fd(2, "\n%s\n", error);
+	ft_printf_fd(2, "%s\n", error);
 	if (ft_strcmp(error, ERROR99) || ft_strcmp(error, ERROR98))
 		close_minishell(info, 1);
 	else
