@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/08 05:36:11 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/08 05:47:30 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ char	**get_string_cmd(t_info *info, t_commands cmd)
 {
 	char	**result;
 	t_list	*lst;
-	// t_dir	*dir;
 	int		i;
 	int		j;
 
@@ -76,7 +75,8 @@ void	wait_close(t_info *info, t_exec *exec)
 	while (i + 1 < info->com_count)
 	{
 		waitpid(exec->pid_tab[i], NULL, 0);
-		close(exec->fd_tab[i]);
+		if (i != 0)
+			close(exec->fd_tab[i]);
 		i++;
 	}
 }
@@ -102,18 +102,19 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 
 	close(fd[0]);
 	if (dup2(exec->fd, STDIN_FILENO) == -1)
-		return ;	// error : dup2 function failed to execute
+		return (ft_error(ERROR13, info));
 	if (exec->end == 0)
 	{
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
-			return ;	// error : dup2 function failed to execute
+			return (ft_error(ERROR13, info));
 	}
 	path = get_path(info, exec->path, cmd);
 	if (execve(path, cmd, exec->envp) == -1)
 	{
 		set_exitstatus(errno);
-		return ;	// error : execve function failed to execute
+		return (ft_error(ERROR12, info));
 	}
+	exit(0);
 }
 
 void	handle_command(t_info *info, t_exec *exec, char **cmd)
@@ -122,10 +123,10 @@ void	handle_command(t_info *info, t_exec *exec, char **cmd)
 	pid_t	pid;
 
 	if (pipe(fd) == -1)
-		return ;	//error
+		return (ft_error(ERROR11, info));
 	pid = fork();
 	if (pid == -1)
-		return ;	//error
+		return (ft_error(ERROR10, info));
 	else if (pid == 0)
 		exec_command(info, exec, fd, cmd);
 	add_pid(info, exec, pid);
@@ -198,8 +199,6 @@ char	**get_big_path(t_info *info, char **envp)
 void	init_exec(t_info *info, t_exec *exec)
 {
 	exec->path = get_big_path(info, info->envp);
-	if (info->is_finish != 0)
-		return ;	//error
 	exec->fd = STDIN_FILENO;
 	exec->envp = info->envp;
 	exec->end = 0;
@@ -217,8 +216,6 @@ void	execution(t_info *info)
 	t_exec	exec;
 
 	init_exec(info, &exec);
-	if (info->is_finish != 0)
-		return ;	//error
 	handle_pipe(info, &exec);
 	wait_close(info, &exec);
 	stock_free(&info->exec_mem);
