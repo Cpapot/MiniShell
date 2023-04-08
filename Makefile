@@ -5,7 +5,7 @@
 #				| |    | | |  __/\__ \.
 #				|_|    |_|_|\___||___/
 
-HEADERS 	=	minishell.h error.h
+HEADERS 	=	minishell.h error.h exec.h
 
 SRCS		=	minishell.c minishell_utils.c \
 				parsing.c parsing_utils.c shell_split.c \
