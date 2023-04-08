@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 19:40:10 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/16 02:55:34 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/07 17:11:15 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	*stock_malloc(size_t size, t_memlist **stock)
 	else
 	{
 		tmp = lst_mem_new(result);
+		if (tmp == NULL)
+			return (NULL);
 		lst_mem_add(stock, tmp);
 	}
 	return (result);

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:20:54 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/06 19:46:37 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:08:40 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	find_builtins(t_list *lst, t_info *info, int out_fd)
 		i = bi_cd(lst->next, info);
 	else if (ft_strcmp("exit", lst->content))
 		i = bi_exit(lst->next, info);
+	else if (ft_strcmp("unset", lst->content))
+		i = bi_unset(lst->next, info);
 	return (i);
 }
 
