@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/07 04:42:12 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/08 05:36:11 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,22 @@ char	**get_string_cmd(t_info *info, t_commands cmd)
 	t_list	*lst;
 	// t_dir	*dir;
 	int		i;
+	int		j;
 
 	result = stock_malloc(sizeof(char *) * info->com_count, &info->exec_mem);
 	i = 0;
 	while (i + 1 < info->com_count)
 	{
 		lst = cmd.command;
+		j = 0;
 		while (lst && lst->content)
 		{
-			result[i] = ft_strndup(lst->content, \
+			result[j] = ft_strndup(lst->content, \
 				ft_strlen(lst->content), &info->exec_mem);
 			lst = lst->next;
+			j++;
 		}
+		result[j] = NULL;
 		i++;
 	}
 	return (result);
@@ -48,10 +52,10 @@ char	*get_path(t_info *info, char **path, char **cmd)
 	{
 		str = ft_strjoin(path[i], "/", &mem);
 		if (!str)
-			return (stock_free(&mem), NULL);	// malloc error
+			return (stock_free(&mem), ft_error(ERROR99, info), NULL);
 		str = ft_strjoin(str, cmd[0], &mem);
 		if (!str)
-			return (stock_free(&mem), NULL);	// malloc error
+			return (stock_free(&mem), ft_error(ERROR99, info), NULL);
 		if (access(str, F_OK) != -1)
 			break ;
 		i++;
@@ -60,7 +64,7 @@ char	*get_path(t_info *info, char **path, char **cmd)
 		return (stock_free(&mem), NULL);	// error "no path exists where this command is executable"
 	res = ft_strdup(str, &info->exec_mem);
 	if (!res)
-		return (stock_free(&mem), NULL);	// malloc error
+		return (stock_free(&mem), ft_error(ERROR99, info), NULL);
 	return (stock_free(&mem), res);
 }
 
@@ -106,7 +110,10 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	}
 	path = get_path(info, exec->path, cmd);
 	if (execve(path, cmd, exec->envp) == -1)
+	{
+		set_exitstatus(errno);
 		return ;	// error : execve function failed to execute
+	}
 }
 
 void	handle_command(t_info *info, t_exec *exec, char **cmd)
@@ -132,10 +139,11 @@ void	handle_pipe(t_info *info, t_exec *exec)
 	t_commands	*cmds;
 	char		**cmd;
 
-	// if (dup2(arg->in_fd, STDIN_FILENO) == -1)
-	// 	free_all(arg, "dup2 error");
-	// if (dup2(arg->out_fd, STDOUT_FILENO) == -1)
-	// 	free_all(arg, "dup2 error");
+	if (dup2(exec->in_fd, STDIN_FILENO) == -1)
+		return ;	//error
+	if (dup2(exec->out_fd, STDOUT_FILENO) == -1)
+		return ;	//error
+	exec->fd = STDIN_FILENO;
 	i = 0;
 	cmds = info->final_parse;
 	while (i + 2 < info->com_count)
@@ -195,6 +203,9 @@ void	init_exec(t_info *info, t_exec *exec)
 	exec->fd = STDIN_FILENO;
 	exec->envp = info->envp;
 	exec->end = 0;
+	exec->fd = 0;
+	exec->in_fd = STDIN_FILENO;
+	exec->out_fd = STDOUT_FILENO;
 	init_fd_pid(info, exec);
 }
 
