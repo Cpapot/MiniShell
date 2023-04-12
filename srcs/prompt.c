@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:20:22 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/09 01:20:54 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:57:11 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,45 +80,42 @@ static char	*get_gitbranch_in_parentdir(t_info *info)
 	return (NULL);
 }
 
-static char	*prompt_string(t_info *info)
+static char *get_prompt_path(t_info *info)
+{
+	char	*dir;
+	char	buffer[GITBUFFER_SIZE];
+	char	*result;
+
+	dir = getcwd(buffer, GITBUFFER_SIZE);
+	result = ft_stsubstr(dir, dir_len(dir) + 1, ft_strlen(dir), &info->prompt_mem);
+	if (result == NULL)
+		ft_error(ERROR99, info);
+	return (result);
+}
+
+char	*prompt_string(t_info *info)
 {
 	char	*prompt;
 	char	*branch;
+	char	*path;
 
 	branch = get_gitbranch_in_parentdir(info);
+	path = get_prompt_path(info);
+	prompt = ft_strjoin("\e[36m➡️  ", path, &info->prompt_mem);
+	prompt = ft_strjoin(prompt, " "WHITE, &info->prompt_mem);
+		if (prompt == NULL)
+			ft_error(ERROR99, info);
 	if (branch != NULL)
 	{
-		prompt = ft_strjoin(BLUE"Minishell (\001\x1b[31m\002", branch, &info->prompt_mem);
+		prompt = ft_strjoin(prompt,"\e[34mgit:(\001\x1b[31m\002", &info->prompt_mem);
 		if (prompt == NULL)
 			ft_error(ERROR99, info);
-		prompt = ft_strjoin(prompt, "\001\x1b[34m\002)➡️  "WHITE, &info->prompt_mem);
+		prompt = ft_strjoin(prompt, branch, &info->prompt_mem);
 		if (prompt == NULL)
 			ft_error(ERROR99, info);
-	}
-	else
-	{
-		prompt = ft_strdup(BLUE"Minishell ➡️  "WHITE, &info->prompt_mem);
+		prompt = ft_strjoin(prompt, "\001\x1b[34m\002) "WHITE, &info->prompt_mem);
 		if (prompt == NULL)
 			ft_error(ERROR99, info);
 	}
 	return (prompt);
-}
-
-void	prompt(t_info *info)
-{
-	while (1)
-	{
-		info->prompt_string = readline(prompt_string(info));
-		if (info->prompt_string == NULL)
-			close_minishell(info, 0);
-		stock_free(&info->final_memparse);
-		if (strlen(info->prompt_string) != 0)
-			break ;
-	}
-	//info->prompt_string = ft_strdup("\"\"\"\"", &info->parsing);
-	if (info->lastprompt_string
-		&& !ft_strcmp(info->lastprompt_string, info->prompt_string))
-		add_history(info->prompt_string);
-	addto_logs(info->prompt_string, info);
-	info->lastprompt_string = info->prompt_string;
 }
