@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:20:22 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/09 01:20:54 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 13:24:18 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static char	*prompt_string(t_info *info)
 	branch = get_gitbranch_in_parentdir(info);
 	if (branch != NULL)
 	{
-		prompt = ft_strjoin(BLUE"Minishell (\001\x1b[31m\002", branch, &info->prompt_mem);
+		prompt = ft_strjoin("\e[36mMinishell \e[34mgit:(\001\x1b[31m\002", branch, &info->prompt_mem);
 		if (prompt == NULL)
 			ft_error(ERROR99, info);
 		prompt = ft_strjoin(prompt, "\001\x1b[34m\002)➡️  "WHITE, &info->prompt_mem);
@@ -97,7 +97,7 @@ static char	*prompt_string(t_info *info)
 	}
 	else
 	{
-		prompt = ft_strdup(BLUE"Minishell ➡️  "WHITE, &info->prompt_mem);
+		prompt = ft_strdup("\e[36mMinishell ➡️  "WHITE, &info->prompt_mem);
 		if (prompt == NULL)
 			ft_error(ERROR99, info);
 	}
