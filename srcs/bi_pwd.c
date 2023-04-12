@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:54:17 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 15:10:21 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 20:00:17 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,3 @@ int	bi_pwd(t_info *info, int out_fd)
 	free (str);
 	return (1);
 }
-

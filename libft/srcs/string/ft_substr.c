@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 15:30:42 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/14 16:40:58 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 20:07:37 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
-char	*ft_stsubstr(char const *s, unsigned int start, size_t len, t_memlist **st)
+char	*ft_stsubstr(char const *s, int start, size_t len, t_memlist **st)
 {
 	char	*result;
 	size_t	i;
 	size_t	malloc_size;
 
 	i = 0;
-	if (len == 0 || start > ft_strlen(s))
+	if (start < 0 || len == 0 || (unsigned int)start > ft_strlen(s))
 	{
 		result = stock_malloc(sizeof(char), st);
 		result[0] = '\0';

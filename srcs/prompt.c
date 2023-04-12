@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:20:22 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 15:57:11 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 20:04:45 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 #define GITBUFFER_SIZE	1024
-#define	GITPATH			"/.git/HEAD"
+#define GITPATH			"/.git/HEAD"
 
-
-static char *get_gitbranch_indir(char* buffer, char *dir, t_info *info)
+static char	*get_gitbranch_indir(char *buffer, char *dir, t_info *info)
 {
 	char	*result;
 	int		fd;
@@ -72,7 +71,7 @@ static char	*get_gitbranch_in_parentdir(t_info *info)
 			return (result);
 		dir_size = dir_len(dir);
 		if (dir_size == -1)
-			break;
+			break ;
 		dir = ft_stsubstr(dir, 0, dir_size, &info->prompt_mem);
 		if (dir == NULL)
 			ft_error(ERROR99, info);
@@ -80,7 +79,7 @@ static char	*get_gitbranch_in_parentdir(t_info *info)
 	return (NULL);
 }
 
-static char *get_prompt_path(t_info *info)
+static char	*get_prompt_path(t_info *info)
 {
 	char	*dir;
 	char	buffer[GITBUFFER_SIZE];
@@ -103,8 +102,8 @@ char	*prompt_string(t_info *info)
 	path = get_prompt_path(info);
 	prompt = ft_strjoin("\e[36m➡️  ", path, &info->prompt_mem);
 	prompt = ft_strjoin(prompt, " "WHITE, &info->prompt_mem);
-		if (prompt == NULL)
-			ft_error(ERROR99, info);
+	if (prompt == NULL)
+		ft_error(ERROR99, info);
 	if (branch != NULL)
 	{
 		prompt = ft_strjoin(prompt,"\e[34mgit:(\001\x1b[31m\002", &info->prompt_mem);

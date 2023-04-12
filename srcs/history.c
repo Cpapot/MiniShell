@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 20:05:38 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 18:53:23 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 20:03:20 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include					"../inc/minishell.h"
-#define		PWDERROR		"Error while calling \"getcwd\""
-#define		BUFFER_SIZE		2048
+#include "../inc/minishell.h"
+#define PWDERROR		"Error while calling \"getcwd\""
+#define BUFFER_SIZE		2048
 
 static char	*get_logpath(t_info *info)
 {

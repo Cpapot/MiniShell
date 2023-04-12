@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:20:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 14:34:45 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 20:04:55 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ int	quote_size_shellsplit(char *str, int mode)
 	int			i;
 
 	i = 0;
-
 	if (mode == 0)
 	{
 		i++;

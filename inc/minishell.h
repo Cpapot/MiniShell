@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 19:36:50 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 19:59:13 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void		remove_quote(t_list *lst, t_memlist **stock);
 t_list		*remove_empty_node(t_list *lst);
 int			quote_size(char *str, int mode);
 int			quote_size_shellsplit(char *str, int mode);
-
 
 /*						check_error						*/
 int			is_line_valid(t_list *lst, t_info *info);
