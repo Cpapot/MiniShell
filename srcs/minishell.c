@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/09 01:15:08 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 16:37:02 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 	info->exec_mem = NULL;
 	info->prompt_mem = NULL;
 	info->final_memparse = NULL;
+	info->shell_mem = NULL;
 	info->is_finish = 0;
 	signal(SIGINT, catch_signals);
 	signal(SIGQUIT, SIG_IGN);
@@ -32,12 +33,32 @@ void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 void	close_minishell(t_info	*info, int status)
 {
 	rl_clear_history();
+	stock_free(&info->shell_mem);
 	stock_free(&info->envp_mem);
 	stock_free(&info->exec_mem);
 	stock_free(&info->parsing);
 	stock_free(&info->final_memparse);
 	stock_free(&info->prompt_mem);
 	exit(status);
+}
+
+void	prompt(t_info *info)
+{
+	while (1)
+	{
+		info->prompt_string = readline(prompt_string(info));
+		if (info->prompt_string == NULL)
+			close_minishell(info, 0);
+		stock_free(&info->final_memparse);
+		if (strlen(info->prompt_string) != 0)
+			break ;
+	}
+	//info->prompt_string = ft_strdup("\"\"\"\"", &info->parsing);
+	if (info->lastprompt_string
+		&& !ft_strcmp(info->lastprompt_string, info->prompt_string))
+		add_history(info->prompt_string);
+	addto_logs(info->prompt_string, info);
+	info->lastprompt_string = info->prompt_string;
 }
 
 void	loop(t_info *info)
@@ -50,8 +71,8 @@ void	loop(t_info *info)
 			break ;
 		if (info->final_parse != NULL)
 		{
-			// printtest(info);
-					execution(info);
+			//printtest(info);
+			execution(info);
 		}
 		if (info->is_finish != 0)
 			break ;

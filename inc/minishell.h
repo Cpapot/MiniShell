@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/09 00:30:42 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 16:03:54 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_info
 	t_memlist	*prompt_mem;
 	t_memlist	*final_memparse;
 	t_memlist	*envp_mem;
+	t_memlist	*shell_mem;
 	int			com_count;
 	int			is_finish;
 	t_list		**command;
@@ -110,6 +111,8 @@ char		*remove_actual_quote(char *str, t_memlist **stock);
 void		remove_quote(t_list *lst, t_memlist **stock);
 t_list		*remove_empty_node(t_list *lst);
 int			quote_size(char *str, int mode);
+int			quote_size_shellsplit(char *str, int mode);
+
 
 /*						check_error						*/
 int			is_line_valid(t_list *lst, t_info *info);
@@ -141,6 +144,7 @@ void		catch_signals(int sig);
 
 /*						prompt							*/
 void		prompt(t_info *info);
+char		*prompt_string(t_info *info);
 
 void		printtest(t_info *info);
 

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:54:17 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/06 13:26:09 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:10:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	bi_pwd(t_info *info, int out_fd)
 		return (free (str), -1);
 	}
 	ft_printf_fd(out_fd, "%s\n", str);
+	set_exitstatus(0);
 	free (str);
 	return (1);
 }
