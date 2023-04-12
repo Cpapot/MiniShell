@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 14:23:17 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/06 18:06:20 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/08 05:59:31 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@
 # define ERROR13		"\e[31m\e[1m[ERROR:13]\e[0m Failed to duplicate fd"
 # define ERROR14		"\e[31m\e[1m[ERROR:14]\e[0m Can't open file"
 # define ERROR15		"\e[31m\e[1m[ERROR:15]\e[0m Can't create file"
-# define ERROR20		"\e[31m\e[ERROR:20]\e[0m No such file or directory"
-# define ERROR98		"\e[31m\e[ERROR:99]\e[0m Failure to acces or create logs"
-# define ERROR99		"\e[31m\e[ERROR:99]\e[0m Malloc cannot be created"
+# define ERROR20		"\e[31m\e[1m[ERROR:20]\e[0m No such file or directory"
+# define ERROR98		"\e[31m\e[1m[ERROR:98]\e[0m Failure to acces or create logs"
+# define ERROR99		"\e[31m\e[1m[ERROR:99]\e[0m Malloc cannot be created"
 # define EXPORTERROR1	"\e[31m\e[1mexport\e[0m: not a valid identifier"
-
+# define UNSETERROR1	"\e[31m\e[1munset\e[0m: not a valid identifier"
 
 #endif

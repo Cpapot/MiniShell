@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/07 20:04:14 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/12 19:36:50 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ typedef struct s_info
 	t_commands	*final_parse;
 	t_memlist	*exec_mem;
 	t_memlist	*parsing;
+	t_memlist	*prompt_mem;
 	t_memlist	*final_memparse;
 	t_memlist	*envp_mem;
+	t_memlist	*shell_mem;
 	int			com_count;
 	int			is_finish;
 	t_list		**command;
@@ -104,37 +106,45 @@ t_dir		*ft_lstdirnew(char *type, char *dest, t_memlist **mem);
 int			is_redirection(char *str);
 char		*prompt_until_char(char c, t_memlist **stock, char *str);
 
-/*						quote						*/
+/*						quote							*/
 char		*remove_actual_quote(char *str, t_memlist **stock);
 void		remove_quote(t_list *lst, t_memlist **stock);
 t_list		*remove_empty_node(t_list *lst);
 int			quote_size(char *str, int mode);
+int			quote_size_shellsplit(char *str, int mode);
 
-/*						check_error					*/
+
+/*						check_error						*/
 int			is_line_valid(t_list *lst, t_info *info);
 int			is_command_line(t_list *lst, t_info *info);
 
-/*						BUILTINS					*/
+/*						BUILTINS						*/
 int			find_builtins(t_list *lst, t_info *info, int out_fd);
 int			bi_echo(t_list *lst, int out_fd);
-int			bi_export(t_list *lst, t_info *info);
-int			bi_env(t_list *lst, t_info *info);
+int			bi_export(t_list *lst, t_info *info, int fd);
+int			bi_env(t_list *lst, t_info *info, int fd);
 int			bi_pwd(t_info *info, int out_fd);
 int			bi_cd(t_list *lst, t_info *info);
 int			bi_exit(t_list *lst, t_info *info);
+int			bi_unset(t_list *lst, t_info *info);
 
 /*						bi_UTILS						*/
-void		print_export(char **envp, t_info *info);
-void		print_env(char **envp);
+void		print_export(char **envp, t_info *info, int fd);
+void		print_env(char **envp, int fd);
 char		*start(char *str, int size, t_info *info);
 char		*find_var(char *str, t_info *info);
 char		*find_name(char *str, t_info *info);
+int			is_var_already_exist(char *name, char **envp, t_info *info);
 
-/*						exit_status					*/
+/*						exit_status						*/
 char		*swap_exit(char *str, t_info *info);
 void		set_exitstatus(int status);
 
 void		catch_signals(int sig);
+
+/*						prompt							*/
+void		prompt(t_info *info);
+char		*prompt_string(t_info *info);
 
 void		printtest(t_info *info);
 

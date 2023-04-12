@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/06 19:49:33 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 19:33:35 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static int	export_parsing(char *str, t_list *lst)
 	return (0);
 }
 
-static int	is_var_already_exist(char *name, char **envp, t_info *info)
+int	is_var_already_exist(char *name, char **envp, t_info *info)
 {
 	int	i;
 
@@ -106,7 +106,7 @@ static int	is_var_already_exist(char *name, char **envp, t_info *info)
 	return (-1);
 }
 
-int	bi_export(t_list *lst, t_info *info)
+int	bi_export(t_list *lst, t_info *info, int fd)
 {
 	int		parsing_res;
 	int		var_pos;
@@ -115,13 +115,13 @@ int	bi_export(t_list *lst, t_info *info)
 
 	set_exitstatus(0);
 	if (lst == NULL)
-		return (print_export(info->envp, info), 1);
+		return (print_export(info->envp, info, fd), 1);
 	str = lst->content;
 	parsing_res = export_parsing(str, lst);
 	if (parsing_res == 1)
 		return (ft_error(EXPORTERROR1, info), -1);
 	if (parsing_res == 2)
-		return (print_export(info->envp, info), 1);
+		return (print_export(info->envp, info, fd), 1);
 	var_pos = is_var_already_exist(find_name(str, info), info->envp, info);
 	var = find_var(str, info);
 	if (var_pos < 0)

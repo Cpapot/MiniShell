@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:15:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/06 13:23:46 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:08:37 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,37 @@ static int	check_numeric(char *str)
 	return (0);
 }
 
+int	convert_status(long long status)
+{
+	if (status >= 255 && status > 0)
+	{
+		while (status >= 255)
+			status = status - 256;
+		return (status);
+	}
+	if (status < 0)
+	{
+		while (status < 0)
+			status = status + 256;
+		return (status);
+	}
+	return (status);
+}
+
 int		bi_exit(t_list *lst, t_info *info)
 {
-	int	status;
+	long long	status;
 
-	status = ft_atoll(lst->content);
+	if (lst != NULL)
+		status = ft_atoll(lst->content);
+	else
+		status = 0;
+	status = convert_status(status);
 	printf("exit\n");
 	if (ft_lstsize(lst) == 0)
 		close_minishell(info, 0);
 	if (ft_lstsize(lst) > 1)
-		return (ft_error("too many arguments", info), -1);
+		return (set_exitstatus(1), ft_error("too many arguments", info), -1);
 	if (check_numeric(lst->content))
 	{
 		ft_error("numeric argument required", info);

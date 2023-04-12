@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:20:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/22 21:05:29 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 14:34:45 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,35 @@ int	quote_size(char *str, int mode)
 	int			i;
 
 	i = 0;
+	if (!str[0])
+		return (0);
+	if (mode == 0)
+	{
+		if (str[0] == '\'')
+			return (1);
+		i++;
+		while (str[i] && str[i] != '\'')
+			i++;
+		return (i + 1);
+	}
+	else if (mode == 1)
+	{
+		if (str[0] == '\"')
+			return (1);
+		i++;
+		while (str[i] && str[i] != '\"')
+			i++;
+		return (i + 1);
+	}
+	return (0);
+}
+
+int	quote_size_shellsplit(char *str, int mode)
+{
+	int			i;
+
+	i = 0;
+
 	if (mode == 0)
 	{
 		i++;

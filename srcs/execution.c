@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/08 05:47:30 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:33:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_path(t_info *info, char **path, char **cmd)
 		i++;
 	}
 	if (!str)
-		return (stock_free(&mem), NULL);	// error "no path exists where this command is executable"
+		return (stock_free(&mem), ft_error(ERROR12, info), NULL);
 	res = ft_strdup(str, &info->exec_mem);
 	if (!res)
 		return (stock_free(&mem), ft_error(ERROR99, info), NULL);
@@ -141,9 +141,9 @@ void	handle_pipe(t_info *info, t_exec *exec)
 	char		**cmd;
 
 	if (dup2(exec->in_fd, STDIN_FILENO) == -1)
-		return ;	//error
+		return (ft_error(ERROR13, info));
 	if (dup2(exec->out_fd, STDOUT_FILENO) == -1)
-		return ;	//error
+		return (ft_error(ERROR13, info));
 	exec->fd = STDIN_FILENO;
 	i = 0;
 	cmds = info->final_parse;
@@ -166,16 +166,17 @@ void	init_fd_pid(t_info *info, t_exec *exec)
 	exec->pid_tab = stock_malloc(sizeof(pid_t) * info->com_count, \
 		&info->exec_mem);
 	if (!exec->pid_tab)
-		return ;	//error
+		return (ft_error(ERROR99, info));
 	exec->fd_tab = stock_malloc(sizeof(int) * info->com_count, \
 		&info->exec_mem);
 	if (!exec->fd_tab)
-		return ;	//error
+		return (ft_error(ERROR99, info));
 	while (i < (info->com_count - 1))
 	{
 		exec->pid_tab[i] = -1;
 		i++;
 	}
+	return ;
 }
 
 char	**get_big_path(t_info *info, char **envp)
@@ -192,7 +193,7 @@ char	**get_big_path(t_info *info, char **envp)
 	}
 	splitted = ft_split((envp[i] + 5), ':', &info->exec_mem);
 	if (!splitted)
-		return (NULL);		//error
+		return (ft_error(ERROR99, info), NULL);
 	return (splitted);
 }
 
@@ -221,8 +222,3 @@ void	execution(t_info *info)
 	stock_free(&info->exec_mem);
 	return ;
 }
-
-// info->exec_mem;
-// info->envp;
-// info->command;
-// info->com_count;

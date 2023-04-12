@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:51:08 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/11 02:27:35 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 14:14:12 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ t_dir	*ft_lstdirnew(char *type, char *dest, t_memlist **mem)
 	if (node == NULL)
 		return (NULL);
 	node->type = type;
-	node->dest = dest;
+	if (dest != NULL)
+		node->dest = remove_actual_quote(dest, mem);
+	else
+		node->dest = NULL;
 	node->next = NULL;
 	return (node);
 }
