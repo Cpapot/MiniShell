@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 13:41:17 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/13 15:43:08 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,28 +108,20 @@ void	handle_command(t_info *info, t_exec *exec, char **cmd)
 	exec->fd = fd[0];
 }
 
-int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
+void	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
 {
-	int		i;
 	char	*pwd;
 	char	buffer[BUFFER_SIZE];
 
-	i = 0;
 	pwd = getcwd(buffer, BUFFER_SIZE);
-	while (cmd_tab[0][i])
-		i++;
-	while (cmd_tab[0][i] != '/')
-		i--;
 	exec->path = ft_strjoin(pwd, &cmd_tab[0][1], &info->exec_mem);
 	if (exec->path == NULL)
 		ft_error(ERROR99, info);
-	return (i + 1);
 }
 
 void	search_exec(t_info *info, t_exec *exec, t_commands lst_cmd)
 {
 	char	**cmd_tab;
-	int		i = 0;
 
 	cmd_tab = cmd_to_tab(info, lst_cmd);
 	if (!contains_slash(cmd_tab[0]))
@@ -150,10 +142,7 @@ void	search_exec(t_info *info, t_exec *exec, t_commands lst_cmd)
 	}
 	else
 	{
-		while (cmd_tab[0][i])
-			i++;
-		i = exec_file(info, exec, cmd_tab);
-		cmd_tab[0] += i;
+		exec_file(info, exec, cmd_tab);
 		handle_command(info, exec, cmd_tab);
 	}
 }
