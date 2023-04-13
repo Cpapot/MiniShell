@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/12 15:33:21 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 19:39:48 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,19 @@ char	**get_string_cmd(t_info *info, t_commands cmd)
 	return (result);
 }
 
+char	*check_path(t_info *info, char *path, t_memlist **mem, char **cmd)
+{
+	char	*str;
+
+	str = ft_strjoin(path, "/", mem);
+	str = ft_strjoin(str, cmd[0], mem);
+	if (!str)
+		return (stock_free(mem), ft_error(ERROR99, info), NULL);
+	if (access(str, F_OK) != -1)
+		return (str);
+	return (NULL);
+}
+
 char	*get_path(t_info *info, char **path, char **cmd)
 {
 	t_memlist	*mem;
@@ -49,18 +62,11 @@ char	*get_path(t_info *info, char **path, char **cmd)
 	i = 0;
 	while (path[i])
 	{
-		str = ft_strjoin(path[i], "/", &mem);
-		if (!str)
-			return (stock_free(&mem), ft_error(ERROR99, info), NULL);
-		str = ft_strjoin(str, cmd[0], &mem);
-		if (!str)
-			return (stock_free(&mem), ft_error(ERROR99, info), NULL);
-		if (access(str, F_OK) != -1)
+		str = check_path(info, path[i], &mem, cmd);
+		if (str)
 			break ;
 		i++;
 	}
-	if (!str)
-		return (stock_free(&mem), ft_error(ERROR12, info), NULL);
 	res = ft_strdup(str, &info->exec_mem);
 	if (!res)
 		return (stock_free(&mem), ft_error(ERROR99, info), NULL);
@@ -147,15 +153,15 @@ void	handle_pipe(t_info *info, t_exec *exec)
 	exec->fd = STDIN_FILENO;
 	i = 0;
 	cmds = info->final_parse;
-	while (i + 2 < info->com_count)
+	while (i + 1 < info->com_count)
 	{
+		if (i + 2 >= info->com_count)
+			exec->end = 1;
 		cmd = get_string_cmd(info, cmds[i]);
-		handle_command(info, exec, cmd);
+		if (find_builtins(cmds[i].command, info, 1) == 0)
+			handle_command(info, exec, cmd);
 		i++;
 	}
-	exec->end = 1;
-	cmd = get_string_cmd(info, cmds[i]);
-	handle_command(info, exec, cmd);
 }
 
 void	init_fd_pid(t_info *info, t_exec *exec)

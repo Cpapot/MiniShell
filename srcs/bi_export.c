@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 19:33:35 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 19:53:36 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	**add_to_envp(char **envp, char *name, char *var, t_info *info)
 		result[i] = envp[i];
 	if (var == NULL)
 	{
-		result[i] = name;
+		result[i] = ft_strdup(name, &info->envp_mem);
 		result[i + 1] = NULL;
 		return (result);
 	}

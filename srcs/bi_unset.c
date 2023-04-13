@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:57:30 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/07 18:21:28 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 20:00:21 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,4 @@ int	bi_unset(t_list *lst, t_info *info)
 		return (1);
 	info->envp = delete_var(var_pos, info->envp);
 	return (1);
-
 }
