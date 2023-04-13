@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 15:43:08 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 17:00:54 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,32 @@
 
 #define BUFFER_SIZE	1024
 
+void	redirect(t_info *info, t_exec *exec)
+{
+	if (dup2(exec->in_fd, STDIN_FILENO) == -1)
+		return (ft_error(ERROR13, info));
+	if (dup2(exec->out_fd, STDOUT_FILENO) == -1)
+		return (ft_error(ERROR13, info));
+}
+
 char	**cmd_to_tab(t_info *info, t_commands cmd)
 {
 	char	**result;
 	t_list	*lst;
-	int		i;
 	int		j;
+	int		size;
 
-	result = stock_malloc(sizeof(char *) * info->com_count, &info->exec_mem);
-	i = 0;
-	while (i + 1 < info->com_count)
+	lst = cmd.command;
+	size = ft_lstsize(lst) + 1;
+	result = stock_malloc(sizeof(char *) * size, &info->exec_mem);
+	j = 0;
+	while (lst && lst->content)
 	{
-		lst = cmd.command;
-		j = 0;
-		while (lst && lst->content)
-		{
-			result[j] = ft_strdup(lst->content, &info->exec_mem);
-			lst = lst->next;
-			j++;
-		}
-		result[j] = NULL;
-		i++;
+		result[j] = ft_strdup(lst->content, &info->exec_mem);
+		lst = lst->next;
+		j++;
 	}
+	result[j] = NULL;
 	return (result);
 }
 
@@ -96,6 +100,7 @@ void	handle_command(t_info *info, t_exec *exec, char **cmd)
 	int		fd[2];
 	pid_t	pid;
 
+	redirect(info, exec);
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info));
 	pid = fork();
@@ -147,7 +152,6 @@ void	search_exec(t_info *info, t_exec *exec, t_commands lst_cmd)
 	}
 }
 
-
 void	start_exec(t_info *info, t_exec *exec)
 {
 	int			i;
@@ -174,10 +178,6 @@ void	init_exec(t_info *info, t_exec *exec)
 	exec->in_fd = STDIN_FILENO;
 	exec->out_fd = STDOUT_FILENO;
 	init_fd_pid(info, exec);
-	if (dup2(exec->in_fd, STDIN_FILENO) == -1)
-		return (ft_error(ERROR13, info));
-	if (dup2(exec->out_fd, STDOUT_FILENO) == -1)
-		return (ft_error(ERROR13, info));
 }
 
 /*
@@ -189,7 +189,7 @@ void	execution(t_info *info)
 
 	init_exec(info, &exec);
 	start_exec(info, &exec);
-	wait_close(info, &exec);
+	wait_close(&exec);
 	stock_free(&info->exec_mem);
 	return ;
 }

@@ -3,30 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 13:45:00 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/13 17:03:42 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	wait_close(t_info *info, t_exec *exec)
+void	wait_close(t_exec *exec)
 {
 	int	i;
 	int	exit_status;
 
 	i = 0;
 	exit_status = 0;
-	while (i + 1 < info->com_count)
+	while (exec->pid_tab[i] >= 0)
 	{
+		printf("%d\n", i);
 		waitpid(exec->pid_tab[i], &exit_status, 0);
-		//set_exitstatus(exit_status);
+		set_exitstatus(exit_status);
 		if (i != 0)
 			close(exec->fd_tab[i]);
 		i++;
 	}
+
 }
 
 void	init_fd_pid(t_info *info, t_exec *exec)
@@ -34,7 +36,7 @@ void	init_fd_pid(t_info *info, t_exec *exec)
 	int	i;
 
 	i = 0;
-	exec->pid_tab = stock_malloc(sizeof(pid_t) * info->com_count, \
+	exec->pid_tab = stock_malloc(sizeof(pid_t) * info->com_count + 1, \
 		&info->exec_mem);
 	if (!exec->pid_tab)
 		return (ft_error(ERROR99, info));
@@ -47,6 +49,7 @@ void	init_fd_pid(t_info *info, t_exec *exec)
 		exec->pid_tab[i] = -1;
 		i++;
 	}
+	exec->pid_tab[i] = -1;
 	return ;
 }
 
