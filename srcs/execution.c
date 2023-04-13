@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 07:27:00 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 08:22:51 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	if (execve(exec->path, cmd, exec->envp) == -1)
 	{
 		set_exitstatus(errno);
-		return (ft_error(ERROR12, info));
+		return (ft_error(ERROR12, info), exit(1));
 	}
 	exit(0);
 }
