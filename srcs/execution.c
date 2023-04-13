@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 08:27:11 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 12:37:28 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+#define BUFFER_SIZE	1024
 
 char	**cmd_to_tab(t_info *info, t_commands cmd)
 {
@@ -27,8 +29,7 @@ char	**cmd_to_tab(t_info *info, t_commands cmd)
 		j = 0;
 		while (lst && lst->content)
 		{
-			result[j] = ft_strndup(lst->content, \
-				ft_strlen(lst->content), &info->exec_mem);
+			result[j] = ft_strdup(lst->content, &info->exec_mem);
 			lst = lst->next;
 			j++;
 		}
@@ -112,14 +113,19 @@ void	handle_command(t_info *info, t_exec *exec, char **cmd)
 
 int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
 {
-	int	i;
+	int		i;
+	char	*pwd;
+	char	buffer[BUFFER_SIZE];
 
 	i = 0;
+	pwd = getcwd(buffer, BUFFER_SIZE);
 	while (cmd_tab[0][i])
 		i++;
 	while (cmd_tab[0][i] != '/')
 		i--;
-	exec->path = ft_strndup(cmd_tab[0], i + 1, &info->exec_mem);
+	exec->path = ft_strjoin(pwd, &cmd_tab[0][1], &info->exec_mem);
+	if (exec->path == NULL)
+		ft_error(ERROR99, info);
 	return (i + 1);
 }
 
@@ -151,11 +157,10 @@ void	search_exec(t_info *info, t_exec *exec, t_commands lst_cmd)
 			i++;
 		i = exec_file(info, exec, cmd_tab);
 		cmd_tab[0] += i;
-		printf("%s\n\n\n", exec->path);
-		printf("%s\n\n\n", cmd_tab[0]);
 		handle_command(info, exec, cmd_tab);
 	}
 }
+
 
 void	start_exec(t_info *info, t_exec *exec)
 {
