@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 15:17:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/03 17:08:50 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/13 13:37:18 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,12 @@ t_commands	*split_pipe(t_info *info, t_list *lst)
 	result = stock_malloc(sizeof(t_commands) * (info->com_count + 1),
 			&info->final_memparse);
 	if (result == NULL)
-		return (print_error_exit(info, ERROR99, 0), NULL);
+		return (ft_error(ERROR99, info), NULL);
 	while (++i != info->com_count)
 	{
 		result[i].command = first_command(tmp, info);
 		if (result[i].command == NULL && i + 1 != info->com_count)
-			return (print_error(ERROR4), NULL);
+			return (ft_error(ERROR4, info), NULL);
 		tmp = lst;
 		go_next_cmd(&tmp);
 		lst = tmp;
