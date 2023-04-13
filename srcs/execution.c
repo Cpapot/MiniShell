@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 08:22:51 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 08:27:11 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,11 @@ void	handle_command(t_info *info, t_exec *exec, char **cmd)
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info));
 	pid = fork();
+	add_pid(info, exec, pid);
 	if (pid == -1)
 		return (ft_error(ERROR10, info));
 	else if (pid == 0)
 		exec_command(info, exec, fd, cmd);
-	add_pid(info, exec, pid);
 	close(fd[1]);
 	exec->fd = fd[0];
 }
