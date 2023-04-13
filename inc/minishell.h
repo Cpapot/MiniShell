@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 19:36:50 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/13 06:22:23 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,11 @@ typedef struct s_dir
 
 typedef struct s_commands
 {
+	char	*path;
+	int		is_command;
 	t_list	*command;
 	t_dir	*dir;
-}	t_commands;
+}					t_commands;
 
 typedef struct s_info
 {
@@ -113,7 +115,6 @@ t_list		*remove_empty_node(t_list *lst);
 int			quote_size(char *str, int mode);
 int			quote_size_shellsplit(char *str, int mode);
 
-
 /*						check_error						*/
 int			is_line_valid(t_list *lst, t_info *info);
 int			is_command_line(t_list *lst, t_info *info);
@@ -145,6 +146,13 @@ void		catch_signals(int sig);
 /*						prompt							*/
 void		prompt(t_info *info);
 char		*prompt_string(t_info *info);
+
+/*						exec							*/
+void		wait_close(t_info *info, t_exec *exec);
+void		init_fd_pid(t_info *info, t_exec *exec);
+void		add_pid(t_info *info, t_exec *exec, pid_t pid);
+char		**get_big_path(t_info *info, char **envp);
+int			contains_slash(char *cmd);
 
 void		printtest(t_info *info);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:15:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 15:08:37 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/12 20:00:12 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	convert_status(long long status)
 	return (status);
 }
 
-int		bi_exit(t_list *lst, t_info *info)
+int	bi_exit(t_list *lst, t_info *info)
 {
 	long long	status;
 
