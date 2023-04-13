@@ -6,13 +6,13 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/12 19:39:48 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 07:27:00 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	**get_string_cmd(t_info *info, t_commands cmd)
+char	**cmd_to_tab(t_info *info, t_commands cmd)
 {
 	char	**result;
 	t_list	*lst;
@@ -38,12 +38,12 @@ char	**get_string_cmd(t_info *info, t_commands cmd)
 	return (result);
 }
 
-char	*check_path(t_info *info, char *path, t_memlist **mem, char **cmd)
+char	*check_path(t_info *info, char *path, t_memlist **mem, char *cmd)
 {
 	char	*str;
 
 	str = ft_strjoin(path, "/", mem);
-	str = ft_strjoin(str, cmd[0], mem);
+	str = ft_strjoin(str, cmd, mem);
 	if (!str)
 		return (stock_free(mem), ft_error(ERROR99, info), NULL);
 	if (access(str, F_OK) != -1)
@@ -51,7 +51,7 @@ char	*check_path(t_info *info, char *path, t_memlist **mem, char **cmd)
 	return (NULL);
 }
 
-char	*get_path(t_info *info, char **path, char **cmd)
+char	*get_path(t_info *info, char **path, char *cmd)
 {
 	t_memlist	*mem;
 	int			i;
@@ -67,45 +67,16 @@ char	*get_path(t_info *info, char **path, char **cmd)
 			break ;
 		i++;
 	}
+	if (!str)
+		return (stock_free(&mem), NULL);
 	res = ft_strdup(str, &info->exec_mem);
 	if (!res)
 		return (stock_free(&mem), ft_error(ERROR99, info), NULL);
 	return (stock_free(&mem), res);
 }
 
-void	wait_close(t_info *info, t_exec *exec)
-{
-	int	i;
-
-	i = 0;
-	while (i + 1 < info->com_count)
-	{
-		waitpid(exec->pid_tab[i], NULL, 0);
-		if (i != 0)
-			close(exec->fd_tab[i]);
-		i++;
-	}
-}
-
-void	add_pid(t_info *info, t_exec *exec, pid_t pid)
-{
-	int	i;
-
-	i = 0;
-	while (i + 1 < info->com_count)
-	{
-		if (exec->pid_tab[i] < 0)
-			break ;
-		i++;
-	}
-	exec->pid_tab[i] = pid;
-	exec->fd_tab[i] = exec->fd;
-}
-
 void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 {
-	char	*path;
-
 	close(fd[0]);
 	if (dup2(exec->fd, STDIN_FILENO) == -1)
 		return (ft_error(ERROR13, info));
@@ -114,8 +85,7 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 		if (dup2(fd[1], STDOUT_FILENO) == -1)
 			return (ft_error(ERROR13, info));
 	}
-	path = get_path(info, exec->path, cmd);
-	if (execve(path, cmd, exec->envp) == -1)
+	if (execve(exec->path, cmd, exec->envp) == -1)
 	{
 		set_exitstatus(errno);
 		return (ft_error(ERROR12, info));
@@ -140,79 +110,82 @@ void	handle_command(t_info *info, t_exec *exec, char **cmd)
 	exec->fd = fd[0];
 }
 
-void	handle_pipe(t_info *info, t_exec *exec)
+int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
+{
+	int	i;
+
+	i = 0;
+	while (cmd_tab[0][i])
+		i++;
+	while (cmd_tab[0][i] != '/')
+		i--;
+	exec->path = ft_strndup(cmd_tab[0], i + 1, &info->exec_mem);
+	return (i + 1);
+}
+
+void	search_exec(t_info *info, t_exec *exec, t_commands lst_cmd)
+{
+	char	**cmd_tab;
+	int		i = 0;
+
+	cmd_tab = cmd_to_tab(info, lst_cmd);
+	if (!contains_slash(cmd_tab[0]))
+	{
+		if (access(cmd_tab[0], F_OK) != -1)
+			handle_command(info, exec, cmd_tab);
+		else
+		{
+			if (find_builtins(lst_cmd.command, info, 1) == 0)
+			{
+				exec->path = get_path(info, exec->paths, cmd_tab[0]);
+				if (!exec->path)
+					return (ft_error(ERROR2, info));
+				else
+					handle_command(info, exec, cmd_tab);
+			}
+		}
+	}
+	else
+	{
+		while (cmd_tab[0][i])
+			i++;
+		i = exec_file(info, exec, cmd_tab);
+		cmd_tab[0] += i;
+		printf("%s\n\n\n", exec->path);
+		printf("%s\n\n\n", cmd_tab[0]);
+		handle_command(info, exec, cmd_tab);
+	}
+}
+
+void	start_exec(t_info *info, t_exec *exec)
 {
 	int			i;
 	t_commands	*cmds;
-	char		**cmd;
 
-	if (dup2(exec->in_fd, STDIN_FILENO) == -1)
-		return (ft_error(ERROR13, info));
-	if (dup2(exec->out_fd, STDOUT_FILENO) == -1)
-		return (ft_error(ERROR13, info));
-	exec->fd = STDIN_FILENO;
 	i = 0;
 	cmds = info->final_parse;
 	while (i + 1 < info->com_count)
 	{
 		if (i + 2 >= info->com_count)
 			exec->end = 1;
-		cmd = get_string_cmd(info, cmds[i]);
-		if (find_builtins(cmds[i].command, info, 1) == 0)
-			handle_command(info, exec, cmd);
+		search_exec(info, exec, cmds[i]);
 		i++;
 	}
-}
-
-void	init_fd_pid(t_info *info, t_exec *exec)
-{
-	int	i;
-
-	i = 0;
-	exec->pid_tab = stock_malloc(sizeof(pid_t) * info->com_count, \
-		&info->exec_mem);
-	if (!exec->pid_tab)
-		return (ft_error(ERROR99, info));
-	exec->fd_tab = stock_malloc(sizeof(int) * info->com_count, \
-		&info->exec_mem);
-	if (!exec->fd_tab)
-		return (ft_error(ERROR99, info));
-	while (i < (info->com_count - 1))
-	{
-		exec->pid_tab[i] = -1;
-		i++;
-	}
-	return ;
-}
-
-char	**get_big_path(t_info *info, char **envp)
-{
-	char	**splitted;
-	int		i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (!ft_strncmp(envp[i], "PATH=", 5))
-			break ;
-		i++;
-	}
-	splitted = ft_split((envp[i] + 5), ':', &info->exec_mem);
-	if (!splitted)
-		return (ft_error(ERROR99, info), NULL);
-	return (splitted);
 }
 
 void	init_exec(t_info *info, t_exec *exec)
 {
-	exec->path = get_big_path(info, info->envp);
-	exec->fd = STDIN_FILENO;
+	exec->paths = get_big_path(info, info->envp);
 	exec->envp = info->envp;
 	exec->end = 0;
-	exec->fd = 0;
+	exec->fd = STDIN_FILENO;
 	exec->in_fd = STDIN_FILENO;
 	exec->out_fd = STDOUT_FILENO;
 	init_fd_pid(info, exec);
+	if (dup2(exec->in_fd, STDIN_FILENO) == -1)
+		return (ft_error(ERROR13, info));
+	if (dup2(exec->out_fd, STDOUT_FILENO) == -1)
+		return (ft_error(ERROR13, info));
 }
 
 /*
@@ -223,7 +196,7 @@ void	execution(t_info *info)
 	t_exec	exec;
 
 	init_exec(info, &exec);
-	handle_pipe(info, &exec);
+	start_exec(info, &exec);
 	wait_close(info, &exec);
 	stock_free(&info->exec_mem);
 	return ;
