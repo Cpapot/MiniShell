@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/07 13:49:37 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/13 13:36:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static char	*swap_envstr(char *str, t_info *info, char **envp)
 			tmp = ft_strjoin(buff, &str[u], &info->parsing);
 			str = ft_strjoin(start(str, i - 1, info), tmp, &info->parsing);
 			if (!buff || !tmp || !str)
-				print_error_exit(info, ERROR99, EXIT_FAILURE);
+				ft_error(ERROR99, info);
 			i += ft_strlen(buff) - 1;
 		}
 	}

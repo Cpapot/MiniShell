@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_status.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 11:09:35 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 08:21:13 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 13:34:23 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*swap_exit(char *str, t_info *info)
 			tmp = ft_strjoin(ft_itoa(g_exit_status), &str[u], &info->parsing);
 			str = ft_strjoin(start(str, i - 1, info), tmp, &info->parsing);
 			if (!tmp || !str)
-				print_error_exit(info, ERROR99, EXIT_FAILURE);
+				ft_error(ERROR99, info);
 			i += ft_strlen(ft_itoa(g_exit_status)) - 1;
 		}
 	}

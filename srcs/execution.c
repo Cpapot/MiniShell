@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 12:37:28 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/13 13:41:17 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,7 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 			return (ft_error(ERROR13, info));
 	}
 	if (execve(exec->path, cmd, exec->envp) == -1)
-	{
-		set_exitstatus(errno);
 		return (ft_error(ERROR12, info), exit(1));
-	}
 	exit(0);
 }
 
@@ -173,7 +170,8 @@ void	start_exec(t_info *info, t_exec *exec)
 	{
 		if (i + 2 >= info->com_count)
 			exec->end = 1;
-		search_exec(info, exec, cmds[i]);
+		if (cmds[i].command != NULL && cmds[i].command->content != NULL)
+			search_exec(info, exec, cmds[i]);
 		i++;
 	}
 }
