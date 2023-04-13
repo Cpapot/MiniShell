@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 17:03:42 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 21:06:07 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,12 @@ void	wait_close(t_exec *exec)
 	exit_status = 0;
 	while (exec->pid_tab[i] >= 0)
 	{
-		printf("%d\n", i);
 		waitpid(exec->pid_tab[i], &exit_status, 0);
 		set_exitstatus(exit_status);
 		if (i != 0)
 			close(exec->fd_tab[i]);
 		i++;
 	}
-
 }
 
 void	init_fd_pid(t_info *info, t_exec *exec)

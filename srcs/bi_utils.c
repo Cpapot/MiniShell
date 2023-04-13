@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:20:54 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 03:27:24 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 19:19:51 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	find_builtins(t_list *lst, t_info *info, int out_fd)
 	int	i;
 
 	i = 0;
+	if (out_fd == -2)
+		out_fd = 1;
 	if (ft_strcmp("export", lst->content))
 		i = bi_export(lst->next, info, out_fd);
 	else if (ft_strcmp("echo", lst->content))

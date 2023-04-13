@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 17:00:54 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 21:14:30 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,50 @@
 
 #define BUFFER_SIZE	1024
 
-void	redirect(t_info *info, t_exec *exec)
+void	heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
 {
-	if (dup2(exec->in_fd, STDIN_FILENO) == -1)
-		return (ft_error(ERROR13, info));
-	if (dup2(exec->out_fd, STDOUT_FILENO) == -1)
-		return (ft_error(ERROR13, info));
+	int		fd[2];
+	char	*result;
+
+	if (pipe(fd) == -1)
+		return (ft_error(ERROR11, info));
+	while (42)
+	{
+		result = readline(BLACK"> "WHITE);
+		// printf("result : \"%s\" === dir : \"%s\"\n", result, lst_cmd.dir->dest);
+		// printf("%d\n", ft_strncmp(result, lst_cmd.dir->dest, ft_strlen(result)));
+		if (ft_strcmp(result, lst_cmd.dir->dest))
+			break ;
+		write(fd[0], result, ft_strlen(result));
+		write(fd[0], "\n", 1);
+		free(result);
+	}
+	free(result);
+	exec->in_fd = fd[0];
+	close(fd[1]);
+	return ;
+}
+
+void	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
+{
+	while (lst_cmd.dir)
+	{
+		if (ft_strcmp(lst_cmd.dir->type, "<"))
+			exec->in_fd = open(lst_cmd.dir->dest, O_RDONLY);
+		else if (ft_strcmp(lst_cmd.dir->type, ">"))
+			exec->out_fd = open(lst_cmd.dir->dest, \
+			O_RDWR | O_TRUNC | O_CREAT, 0644);
+		else if (ft_strcmp(lst_cmd.dir->type, ">>"))
+			exec->out_fd = open(lst_cmd.dir->dest, \
+			O_RDWR | O_APPEND | O_CREAT, 0644);
+		else if (ft_strcmp(lst_cmd.dir->type, "<<"))
+			heredoc(info, exec, lst_cmd);
+		lst_cmd.dir = lst_cmd.dir->next;
+	}
+	if (exec->in_fd == -1)
+		return (ft_error(ERROR14, info));
+	if (exec->out_fd == -1)
+		return (ft_error(ERROR15, info));
 }
 
 char	**cmd_to_tab(t_info *info, t_commands cmd)
@@ -83,13 +121,18 @@ char	*get_path(t_info *info, char **path, char *cmd)
 void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 {
 	close(fd[0]);
-	if (dup2(exec->fd, STDIN_FILENO) == -1)
+
+	if (exec->in_fd != -2 && dup2(exec->in_fd, STDIN_FILENO) == -1)
 		return (ft_error(ERROR13, info));
-	if (exec->end == 0)
-	{
-		if (dup2(fd[1], STDOUT_FILENO) == -1)
-			return (ft_error(ERROR13, info));
-	}
+
+	else if (dup2(exec->fd, STDIN_FILENO) == -1)
+		return (ft_error(ERROR13, info));
+
+	if (exec->end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
+		return (ft_error(ERROR13, info));
+
+	else if (exec->out_fd != -2 && dup2(exec->out_fd, STDOUT_FILENO) == -1)
+		return (ft_error(ERROR13, info));
 	if (execve(exec->path, cmd, exec->envp) == -1)
 		return (ft_error(ERROR12, info), exit(1));
 	exit(0);
@@ -100,15 +143,14 @@ void	handle_command(t_info *info, t_exec *exec, char **cmd)
 	int		fd[2];
 	pid_t	pid;
 
-	redirect(info, exec);
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info));
 	pid = fork();
-	add_pid(info, exec, pid);
 	if (pid == -1)
 		return (ft_error(ERROR10, info));
 	else if (pid == 0)
 		exec_command(info, exec, fd, cmd);
+	add_pid(info, exec, pid);
 	close(fd[1]);
 	exec->fd = fd[0];
 }
@@ -135,7 +177,7 @@ void	search_exec(t_info *info, t_exec *exec, t_commands lst_cmd)
 			handle_command(info, exec, cmd_tab);
 		else
 		{
-			if (find_builtins(lst_cmd.command, info, 1) == 0)
+			if (find_builtins(lst_cmd.command, info, exec->out_fd) == 0)
 			{
 				exec->path = get_path(info, exec->paths, cmd_tab[0]);
 				if (!exec->path)
@@ -164,7 +206,14 @@ void	start_exec(t_info *info, t_exec *exec)
 		if (i + 2 >= info->com_count)
 			exec->end = 1;
 		if (cmds[i].command != NULL && cmds[i].command->content != NULL)
+		{
+			redirect(info, exec, cmds[i]);
+			if (exec->in_fd == -1 || exec->out_fd == -1)
+				return ;
 			search_exec(info, exec, cmds[i]);
+			exec->in_fd = -2;
+			exec->out_fd = -2;
+		}
 		i++;
 	}
 }
@@ -175,8 +224,8 @@ void	init_exec(t_info *info, t_exec *exec)
 	exec->envp = info->envp;
 	exec->end = 0;
 	exec->fd = STDIN_FILENO;
-	exec->in_fd = STDIN_FILENO;
-	exec->out_fd = STDOUT_FILENO;
+	exec->in_fd = -2;
+	exec->out_fd = -2;
 	init_fd_pid(info, exec);
 }
 
