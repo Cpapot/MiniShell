@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 06:22:23 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/13 17:01:17 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ typedef struct s_dir
 
 typedef struct s_commands
 {
-	char	*path;
-	int		is_command;
 	t_list	*command;
 	t_dir	*dir;
 }					t_commands;
@@ -148,7 +146,7 @@ void		prompt(t_info *info);
 char		*prompt_string(t_info *info);
 
 /*						exec							*/
-void		wait_close(t_info *info, t_exec *exec);
+void		wait_close(t_exec *exec);
 void		init_fd_pid(t_info *info, t_exec *exec);
 void		add_pid(t_info *info, t_exec *exec, pid_t pid);
 char		**get_big_path(t_info *info, char **envp);
