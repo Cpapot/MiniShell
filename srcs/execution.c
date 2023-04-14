@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/14 16:41:54 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/14 18:08:24 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
 	}
 	else if (cmd_tab[0][0] == '/')
 		exec->path = cmd_tab[0];
+	if (access(exec->path, F_OK) == -1)
+		return (ft_error(ERROR20, info), 1);
 	return (0);
 }
 
