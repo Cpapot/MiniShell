@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 17:01:17 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:29:49 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,14 +140,16 @@ char		*swap_exit(char *str, t_info *info);
 void		set_exitstatus(int status);
 
 void		catch_signals(int sig);
+void		catch_signals_child(int sig);
 
 /*						prompt							*/
 void		prompt(t_info *info);
 char		*prompt_string(t_info *info);
 
 /*						exec							*/
+int			init_fd_pid(t_info *info, t_exec *exec);
+
 void		wait_close(t_exec *exec);
-void		init_fd_pid(t_info *info, t_exec *exec);
 void		add_pid(t_info *info, t_exec *exec, pid_t pid);
 char		**get_big_path(t_info *info, char **envp);
 int			contains_slash(char *cmd);

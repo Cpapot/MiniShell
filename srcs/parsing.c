@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 13:19:35 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/14 13:11:33 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ t_commands	*parsing(t_info *info)
 		remove_quote(result[i].command, &info->parsing);
 		result[i].command = remove_empty_node(result[i].command);
 		cpy_final_parse(result[i], info);
-		if (!is_command_line(result[i].command, info))
-			return (NULL);
+		/*if (!is_command_line(result[i].command, info))
+			return (NULL);*/
 	}
 	stock_free(&info->parsing);
 	return (result);
