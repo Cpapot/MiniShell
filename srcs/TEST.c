@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   TEST.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 21:21:09 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 14:56:12 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/14 16:44:18 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ void	printtest(t_info *info)
 			tmp2 = tmp2->next;
 		}
 		i++;
+		printf("\n");
 	}
 }

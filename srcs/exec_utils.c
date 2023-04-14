@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/14 14:51:49 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:28:54 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	wait_close(t_exec *exec)
 	}
 }
 
-void	init_fd_pid(t_info *info, t_exec *exec)
+int	init_fd_pid(t_info *info, t_exec *exec)
 {
 	int	i;
 
@@ -37,18 +37,18 @@ void	init_fd_pid(t_info *info, t_exec *exec)
 	exec->pid_tab = stock_malloc(sizeof(pid_t) * info->com_count + 1, \
 		&info->exec_mem);
 	if (!exec->pid_tab)
-		return (ft_error(ERROR99, info));
+		return (ft_error(ERROR99, info), 1);
 	exec->fd_tab = stock_malloc(sizeof(int) * info->com_count, \
 		&info->exec_mem);
 	if (!exec->fd_tab)
-		return (ft_error(ERROR99, info));
-	while (i < (info->com_count - 1))
+		return (ft_error(ERROR99, info), 1);
+	while (i + 1 < info->com_count)
 	{
 		exec->pid_tab[i] = -1;
 		i++;
 	}
 	exec->pid_tab[i] = -1;
-	return ;
+	return (0);
 }
 
 void	add_pid(t_info *info, t_exec *exec, pid_t pid)
