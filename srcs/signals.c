@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 18:23:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/03/23 15:43:27 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/14 13:54:23 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,10 @@ void	catch_signals(int sig)
 	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_redisplay();
+}
+
+void	catch_signals_child(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
 }

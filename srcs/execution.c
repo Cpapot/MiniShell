@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 21:14:30 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/14 14:13:23 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,16 +121,12 @@ char	*get_path(t_info *info, char **path, char *cmd)
 void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 {
 	close(fd[0]);
-
 	if (exec->in_fd != -2 && dup2(exec->in_fd, STDIN_FILENO) == -1)
 		return (ft_error(ERROR13, info));
-
 	else if (dup2(exec->fd, STDIN_FILENO) == -1)
 		return (ft_error(ERROR13, info));
-
 	if (exec->end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (ft_error(ERROR13, info));
-
 	else if (exec->out_fd != -2 && dup2(exec->out_fd, STDOUT_FILENO) == -1)
 		return (ft_error(ERROR13, info));
 	if (execve(exec->path, cmd, exec->envp) == -1)
@@ -145,6 +141,7 @@ void	handle_command(t_info *info, t_exec *exec, char **cmd)
 
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info));
+	signal(SIGINT, catch_signals_child);
 	pid = fork();
 	if (pid == -1)
 		return (ft_error(ERROR10, info));
@@ -160,10 +157,15 @@ void	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
 	char	*pwd;
 	char	buffer[BUFFER_SIZE];
 
-	pwd = getcwd(buffer, BUFFER_SIZE);
-	exec->path = ft_strjoin(pwd, &cmd_tab[0][1], &info->exec_mem);
-	if (exec->path == NULL)
-		ft_error(ERROR99, info);
+	if (cmd_tab[0][0] == '.')
+	{
+		pwd = getcwd(buffer, BUFFER_SIZE);
+		exec->path = ft_strjoin(pwd, &cmd_tab[0][1], &info->exec_mem);
+		if (exec->path == NULL)
+			ft_error(ERROR99, info);
+	}
+	else if (cmd_tab[0][0] == '/')
+		exec->path = cmd_tab[0];
 }
 
 void	search_exec(t_info *info, t_exec *exec, t_commands lst_cmd)
