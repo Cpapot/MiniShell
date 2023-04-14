@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/14 14:50:31 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/14 15:19:44 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,13 +125,19 @@ char	*get_path(t_info *info, char **path, char *cmd)
 void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 {
 	close(fd[0]);
-	if (exec->in_fd != -2 && dup2(exec->in_fd, STDIN_FILENO) == -1)
-		return (ft_error(ERROR13, info));
+	if (exec->in_fd != -2)
+	{
+		if (dup2(exec->in_fd, STDIN_FILENO) == -1)
+			return (ft_error(ERROR13, info));
+	}
 	else if (dup2(exec->fd, STDIN_FILENO) == -1)
 		return (ft_error(ERROR13, info));
-	if (exec->end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
-		return (ft_error(ERROR13, info));
-	else if (exec->out_fd != -2 && dup2(exec->out_fd, STDOUT_FILENO) == -1)
+	if (exec->out_fd != -2)
+	{
+		if (dup2(exec->out_fd, STDOUT_FILENO) == -1)
+			return (ft_error(ERROR13, info));
+	}
+	else if (exec->end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (ft_error(ERROR13, info));
 	if (execve(exec->path, cmd, exec->envp) == -1)
 		return (ft_error(ERROR12, info), exit(1));
