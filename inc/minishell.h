@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 17:01:17 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/14 13:54:34 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ char		*swap_exit(char *str, t_info *info);
 void		set_exitstatus(int status);
 
 void		catch_signals(int sig);
+void		catch_signals_child(int sig);
 
 /*						prompt							*/
 void		prompt(t_info *info);

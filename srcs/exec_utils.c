@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/13 21:06:07 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/14 13:57:35 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	wait_close(t_exec *exec)
 	while (exec->pid_tab[i] >= 0)
 	{
 		waitpid(exec->pid_tab[i], &exit_status, 0);
-		set_exitstatus(exit_status);
+		set_exitstatus(WEXITSTATUS(exit_status));
 		if (i != 0)
 			close(exec->fd_tab[i]);
 		i++;
