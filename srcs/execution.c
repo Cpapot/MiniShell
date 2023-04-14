@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/14 14:13:23 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/14 14:50:31 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,21 +101,25 @@ char	*get_path(t_info *info, char **path, char *cmd)
 	char		*str;
 	char		*res;
 
-	mem = NULL;
-	i = 0;
-	while (path[i])
+	if (path)
 	{
-		str = check_path(info, path[i], &mem, cmd);
-		if (str)
-			break ;
-		i++;
+		mem = NULL;
+		i = 0;
+		while (path[i])
+		{
+			str = check_path(info, path[i], &mem, cmd);
+			if (str)
+				break ;
+			i++;
+		}
+		if (!str)
+			return (stock_free(&mem), NULL);
+		res = ft_strdup(str, &info->exec_mem);
+		if (!res)
+			return (stock_free(&mem), ft_error(ERROR99, info), NULL);
+		return (stock_free(&mem), res);
 	}
-	if (!str)
-		return (stock_free(&mem), NULL);
-	res = ft_strdup(str, &info->exec_mem);
-	if (!res)
-		return (stock_free(&mem), ft_error(ERROR99, info), NULL);
-	return (stock_free(&mem), res);
+	return (NULL);
 }
 
 void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)

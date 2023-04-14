@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/14 13:57:35 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/14 14:51:49 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,14 @@ char	**get_big_path(t_info *info, char **envp)
 			break ;
 		i++;
 	}
-	splitted = ft_split((envp[i] + 5), ':', &info->exec_mem);
-	if (!splitted)
-		return (ft_error(ERROR99, info), NULL);
-	return (splitted);
+	if (envp[i])
+	{
+		splitted = ft_split((envp[i] + 5), ':', &info->exec_mem);
+		if (!splitted)
+			return (ft_error(ERROR99, info), NULL);
+		return (splitted);
+	}
+	return (NULL);
 }
 
 int	contains_slash(char *cmd)
