@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 14:23:17 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 18:59:54 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/15 18:18:56 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define ERROR20		"\e[31m\e[1m[ERROR:20]\e[0m No such file or directory"
 # define ERROR98		"\e[31m\e[1m[ERROR:98]\e[0m Failure to access/create logs"
 # define ERROR99		"\e[31m\e[1m[ERROR:99]\e[0m Malloc cannot be created"
+# define WARNING		"\e[35m\e[1m[WARNING]\e[0m here-document delimited by end-of-file"
 # define EXPORTERROR1	"\e[31m\e[1mexport\e[0m: not a valid identifier"
 # define UNSETERROR1	"\e[31m\e[1munset\e[0m: not a valid identifier"
 
