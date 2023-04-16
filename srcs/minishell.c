@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/14 16:41:02 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/15 18:05:57 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,6 @@ void	prompt(t_info *info)
 		if (strlen(info->prompt_string) != 0)
 			break ;
 	}
-	//info->prompt_string = ft_strdup("\"\"\"\"", &info->parsing);
-	if ((info->lastprompt_string
-		&& !ft_strcmp(info->lastprompt_string, info->prompt_string))
-			|| info->lastprompt_string == NULL)
-		add_history(info->prompt_string);
-	addto_logs(info->prompt_string, info);
-	info->lastprompt_string = info->prompt_string;
 }
 
 void	loop(t_info *info)
@@ -72,11 +65,17 @@ void	loop(t_info *info)
 			break ;
 		if (info->final_parse != NULL)
 		{
-			printtest(info);
-			// execution(info);
+			//printtest(info);
+			execution(info);
 		}
 		if (info->is_finish != 0)
 			break ;
+		if ((info->lastprompt_string
+		&& !ft_strcmp(info->lastprompt_string, info->prompt_string))
+			|| info->lastprompt_string == NULL)
+			add_history(info->prompt_string);
+		addto_logs(info->prompt_string, info);
+		info->lastprompt_string = info->prompt_string;
 	}
 }
 
