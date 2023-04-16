@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/15 20:23:10 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/16 17:10:53 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,18 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 {
 	while (lst_cmd.dir)
 	{
+		if (ft_strcmp(lst_cmd.dir->type, "<<"))
+		{
+			if (heredoc(info, exec, lst_cmd))
+				return (1);
+		}
+		else // j'ai rajouté ca il faudra le mettre dans une autre fonction
+		{
+			if (is_contain_env(lst_cmd.dir->dest) == 1)
+				lst_cmd.dir->dest = swap_envstr(lst_cmd.dir->dest, info, info->envp);
+			else if (is_contain_env(lst_cmd.dir->dest) == 2)
+				lst_cmd.dir->dest = swap_exit(lst_cmd.dir->dest, info);
+		}
 		if (ft_strcmp(lst_cmd.dir->type, "<"))
 			exec->in_fd = open(lst_cmd.dir->dest, O_RDONLY);
 		else if (ft_strcmp(lst_cmd.dir->type, ">"))
@@ -247,11 +259,6 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 		else if (ft_strcmp(lst_cmd.dir->type, ">>"))
 			exec->out_fd = open(lst_cmd.dir->dest, \
 			O_RDWR | O_APPEND | O_CREAT, 0644);
-		else if (ft_strcmp(lst_cmd.dir->type, "<<"))
-		{
-			if (heredoc(info, exec, lst_cmd))
-				return (1);
-		}
 		lst_cmd.dir = lst_cmd.dir->next;
 	}
 	if (exec->in_fd == -1)
@@ -273,10 +280,10 @@ int	start_exec(t_info *info, t_exec *exec)
 	{
 		if (i + 2 >= info->com_count)
 			exec->end = 1;
+		if (redirect(info, exec, cmds[i]))
+				return (1);
 		if (cmds[i].command != NULL && cmds[i].command->content != NULL)
 		{
-			if (redirect(info, exec, cmds[i]))
-				return (1);
 			cmd_tab = cmd_to_tab(info, cmds[i]);
 			if (!cmd_tab)
 				return (1);

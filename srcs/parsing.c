@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/14 13:11:33 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/16 16:42:11 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ t_commands	*parsing(t_info *info)
 	info->final_parse = result;
 	while (result[++i].command != NULL)
 	{
+
 		result[i].command
 			= find_redirection(result[i].command, info, i);
 		swap_env(result[i].command, info, info->envp);

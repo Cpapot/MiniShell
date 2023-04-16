@@ -6,13 +6,13 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 13:36:58 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/16 16:53:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static int	is_contain_env(char *str)
+int	is_contain_env(char *str)
 {
 	int	i;
 
@@ -71,7 +71,7 @@ char	*start(char *str, int size, t_info *info)
 	return (result);
 }
 
-static char	*swap_envstr(char *str, t_info *info, char **envp)
+char	*swap_envstr(char *str, t_info *info, char **envp)
 {
 	int		i;
 	int		u;

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/15 19:24:42 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/16 16:53:10 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ t_list		*shell_split(t_info *info, char *str, t_memlist **stock);
 
 /*						swap_env						*/
 void		swap_env(t_list *lst, t_info *info, char **envp);
+char		*swap_envstr(char *str, t_info *info, char **envp);
+int			is_contain_env(char *str);
 
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);
