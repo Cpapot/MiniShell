@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/14 18:08:24 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/15 20:23:10 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,55 @@
 
 #define BUFFER_SIZE	1024
 
-void	heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
+int	heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
 {
 	int		fd[2];
 	char	*result;
 
 	if (pipe(fd) == -1)
-		return (ft_error(ERROR11, info));
+		return (ft_error(ERROR11, info), 1);
 	while (42)
 	{
 		result = readline(BLACK"> "WHITE);
-		// printf("result : \"%s\" === dir : \"%s\"\n", result, lst_cmd.dir->dest);
-		// printf("%d\n", ft_strncmp(result, lst_cmd.dir->dest, ft_strlen(result)));
+		if (result == NULL)
+			return (ft_error(WARNING, info), 1);
 		if (ft_strcmp(result, lst_cmd.dir->dest))
 			break ;
-		write(fd[0], result, ft_strlen(result));
-		write(fd[0], "\n", 1);
+		write(fd[1], result, ft_strlen(result));
+		write(fd[1], "\n", 1);
 		free(result);
 	}
 	free(result);
 	exec->in_fd = fd[0];
 	close(fd[1]);
-	return ;
+	return (0);
 }
+/*
+int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
+{
+	int		fd[2];
+	pid_t	pid;
+	int		exit_status;
 
+	exit_status = 0;
+	if (pipe(fd) == -1)
+		return (ft_error(ERROR11, info), 1);
+	pid = fork();
+	if (pid == -1)
+		return (ft_error(ERROR10, info), 1);
+	else if (pid == 0)
+	{
+		//signal(SIGINT, catch_signals_heredoc);
+		//heredoc(info, exec, lst_cmd, fd);
+		exit(1);
+	}
+	printf("exit");
+	waitpid(pid, &exit_status, 0);
+	set_exitstatus(WEXITSTATUS(exit_status));
+	close(fd[1]);
+	return (0);
+}
+*/
 char	*check_path(t_info *info, char *path, t_memlist **mem, char *cmd)
 {
 	char	*str;
@@ -116,7 +141,7 @@ int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
 	else if (cmd_tab[0][0] == '/')
 		exec->path = cmd_tab[0];
 	if (access(exec->path, F_OK) == -1)
-		return (ft_error(ERROR20, info), 1);
+		return (ft_error(ERROR2, info), 1);
 	return (0);
 }
 
@@ -223,7 +248,10 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 			exec->out_fd = open(lst_cmd.dir->dest, \
 			O_RDWR | O_APPEND | O_CREAT, 0644);
 		else if (ft_strcmp(lst_cmd.dir->type, "<<"))
-			heredoc(info, exec, lst_cmd);
+		{
+			if (heredoc(info, exec, lst_cmd))
+				return (1);
+		}
 		lst_cmd.dir = lst_cmd.dir->next;
 	}
 	if (exec->in_fd == -1)
