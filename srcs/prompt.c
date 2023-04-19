@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:20:22 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 20:04:45 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/19 19:47:16 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ static char	*get_prompt_path(t_info *info)
 	char	*result;
 
 	dir = getcwd(buffer, GITBUFFER_SIZE);
-	result = ft_stsubstr(dir, dir_len(dir) + 1, ft_strlen(dir), &info->prompt_mem);
+	result = ft_stsubstr(dir, dir_len(dir) + 1, \
+		ft_strlen(dir), &info->prompt_mem);
 	if (result == NULL)
 		ft_error(ERROR99, info);
 	return (result);
@@ -106,7 +107,8 @@ char	*prompt_string(t_info *info)
 		ft_error(ERROR99, info);
 	if (branch != NULL)
 	{
-		prompt = ft_strjoin(prompt,"\e[34mgit:(\001\x1b[31m\002", &info->prompt_mem);
+		prompt = ft_strjoin(prompt, "\e[34mgit:(\001\x1b[31m\002", \
+			&info->prompt_mem);
 		if (prompt == NULL)
 			ft_error(ERROR99, info);
 		prompt = ft_strjoin(prompt, branch, &info->prompt_mem);

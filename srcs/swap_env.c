@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   swap_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/16 16:53:01 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/19 19:47:24 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	is_contain_env(char *str)
 				break ;
 			if (i > 0 && str[i - 1] == '\\')
 				break ;
-			if (str[i + 1] == '?' && (str[i + 2] == 0 || str[i + 2] == ' ' ||\
+			if (str[i + 1] == '?' && (str[i + 2] == 0 || str[i + 2] == ' ' || \
 				str[i + 2] == '$' || str[i + 2] == '\'' || str[i + 2] == '\"'))
 				return (2);
 			return (1);

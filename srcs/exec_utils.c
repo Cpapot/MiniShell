@@ -3,68 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/15 20:05:16 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/19 20:05:59 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void	wait_close(t_exec *exec)
-{
-	int	i;
-	int	exit_status;
-
-	i = 0;
-	exit_status = 0;
-	while (exec->pid_tab[i] >= 0)
-	{
-		waitpid(exec->pid_tab[i], &exit_status, 0);
-		set_exitstatus(WEXITSTATUS(exit_status));
-		if (i != 0)
-			close(exec->fd_tab[i]);
-		i++;
-	}
-}
-
-int	init_fd_pid(t_info *info, t_exec *exec)
-{
-	int	i;
-
-	i = 0;
-	exec->pid_tab = stock_malloc(sizeof(pid_t) * info->com_count + 1, \
-		&info->exec_mem);
-	if (!exec->pid_tab)
-		return (ft_error(ERROR99, info), 1);
-	exec->fd_tab = stock_malloc(sizeof(int) * info->com_count, \
-		&info->exec_mem);
-	if (!exec->fd_tab)
-		return (ft_error(ERROR99, info), 1);
-	while (i + 1 < info->com_count)
-	{
-		exec->pid_tab[i] = -1;
-		i++;
-	}
-	exec->pid_tab[i] = -1;
-	return (0);
-}
-
-void	add_pid(t_info *info, t_exec *exec, pid_t pid)
-{
-	int	i;
-
-	i = 0;
-	while (i + 1 < info->com_count)
-	{
-		if (exec->pid_tab[i] < 0)
-			break ;
-		i++;
-	}
-	exec->pid_tab[i] = pid;
-	exec->fd_tab[i] = exec->fd;
-}
 
 char	**get_big_path(t_info *info, char **envp)
 {
@@ -86,6 +32,72 @@ char	**get_big_path(t_info *info, char **envp)
 		return (splitted);
 	}
 	return (NULL);
+}
+
+static char	*check_path(t_info *info, char *path, t_memlist **mem, char *cmd)
+{
+	char	*str;
+
+	str = ft_strjoin(path, "/", mem);
+	str = ft_strjoin(str, cmd, mem);
+	if (!str)
+		return (stock_free(mem), ft_error(ERROR99, info), NULL);
+	if (access(str, F_OK) != -1)
+		return (str);
+	return (NULL);
+}
+
+char	*get_path(t_info *info, char **path, char *cmd)
+{
+	t_memlist	*mem;
+	int			i;
+	char		*str;
+	char		*res;
+
+	if (path)
+	{
+		mem = NULL;
+		i = 0;
+		while (path[i])
+		{
+			str = check_path(info, path[i], &mem, cmd);
+			if (str)
+				break ;
+			i++;
+		}
+		if (!str)
+			return (stock_free(&mem), NULL);
+		res = ft_strdup(str, &info->exec_mem);
+		if (!res)
+			return (stock_free(&mem), ft_error(ERROR99, info), NULL);
+		return (stock_free(&mem), res);
+	}
+	return (NULL);
+}
+
+char	**cmd_to_tab(t_info *info, t_commands cmd)
+{
+	char	**result;
+	t_list	*lst;
+	int		j;
+	int		size;
+
+	lst = cmd.command;
+	size = ft_lstsize(lst) + 1;
+	result = stock_malloc(sizeof(char *) * size, &info->exec_mem);
+	if (!result)
+		return (NULL);
+	j = 0;
+	while (lst && lst->content)
+	{
+		result[j] = ft_strdup(lst->content, &info->exec_mem);
+		if (!result[j])
+			return (NULL);
+		lst = lst->next;
+		j++;
+	}
+	result[j] = NULL;
+	return (result);
 }
 
 int	contains_slash(char *cmd)

@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 14:33:31 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 20:01:19 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/19 19:45:25 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ void	ft_error(const char *error, t_info *info)
 	{
 		if (ft_strcmp(error, ERROR2) || ft_strcmp(error, ERROR20))
 			set_exitstatus(127);
-		else if (ft_strcmp(error, ERROR3) ||ft_strcmp(error, ERROR5) \
+		else if (ft_strcmp(error, ERROR3) || ft_strcmp(error, ERROR5) \
 			|| ft_strcmp(error, ERROR4) || ft_strcmp(error, ERROR6))
 			set_exitstatus(2);
 		else if (ft_strcmp(error, ERROR14) || ft_strcmp(error, ERROR15)
-		|| ft_strcmp(error, EXPORTERROR1) || ft_strcmp(error, UNSETERROR1))
+			|| ft_strcmp(error, EXPORTERROR1) || ft_strcmp(error, UNSETERROR1))
 			set_exitstatus(1);
 	}
 }

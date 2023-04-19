@@ -5,7 +5,7 @@
 #				| |    | | |  __/\__ \.
 #				|_|    |_|_|\___||___/
 
-HEADERS 	=	minishell.h error.h exec.h
+HEADERS 	=	minishell.h error.h
 
 SRCS		=	minishell.c minishell_utils.c \
 				parsing.c parsing_utils.c shell_split.c \
@@ -14,7 +14,8 @@ SRCS		=	minishell.c minishell_utils.c \
 				TEST.c bi_echo.c bi_utils.c bi_env.c \
 				bi_pwd.c bi_export.c bi_cd.c bi_exit.c \
 				exit_status.c error.c bi_unset.c prompt.c \
-				execution.c exec_utils.c
+				execution.c exec_utils.c exec_invoke.c \
+				exec_pid.c exec_redir.c
 
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
