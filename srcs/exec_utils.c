@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/19 20:05:59 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/20 06:59:17 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*get_path(t_info *info, char **path, char *cmd)
 			i++;
 		}
 		if (!str)
-			return (stock_free(&mem), NULL);
+			return (stock_free(&mem), ft_error(ERROR2, info), NULL);
 		res = ft_strdup(str, &info->exec_mem);
 		if (!res)
 			return (stock_free(&mem), ft_error(ERROR99, info), NULL);

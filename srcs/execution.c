@@ -6,12 +6,14 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/19 20:03:37 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/20 06:54:05 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+/*
+*/
 static int	search_exec2(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
 	int	i;
@@ -23,7 +25,7 @@ static int	search_exec2(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 	{
 		exec->path = get_path(info, exec->paths, cmd[0]);
 		if (!exec->path)
-			return (ft_error(ERROR2, info), 1);
+			return (1);
 		else
 		{
 			if (handle_command(info, exec, cmd))
@@ -33,6 +35,8 @@ static int	search_exec2(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 	return (0);
 }
 
+/*
+*/
 static int	search_exec(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
 	if (!contains_slash(cmd[0]))
@@ -58,6 +62,11 @@ static int	search_exec(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 	return (0);
 }
 
+/*
+This function loops on every command, if there are redirections they are handled,
+after that we get the command from a chained list to an array of strings,
+which we can send as a parameter to the search_exec function.
+*/
 static int	start_exec(t_info *info, t_exec *exec)
 {
 	int			i;
@@ -87,6 +96,9 @@ static int	start_exec(t_info *info, t_exec *exec)
 	return (0);
 }
 
+/*
+This function initialize all the values of our t_exec structure
+*/
 static int	init_exec(t_info *info, t_exec *exec)
 {
 	exec->paths = get_big_path(info, info->envp);
@@ -101,7 +113,7 @@ static int	init_exec(t_info *info, t_exec *exec)
 }
 
 /*
-This function handles all the execution process of the commands
+This function handles all the execution major steps
 */
 void	execution(t_info *info)
 {

@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:58:49 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/19 20:07:24 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/20 07:09:16 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
 	{
 		pwd = getcwd(buffer, BUFFER_SIZE);
 		exec->path = ft_strjoin(pwd, &cmd_tab[0][1], &info->exec_mem);
-		if (exec->path == NULL)
+		if (!exec->path)
 			return (ft_error(ERROR99, info), 1);
 	}
 	else if (cmd_tab[0][0] == '/')

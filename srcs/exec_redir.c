@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/19 20:09:31 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/04/20 04:04:35 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,16 @@ int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
 }
 */
 
+static int	env_check(t_info *info, t_commands *lst_cmd)
+{
+	if (is_contain_env((*lst_cmd).dir->dest) == 1)
+		(*lst_cmd).dir->dest = \
+			swap_envstr((*lst_cmd).dir->dest, info, info->envp);
+	else if (is_contain_env((*lst_cmd).dir->dest) == 2)
+		(*lst_cmd).dir->dest = swap_exit((*lst_cmd).dir->dest, info);
+	return (0);
+}
+
 int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 {
 	while (lst_cmd.dir)
@@ -71,13 +81,8 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 			if (heredoc(info, exec, lst_cmd))
 				return (1);
 		}
-		else // j'ai rajouté ca il faudra le mettre dans une autre fonction
-		{
-			if (is_contain_env(lst_cmd.dir->dest) == 1)
-				lst_cmd.dir->dest = swap_envstr(lst_cmd.dir->dest, info, info->envp);
-			else if (is_contain_env(lst_cmd.dir->dest) == 2)
-				lst_cmd.dir->dest = swap_exit(lst_cmd.dir->dest, info);
-		}
+		else if (env_check(info, &lst_cmd))
+			return (1);
 		if (ft_strcmp(lst_cmd.dir->type, "<"))
 			exec->in_fd = open(lst_cmd.dir->dest, O_RDONLY);
 		else if (ft_strcmp(lst_cmd.dir->type, ">"))
