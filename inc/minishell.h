@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/16 16:53:10 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/19 20:15:19 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <fcntl.h>
 # include <signal.h>
 # include "error.h"
-# include "exec.h"
 
 # define INV_ID_EXPORT	" !#$%&()*+-.<>=:;`/\'\"@{}[]^|~\n? "
 # define INVID			" !#$%&()*+-.<>=:;`/\'\"@{}[]^|~\n"
@@ -68,6 +67,19 @@ typedef struct s_info
 	t_list		**command;
 }	t_info;
 
+typedef struct s_exec
+{
+	char	*path;
+	char	**paths;
+	int		fd;
+	int		in_fd;
+	int		out_fd;
+	char	**envp;
+	pid_t	*pid_tab;
+	int		*fd_tab;
+	int		end;
+}				t_exec;
+
 /*						MINISHELL						*/
 void		close_minishell(t_info	*info, int status);
 
@@ -97,9 +109,6 @@ int			is_contain_env(char *str);
 
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);
-
-/*						execution						*/
-void		execution(t_info *info);
 
 /*						parsing utils					*/
 char		*ft_strndup(const char *s1, size_t n, t_memlist **stock);
@@ -150,13 +159,26 @@ void		catch_signals_heredoc(int sig);
 void		prompt(t_info *info);
 char		*prompt_string(t_info *info);
 
-/*						exec							*/
-int			init_fd_pid(t_info *info, t_exec *exec);
+/*						execution						*/
+void		execution(t_info *info);
 
+/*						exec_pid						*/
+int			init_fd_pid(t_info *info, t_exec *exec);
 void		wait_close(t_exec *exec);
 void		add_pid(t_info *info, t_exec *exec, pid_t pid);
+
+/*						exec_redir						*/
+int			redirect(t_info *info, t_exec *exec, t_commands lst_cmd);
+
+/*						exec_utils						*/
 char		**get_big_path(t_info *info, char **envp);
 int			contains_slash(char *cmd);
+char		**cmd_to_tab(t_info *info, t_commands cmd);
+char		*get_path(t_info *info, char **path, char *cmd);
+
+/*						exec_invoke						*/
+int			handle_command(t_info *info, t_exec *exec, char **cmd);
+int			exec_file(t_info *info, t_exec *exec, char **cmd_tab);
 
 void		printtest(t_info *info);
 

@@ -3,272 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/16 17:10:53 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/20 06:54:05 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-#define BUFFER_SIZE	1024
-
-int	heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
-{
-	int		fd[2];
-	char	*result;
-
-	if (pipe(fd) == -1)
-		return (ft_error(ERROR11, info), 1);
-	while (42)
-	{
-		result = readline(BLACK"> "WHITE);
-		if (result == NULL)
-			return (ft_error(WARNING, info), 1);
-		if (ft_strcmp(result, lst_cmd.dir->dest))
-			break ;
-		write(fd[1], result, ft_strlen(result));
-		write(fd[1], "\n", 1);
-		free(result);
-	}
-	free(result);
-	exec->in_fd = fd[0];
-	close(fd[1]);
-	return (0);
-}
 /*
-int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
-{
-	int		fd[2];
-	pid_t	pid;
-	int		exit_status;
-
-	exit_status = 0;
-	if (pipe(fd) == -1)
-		return (ft_error(ERROR11, info), 1);
-	pid = fork();
-	if (pid == -1)
-		return (ft_error(ERROR10, info), 1);
-	else if (pid == 0)
-	{
-		//signal(SIGINT, catch_signals_heredoc);
-		//heredoc(info, exec, lst_cmd, fd);
-		exit(1);
-	}
-	printf("exit");
-	waitpid(pid, &exit_status, 0);
-	set_exitstatus(WEXITSTATUS(exit_status));
-	close(fd[1]);
-	return (0);
-}
 */
-char	*check_path(t_info *info, char *path, t_memlist **mem, char *cmd)
-{
-	char	*str;
-
-	str = ft_strjoin(path, "/", mem);
-	str = ft_strjoin(str, cmd, mem);
-	if (!str)
-		return (stock_free(mem), ft_error(ERROR99, info), NULL);
-	if (access(str, F_OK) != -1)
-		return (str);
-	return (NULL);
-}
-
-char	*get_path(t_info *info, char **path, char *cmd)
-{
-	t_memlist	*mem;
-	int			i;
-	char		*str;
-	char		*res;
-
-	if (path)
-	{
-		mem = NULL;
-		i = 0;
-		while (path[i])
-		{
-			str = check_path(info, path[i], &mem, cmd);
-			if (str)
-				break ;
-			i++;
-		}
-		if (!str)
-			return (stock_free(&mem), NULL);
-		res = ft_strdup(str, &info->exec_mem);
-		if (!res)
-			return (stock_free(&mem), ft_error(ERROR99, info), NULL);
-		return (stock_free(&mem), res);
-	}
-	return (NULL);
-}
-
-void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
-{
-	close(fd[0]);
-	if (exec->in_fd != -2)
-	{
-		if (dup2(exec->in_fd, STDIN_FILENO) == -1)
-			return (ft_error(ERROR13, info));
-	}
-	else if (dup2(exec->fd, STDIN_FILENO) == -1)
-		return (ft_error(ERROR13, info));
-	if (exec->out_fd != -2)
-	{
-		if (dup2(exec->out_fd, STDOUT_FILENO) == -1)
-			return (ft_error(ERROR13, info));
-	}
-	else if (exec->end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
-		return (ft_error(ERROR13, info));
-	if (execve(exec->path, cmd, exec->envp) == -1)
-		return (ft_error(ERROR12, info), exit(1));
-	exit(0);
-}
-
-int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
-{
-	char	*pwd;
-	char	buffer[BUFFER_SIZE];
-
-	if (cmd_tab[0][0] == '.')
-	{
-		pwd = getcwd(buffer, BUFFER_SIZE);
-		exec->path = ft_strjoin(pwd, &cmd_tab[0][1], &info->exec_mem);
-		if (exec->path == NULL)
-			return (ft_error(ERROR99, info), 1);
-	}
-	else if (cmd_tab[0][0] == '/')
-		exec->path = cmd_tab[0];
-	if (access(exec->path, F_OK) == -1)
-		return (ft_error(ERROR2, info), 1);
-	return (0);
-}
-
-int	handle_command(t_info *info, t_exec *exec, char **cmd)
-{
-	int		fd[2];
-	pid_t	pid;
-
-	if (pipe(fd) == -1)
-		return (ft_error(ERROR11, info), 1);
-	signal(SIGINT, catch_signals_child);
-	pid = fork();
-	if (pid == -1)
-		return (ft_error(ERROR10, info), 1);
-	else if (pid == 0)
-		exec_command(info, exec, fd, cmd);
-	add_pid(info, exec, pid);
-	close(fd[1]);
-	exec->fd = fd[0];
-	return (0);
-}
-
-int	search_exec2(t_info *info, t_exec *exec, t_commands lst_cmd, char **cmd_tab)
+static int	search_exec2(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
 	int	i;
 
-	i = find_builtins(lst_cmd.command, info, exec->out_fd);
+	i = find_builtins(lst.command, info, exec->out_fd);
 	if (i == -1)
 		return (1);
 	if (i == 0)
 	{
-		exec->path = get_path(info, exec->paths, cmd_tab[0]);
+		exec->path = get_path(info, exec->paths, cmd[0]);
 		if (!exec->path)
-			return (ft_error(ERROR2, info), 1);
+			return (1);
 		else
 		{
-			if (handle_command(info, exec, cmd_tab))
+			if (handle_command(info, exec, cmd))
 				return (1);
 		}
 	}
 	return (0);
 }
 
-int	search_exec(t_info *info, t_exec *exec, t_commands lst_cmd, char **cmd_tab)
+/*
+*/
+static int	search_exec(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
-	if (!contains_slash(cmd_tab[0]))
+	if (!contains_slash(cmd[0]))
 	{
-		if (access(cmd_tab[0], F_OK) != -1)
+		if (access(cmd[0], F_OK) != -1)
 		{
-			if (handle_command(info, exec, cmd_tab))
+			if (handle_command(info, exec, cmd))
 				return (1);
 		}
 		else
 		{
-			if (search_exec2(info, exec, lst_cmd, cmd_tab))
+			if (search_exec2(info, exec, lst, cmd))
 				return (1);
 		}
 	}
 	else
 	{
-		if (exec_file(info, exec, cmd_tab))
+		if (exec_file(info, exec, cmd))
 			return (1);
-		if (handle_command(info, exec, cmd_tab))
+		if (handle_command(info, exec, cmd))
 			return (1);
 	}
 	return (0);
 }
 
-char	**cmd_to_tab(t_info *info, t_commands cmd)
-{
-	char	**result;
-	t_list	*lst;
-	int		j;
-	int		size;
-
-	lst = cmd.command;
-	size = ft_lstsize(lst) + 1;
-	result = stock_malloc(sizeof(char *) * size, &info->exec_mem);
-	if (!result)
-		return (NULL);
-	j = 0;
-	while (lst && lst->content)
-	{
-		result[j] = ft_strdup(lst->content, &info->exec_mem);
-		if (!result[j])
-			return (NULL);
-		lst = lst->next;
-		j++;
-	}
-	result[j] = NULL;
-	return (result);
-}
-
-int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
-{
-	while (lst_cmd.dir)
-	{
-		if (ft_strcmp(lst_cmd.dir->type, "<<"))
-		{
-			if (heredoc(info, exec, lst_cmd))
-				return (1);
-		}
-		else // j'ai rajouté ca il faudra le mettre dans une autre fonction
-		{
-			if (is_contain_env(lst_cmd.dir->dest) == 1)
-				lst_cmd.dir->dest = swap_envstr(lst_cmd.dir->dest, info, info->envp);
-			else if (is_contain_env(lst_cmd.dir->dest) == 2)
-				lst_cmd.dir->dest = swap_exit(lst_cmd.dir->dest, info);
-		}
-		if (ft_strcmp(lst_cmd.dir->type, "<"))
-			exec->in_fd = open(lst_cmd.dir->dest, O_RDONLY);
-		else if (ft_strcmp(lst_cmd.dir->type, ">"))
-			exec->out_fd = open(lst_cmd.dir->dest, \
-			O_RDWR | O_TRUNC | O_CREAT, 0644);
-		else if (ft_strcmp(lst_cmd.dir->type, ">>"))
-			exec->out_fd = open(lst_cmd.dir->dest, \
-			O_RDWR | O_APPEND | O_CREAT, 0644);
-		lst_cmd.dir = lst_cmd.dir->next;
-	}
-	if (exec->in_fd == -1)
-		return (ft_error(ERROR14, info), 1);
-	if (exec->out_fd == -1)
-		return (ft_error(ERROR15, info), 1);
-	return (0);
-}
-
-int	start_exec(t_info *info, t_exec *exec)
+/*
+This function loops on every command, if there are redirections they are handled,
+after that we get the command from a chained list to an array of strings,
+which we can send as a parameter to the search_exec function.
+*/
+static int	start_exec(t_info *info, t_exec *exec)
 {
 	int			i;
 	t_commands	*cmds;
@@ -281,7 +80,7 @@ int	start_exec(t_info *info, t_exec *exec)
 		if (i + 2 >= info->com_count)
 			exec->end = 1;
 		if (redirect(info, exec, cmds[i]))
-				return (1);
+			return (1);
 		if (cmds[i].command != NULL && cmds[i].command->content != NULL)
 		{
 			cmd_tab = cmd_to_tab(info, cmds[i]);
@@ -297,7 +96,10 @@ int	start_exec(t_info *info, t_exec *exec)
 	return (0);
 }
 
-int	init_exec(t_info *info, t_exec *exec)
+/*
+This function initialize all the values of our t_exec structure
+*/
+static int	init_exec(t_info *info, t_exec *exec)
 {
 	exec->paths = get_big_path(info, info->envp);
 	exec->envp = info->envp;
@@ -311,7 +113,7 @@ int	init_exec(t_info *info, t_exec *exec)
 }
 
 /*
-This function handles all the execution process of the commands
+This function handles all the execution major steps
 */
 void	execution(t_info *info)
 {

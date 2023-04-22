@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/16 16:29:36 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/19 19:46:08 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	loop(t_info *info)
 		}
 		if (info->is_finish != 0)
 			break ;
-		if ((info->lastprompt_string
+		if ((info->lastprompt_string \
 		&& !ft_strcmp(info->lastprompt_string, info->prompt_string))
 			|| info->lastprompt_string == NULL)
 			add_history(info->prompt_string);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/16 16:42:11 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/04/19 19:46:36 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,12 @@ t_commands	*parsing(t_info *info)
 	info->final_parse = result;
 	while (result[++i].command != NULL)
 	{
-
 		result[i].command
 			= find_redirection(result[i].command, info, i);
 		swap_env(result[i].command, info, info->envp);
 		remove_quote(result[i].command, &info->parsing);
 		result[i].command = remove_empty_node(result[i].command);
 		cpy_final_parse(result[i], info);
-		/*if (!is_command_line(result[i].command, info))
-			return (NULL);*/
 	}
 	stock_free(&info->parsing);
 	return (result);
