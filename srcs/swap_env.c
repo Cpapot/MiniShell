@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   swap_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/19 19:47:24 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/02 14:00:53 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,9 @@ char	*swap_envstr(char *str, t_info *info, char **envp)
 	return (str);
 }
 
+/*
+	If the command contains any env variable, this function will find and replace it
+*/
 void	swap_env(t_list *lst, t_info *info, char **envp)
 {
 	while (lst)

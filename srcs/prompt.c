@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:20:22 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/19 19:47:16 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/02 14:09:14 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,9 @@ static char	*get_prompt_path(t_info *info)
 	return (result);
 }
 
+/*
+	Return a string who contain the actual directory and the name of the branch
+*/
 char	*prompt_string(t_info *info)
 {
 	char	*prompt;

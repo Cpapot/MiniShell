@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:20:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 20:04:55 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/02 14:09:51 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ char	*remove_actual_quote(char *str, t_memlist **stock)
 	return (str);
 }
 
+/*
+	If the command contains any quote, this function will find and remove it
+*/
 void	remove_quote(t_list *lst, t_memlist **stock)
 {
 	while (lst)
