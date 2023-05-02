@@ -74,10 +74,9 @@ MKDIR		=	mkdir -p
 #				 | | \ \ |_| | |  __/\__ \.
 #				 |_|  \_\__,_|_|\___||___/
 
-all : PRINTMINISHELL ${NAME}
+all : PRINTMINISHELL lib ${NAME}
 
-${NAME}: $(OBJS)
-	@${MAKE} --no-print-directory lib
+${NAME}: $(OBJS) $(LIBFT)
 	@${CC} ${OBJS} ${LIBFT} -o ${NAME} -lreadline
 	@echo -n "${SUPPR}	${GREEN}${NAME} : 🆗${DEFAULT}\n\n"
 
@@ -106,8 +105,7 @@ re:
 	@${MAKE} --no-print-directory all
 
 lib:
-	@echo -n "${YELLOW}${SUPPR}	⌛ Compiling libft & printf"
-	@${MAKE}	-C ${LIBFTDIR}
+	@${MAKE} --no-print-directory -C ${LIBFTDIR}
 
 PRINTMINISHELL	:
 	@echo "\033[1;34m\033[5G=========================================================="
