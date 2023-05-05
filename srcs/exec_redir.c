@@ -3,39 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/20 04:04:35 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/05 17:13:18 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static int	heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
+//pb de fd
+static int	heredoc(t_info *info, t_exec *exec, t_commands lst_cmd, int fd[2])
 {
-	int		fd[2];
 	char	*result;
+	char	*tmp;
 
-	if (pipe(fd) == -1)
-		return (ft_error(ERROR11, info), 1);
 	while (42)
 	{
-		result = readline(BLACK"> "WHITE);
+		ft_printf_fd(2, GREEN"> "WHITE);
+		result = get_next_line(0);
 		if (result == NULL)
-			return (ft_error(WARNING, info), 1);
-		if (ft_strcmp(result, lst_cmd.dir->dest))
+			return (ft_error(WARNING, info), close(fd[1]), 1);
+		tmp = ft_substr(result, 0, ft_strlen(result) - 1);
+		if (ft_strcmp(tmp, lst_cmd.dir->dest))
 			break ;
-		write(fd[1], result, ft_strlen(result));
-		write(fd[1], "\n", 1);
+		ft_printf_fd(fd[1], result);
+		free(tmp);
 		free(result);
 	}
+	free(tmp);
 	free(result);
 	exec->in_fd = fd[0];
 	close(fd[1]);
 	return (0);
 }
-/*
+
 int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
 {
 	int		fd[2];
@@ -43,6 +45,7 @@ int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
 	int		exit_status;
 
 	exit_status = 0;
+	signal(SIGINT, SIG_IGN);
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info), 1);
 	pid = fork();
@@ -50,17 +53,14 @@ int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
 		return (ft_error(ERROR10, info), 1);
 	else if (pid == 0)
 	{
-		//signal(SIGINT, catch_signals_heredoc);
-		//heredoc(info, exec, lst_cmd, fd);
+		signal(SIGINT, catch_signals_heredoc);
+		heredoc(info, exec, lst_cmd, fd);
 		exit(1);
 	}
-	printf("exit");
-	waitpid(pid, &exit_status, 0);
-	set_exitstatus(WEXITSTATUS(exit_status));
-	close(fd[1]);
+	waitpid(pid, &exit_status, 2);
+	set_exitstatus(exit_status);
 	return (0);
 }
-*/
 
 static int	env_check(t_info *info, t_commands *lst_cmd)
 {
@@ -78,7 +78,7 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 	{
 		if (ft_strcmp(lst_cmd.dir->type, "<<"))
 		{
-			if (heredoc(info, exec, lst_cmd))
+			if (call_heredoc(info, exec, lst_cmd))
 				return (1);
 		}
 		else if (env_check(info, &lst_cmd))

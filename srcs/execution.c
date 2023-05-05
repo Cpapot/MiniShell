@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/20 06:54:05 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/05 16:52:45 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ static int	search_exec2(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 	return (0);
 }
 
-/*
-*/
 static int	search_exec(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
 	if (!contains_slash(cmd[0]))

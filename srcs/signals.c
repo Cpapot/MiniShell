@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 18:23:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/15 19:45:06 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/05 16:06:26 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ void	catch_signals_child(int sig)
 void	catch_signals_heredoc(int sig)
 {
 	(void)sig;
-	exit(130);
+	ft_printf_fd(2, "\n");
+	exit(1);
 }
