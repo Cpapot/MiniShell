@@ -6,14 +6,12 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/05 16:52:45 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/06 16:23:52 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/*
-*/
 static int	search_exec2(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
 	int	i;

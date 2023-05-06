@@ -6,14 +6,13 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/05 17:13:18 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/06 17:06:52 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//pb de fd
-static int	heredoc(t_info *info, t_exec *exec, t_commands lst_cmd, int fd[2])
+static int	heredoc(t_info *info, t_commands lst_cmd, int fd[2])
 {
 	char	*result;
 	char	*tmp;
@@ -33,12 +32,11 @@ static int	heredoc(t_info *info, t_exec *exec, t_commands lst_cmd, int fd[2])
 	}
 	free(tmp);
 	free(result);
-	exec->in_fd = fd[0];
 	close(fd[1]);
 	return (0);
 }
 
-int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
+int	call_heredoc(t_info *info, t_commands lst_cmd)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -54,12 +52,12 @@ int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
 	else if (pid == 0)
 	{
 		signal(SIGINT, catch_signals_heredoc);
-		heredoc(info, exec, lst_cmd, fd);
+		heredoc(info, lst_cmd, fd);
 		exit(1);
 	}
 	waitpid(pid, &exit_status, 2);
 	set_exitstatus(exit_status);
-	return (0);
+	return (fd[0]);
 }
 
 static int	env_check(t_info *info, t_commands *lst_cmd)
@@ -77,10 +75,7 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 	while (lst_cmd.dir)
 	{
 		if (ft_strcmp(lst_cmd.dir->type, "<<"))
-		{
-			if (call_heredoc(info, exec, lst_cmd))
-				return (1);
-		}
+			exec->in_fd = call_heredoc(info, lst_cmd);
 		else if (env_check(info, &lst_cmd))
 			return (1);
 		if (ft_strcmp(lst_cmd.dir->type, "<"))
