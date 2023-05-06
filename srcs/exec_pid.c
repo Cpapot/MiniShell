@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:53:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/06 17:38:57 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/06 18:19:29 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	wait_close(t_exec *exec)
 			close(exec->fd_tab[i]);
 		i++;
 	}
-	ft_printf("closed");
+	//ft_printf("closed");
 }
 
 int	init_fd_pid(t_info *info, t_exec *exec)

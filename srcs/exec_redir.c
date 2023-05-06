@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/06 17:06:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/06 18:21:25 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 			exec->out_fd = open(lst_cmd.dir->dest, \
 			O_RDWR | O_APPEND | O_CREAT, 0644);
 		lst_cmd.dir = lst_cmd.dir->next;
+		if (exec->in_fd == -1)
+			return (ft_error(ERROR20, info), 1);
+		if (exec->out_fd == -1)
+			return (ft_error(ERROR15, info), 1);
 	}
-	if (exec->in_fd == -1)
-		return (ft_error(ERROR14, info), 1);
-	if (exec->out_fd == -1)
-		return (ft_error(ERROR15, info), 1);
 	return (0);
 }
