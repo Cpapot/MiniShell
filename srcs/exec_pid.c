@@ -6,14 +6,12 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:53:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/06 18:19:29 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/08 15:00:15 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-
-//wait close avec heredocs ne marche pas
 void	wait_close(t_exec *exec)
 {
 	int	i;
@@ -21,7 +19,6 @@ void	wait_close(t_exec *exec)
 
 	i = 0;
 	exit_status = 0;
-	//ft_printf("close & %d", exec->pid_tab[i]);
 	while (exec->pid_tab[i] >= 0)
 	{
 		waitpid(exec->pid_tab[i], &exit_status, 0);
@@ -30,7 +27,6 @@ void	wait_close(t_exec *exec)
 			close(exec->fd_tab[i]);
 		i++;
 	}
-	//ft_printf("closed");
 }
 
 int	init_fd_pid(t_info *info, t_exec *exec)

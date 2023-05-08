@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/19 19:46:08 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/08 15:23:03 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ void	prompt(t_info *info)
 		signal(SIGINT, catch_signals);
 		info->prompt_string = readline(prompt_string(info));
 		if (info->prompt_string == NULL)
+		{
+			printf("exit\n");
 			close_minishell(info, 0);
+		}
 		stock_free(&info->final_memparse);
 		if (strlen(info->prompt_string) != 0)
 			break ;

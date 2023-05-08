@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/06 18:21:25 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/08 15:21:22 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	heredoc(t_info *info, t_commands lst_cmd, int fd[2])
 		ft_printf_fd(2, GREEN"> "WHITE);
 		result = get_next_line(0);
 		if (result == NULL)
-			return (ft_error(WARNING, info), close(fd[1]), 1);
+			return (ft_error(WARNING, info), close(fd[1]), 0);
 		tmp = ft_substr(result, 0, ft_strlen(result) - 1);
 		if (ft_strcmp(tmp, lst_cmd.dir->dest))
 			break ;
@@ -32,7 +32,6 @@ static int	heredoc(t_info *info, t_commands lst_cmd, int fd[2])
 	}
 	free(tmp);
 	free(result);
-	close(fd[1]);
 	return (0);
 }
 
@@ -53,10 +52,13 @@ int	call_heredoc(t_info *info, t_commands lst_cmd)
 	{
 		signal(SIGINT, catch_signals_heredoc);
 		heredoc(info, lst_cmd, fd);
-		exit(1);
+		exit(0);
 	}
 	waitpid(pid, &exit_status, 2);
-	set_exitstatus(exit_status);
+	close(fd[1]);
+	set_exitstatus(WEXITSTATUS(exit_status));
+	if (WEXITSTATUS(exit_status) == 1)
+		return (-1);
 	return (fd[0]);
 }
 
@@ -75,7 +77,11 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 	while (lst_cmd.dir)
 	{
 		if (ft_strcmp(lst_cmd.dir->type, "<<"))
+		{
 			exec->in_fd = call_heredoc(info, lst_cmd);
+			if (exec->in_fd == -1)
+				return (1);
+		}
 		else if (env_check(info, &lst_cmd))
 			return (1);
 		if (ft_strcmp(lst_cmd.dir->type, "<"))
