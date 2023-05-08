@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/08 15:44:04 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/08 17:10:48 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,18 @@
 static int	search_exec2(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
 	int	i;
+	int		fd[2];
 
-	i = find_builtins(lst.command, info, exec->out_fd);
+	if (exec->end == 1 || exec->out_fd != -2)
+		i = find_builtins(lst.command, info, exec->out_fd);
+	else
+	{
+		if (pipe(fd) == -1)
+			return (ft_error(ERROR11, info), 1);
+		i = find_builtins(lst.command, info, fd[1]);
+		close(fd[1]);
+		exec->fd = fd[0];
+	}
 	if (i == -1)
 		return (1);
 	if (i == 0)
@@ -37,7 +47,7 @@ static int	search_exec(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
 	if (!contains_slash(cmd[0]))
 	{
-		if (access(cmd[0], F_OK) != -1)
+		if (!ft_strcmp(cmd[0], "pwd") && access(cmd[0], F_OK) != -1)
 		{
 			if (handle_command(info, exec, cmd))
 				return (1);

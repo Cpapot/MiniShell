@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/08 15:21:22 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/08 16:25:11 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,3 +100,5 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 	}
 	return (0);
 }
+
+
