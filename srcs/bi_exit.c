@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:15:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 20:00:12 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/08 18:30:03 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	check_numeric(char *str)
 		i++;
 	while (str[i])
 	{
-		if (str[i] > '9' && str[i] < '0')
+		if (!(str[i] <= '9' && str[i] >= '0'))
 			return (1);
 		i++;
 	}
