@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/02 14:00:53 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/09 18:06:44 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ int	is_contain_env(char *str)
 	{
 		if (str[i] == '$')
 		{
+			if (str[i + 1] == '\"')
+				return (0);
 			if (str[i + 1] == 0 || str[i + 1] == ' ')
 				break ;
 			if (i > 0 && str[i - 1] == '\\')
 				break ;
-			if (str[i + 1] == '?' && (str[i + 2] == 0 || str[i + 2] == ' ' || \
-				str[i + 2] == '$' || str[i + 2] == '\'' || str[i + 2] == '\"'))
+			if (str[i + 1] == '?')
 				return (2);
 			return (1);
 		}
@@ -71,46 +72,54 @@ char	*start(char *str, int size, t_info *info)
 	return (result);
 }
 
-char	*swap_envstr(char *str, t_info *info, char **envp)
+char	*swap_envstr(char *str, t_info *info, char **envp, int *index)
 {
-	int		i;
 	int		u;
 	char	*tmp;
 	char	*buff;
 
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '\'')
-			i += quote_size(&str[i], 0);
-		else if (str[i] == '$')
-		{
-			u = ++i;
-			while (str[u] && str[u] != ' ' && str[u] != '$' && str[u] != '\''
-				&& str[u] != '\"')
-				u++;
-			buff = getenv_instr(&str[i], u - i, info, envp);
-			tmp = ft_strjoin(buff, &str[u], &info->parsing);
-			str = ft_strjoin(start(str, i - 1, info), tmp, &info->parsing);
-			if (!buff || !tmp || !str)
-				ft_error(ERROR99, info);
-			i += ft_strlen(buff) - 1;
-		}
-	}
+	u = *index + 1;
+	while (str[u] && str[u] != ' ' && str[u] != '$' && str[u] != '\''
+		&& str[u] != '\"')
+		u++;
+	buff = getenv_instr(&str[*index + 1], u - *index - 1, info, envp);
+	tmp = ft_strjoin(buff, &str[u], &info->parsing);
+	str = ft_strjoin(start(str, *index, info), tmp, &info->parsing);
+	if (!buff || !tmp || !str)
+		ft_error(ERROR99, info);
+	*index += ft_strlen(buff) - 1;
 	return (str);
 }
 
 /*
-	If the command contains any env variable, this function will find and replace it
+	If the command contains any env  , this function will find and replace it
 */
 void	swap_env(t_list *lst, t_info *info, char **envp)
 {
+	int		i;
+	char	*str;
+
 	while (lst)
 	{
-		if (is_contain_env(lst->content) == 1)
-			lst->content = swap_envstr(lst->content, info, envp);
-		else if (is_contain_env(lst->content) == 2)
-			lst->content = swap_exit(lst->content, info);
+		str = lst->content;
+		i = 0;
+		while (str && str[i])
+		{
+			if (str[i] == '\'')
+				i += quote_size_env(&str[i], 0);
+			else if (str[i] == '$')
+			{
+				if (is_contain_env(&str[i]) == 1)
+					str = swap_envstr(str , info, envp, &i);
+				else if (is_contain_env(&str[i]) == 2)
+				{
+					str = swap_exit(str, info, &i);
+					//ft_printf(str);
+				}
+			}
+			i++;
+		}
+		lst->content = str;
 		lst = lst->next;
 	}
 }

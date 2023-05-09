@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/08 16:25:11 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/09 16:04:14 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,24 @@ int	call_heredoc(t_info *info, t_commands lst_cmd)
 
 static int	env_check(t_info *info, t_commands *lst_cmd)
 {
-	if (is_contain_env((*lst_cmd).dir->dest) == 1)
-		(*lst_cmd).dir->dest = \
-			swap_envstr((*lst_cmd).dir->dest, info, info->envp);
-	else if (is_contain_env((*lst_cmd).dir->dest) == 2)
-		(*lst_cmd).dir->dest = swap_exit((*lst_cmd).dir->dest, info);
+	int		i;
+	char	*str;
+
+	str = (*lst_cmd).dir->dest;
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == '\'')
+			i += quote_size(&str[i], 0);
+		else if (str[i] == '$')
+		{
+			if (is_contain_env(&str[i]) == 1)
+				str = swap_envstr(str , info, info->envp, &i);
+			else if (is_contain_env(&str[i]) == 2)
+				str = swap_exit(str, info, &i);
+		}
+		i++;
+	}
 	return (0);
 }
 

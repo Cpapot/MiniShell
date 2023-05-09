@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/19 20:15:19 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/09 17:48:52 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int			is_char_in_str(char c, const char *str);
 
 /*						parsing							*/
 t_commands	*parsing(t_info *info);
+int			quote_size_env(char *str, int mode);
 
 /*						split_pipe						*/
 t_commands	*split_pipe(t_info *info, t_list *lst);
@@ -104,7 +105,7 @@ t_list		*shell_split(t_info *info, char *str, t_memlist **stock);
 
 /*						swap_env						*/
 void		swap_env(t_list *lst, t_info *info, char **envp);
-char		*swap_envstr(char *str, t_info *info, char **envp);
+char		*swap_envstr(char *str, t_info *info, char **envp, int *index);
 int			is_contain_env(char *str);
 
 /*						history							*/
@@ -147,7 +148,7 @@ char		*find_name(char *str, t_info *info);
 int			is_var_already_exist(char *name, char **envp, t_info *info);
 
 /*						exit_status						*/
-char		*swap_exit(char *str, t_info *info);
+char		*swap_exit(char *str, t_info *info, int *index);
 void		set_exitstatus(int status);
 
 /*						signals							*/

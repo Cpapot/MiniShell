@@ -59,7 +59,7 @@ NAME		=	minishell
 
 AR			=	ar rc
 
-CFLAGS		=	-Wall -Wextra -Werror -lreadline5 -g3
+CFLAGS		=	-Wall -Wextra -Werror -g3
 
 CC			=	cc
 

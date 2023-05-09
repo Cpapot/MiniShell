@@ -6,11 +6,35 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/02 14:11:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/09 17:48:33 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+int	quote_size_env(char *str, int mode)
+{
+	int			i;
+
+	i = 0;
+	if (!str[0])
+		return (0);
+	if (mode == 0)
+	{
+		i++;
+		while (str[i] && str[i] != '\'')
+			i++;
+		return (i + 1);
+	}
+	else if (mode == 1)
+	{
+		i++;
+		while (str[i] && str[i] != '\"')
+			i++;
+		return (i + 1);
+	}
+	return (0);
+}
 
 /*
 	This function copy the final parsing in to a new memlist

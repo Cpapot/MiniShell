@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   bi_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 14:57:30 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 20:00:21 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/09 18:13:16 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static int	unset_parsing(char *str, t_list *lst)
+static int	unset_parsing(char *str)
 {
 	int	i;
 
@@ -27,8 +27,6 @@ static int	unset_parsing(char *str, t_list *lst)
 			return (1);
 		i++;
 	}
-	if (lst->next != NULL)
-		return (1);
 	return (0);
 }
 
@@ -57,15 +55,18 @@ int	bi_unset(t_list *lst, t_info *info)
 	set_exitstatus(0);
 	if (lst == NULL)
 		return (1);
-	str = lst->content;
-	parsing_res = unset_parsing(str, lst);
-	if (parsing_res == 1)
-		return (ft_error(UNSETERROR1, info), -1);
-	if (parsing_res == 2)
-		return (1);
-	var_pos = is_var_already_exist(str, info->envp, info);
-	if (var_pos == -1)
-		return (1);
-	info->envp = delete_var(var_pos, info->envp);
+	while (lst)
+	{
+		str = lst->content;
+		parsing_res = unset_parsing(str);
+		if (parsing_res == 1)
+			return (ft_error(UNSETERROR1, info), -1);
+		if (parsing_res == 2)
+			return (1);
+		var_pos = is_var_already_exist(str, info->envp, info);
+		if (var_pos == -1)
+			return (1);
+		info->envp = delete_var(var_pos, info->envp);
+	}
 	return (1);
 }
