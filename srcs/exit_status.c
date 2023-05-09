@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 11:09:35 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/09 18:07:46 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/09 19:57:59 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ int		g_exit_status = 0;
 void	set_exitstatus(int status)
 {
 	g_exit_status = status;
+}
+
+int	get_exitstatus(void)
+{
+	return (g_exit_status);
 }
 
 char	*swap_exit(char *str, t_info *info, int *index)

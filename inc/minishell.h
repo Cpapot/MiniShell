@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/09 17:48:52 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/09 19:58:13 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int			is_line_valid(t_list *lst, t_info *info);
 int			is_command_line(t_list *lst, t_info *info);
 
 /*						BUILTINS						*/
-int			find_builtins(t_list *lst, t_info *info, int out_fd);
+int			find_builtins(t_list *lst, t_info *info, t_exec *exec, int out_fd);
 int			bi_echo(t_list *lst, int out_fd);
 int			bi_export(t_list *lst, t_info *info, int fd);
 int			bi_env(t_list *lst, t_info *info, int fd);
@@ -146,10 +146,12 @@ char		*start(char *str, int size, t_info *info);
 char		*find_var(char *str, t_info *info);
 char		*find_name(char *str, t_info *info);
 int			is_var_already_exist(char *name, char **envp, t_info *info);
+int			is_builtins(t_list *lst);
 
 /*						exit_status						*/
 char		*swap_exit(char *str, t_info *info, int *index);
 void		set_exitstatus(int status);
+int			get_exitstatus(void);
 
 /*						signals							*/
 void		catch_signals(int sig);
