@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/09 19:58:13 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/10 23:17:58 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,16 @@ typedef struct s_info
 
 typedef struct s_exec
 {
-	char	*path;
-	char	**paths;
-	int		fd;
-	int		in_fd;
-	int		out_fd;
-	char	**envp;
-	pid_t	*pid_tab;
-	int		*fd_tab;
-	int		end;
+	char		*path;
+	char		**paths;
+	int			fd;
+	int			in_fd;
+	int			out_fd;
+	char		**envp;
+	pid_t		*pid_tab;
+	t_commands	actual_cmd;
+	int			*fd_tab;
+	int			end;
 }				t_exec;
 
 /*						MINISHELL						*/
@@ -130,7 +131,7 @@ int			is_line_valid(t_list *lst, t_info *info);
 int			is_command_line(t_list *lst, t_info *info);
 
 /*						BUILTINS						*/
-int			find_builtins(t_list *lst, t_info *info, t_exec *exec, int out_fd);
+int			find_builtins(t_list *lst, t_info *info, int out_fd);
 int			bi_echo(t_list *lst, int out_fd);
 int			bi_export(t_list *lst, t_info *info, int fd);
 int			bi_env(t_list *lst, t_info *info, int fd);
@@ -157,6 +158,7 @@ int			get_exitstatus(void);
 void		catch_signals(int sig);
 void		catch_signals_child(int sig);
 void		catch_signals_heredoc(int sig);
+void		catch_signals_backslash(int sig);
 
 /*						prompt							*/
 void		prompt(t_info *info);
@@ -182,6 +184,7 @@ char		*get_path(t_info *info, char **path, char *cmd);
 /*						exec_invoke						*/
 int			handle_command(t_info *info, t_exec *exec, char **cmd);
 int			exec_file(t_info *info, t_exec *exec, char **cmd_tab);
+void		exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd);
 
 void		printtest(t_info *info);
 

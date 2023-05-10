@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:53:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/08 17:16:25 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/10 22:00:12 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ void	wait_close(t_exec *exec)
 	if (exec->in_fd != -2)
 		close (exec->in_fd);
 	if (exec->out_fd != -2)
-			close (exec->in_fd);
+		close (exec->in_fd);
 	while (exec->pid_tab[i] >= 0)
 	{
+		set_exitstatus(0);
 		waitpid(exec->pid_tab[i], &exit_status, 0);
-		set_exitstatus(WEXITSTATUS(exit_status));
+		if (get_exitstatus() != 131)
+			set_exitstatus(WEXITSTATUS(exit_status));
 		if (i != 0)
 			close(exec->fd_tab[i]);
 		i++;

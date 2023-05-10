@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:20:54 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/09 20:14:11 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/10 23:02:59 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,40 +36,25 @@ int	is_builtins(t_list *lst)
  *and executed a builtins it returns 0 if the builtins does not exist and
  *returns -1 if there is an error
 */
-int	find_builtins(t_list *lst, t_info *info, t_exec *exec, int out_fd)
+int	find_builtins(t_list *lst, t_info *info, int out_fd)
 {
 	int	i;
-	int	pid;
-
-	pid = 0;
-	i = 0;
-	if (info->com_count != 2)
-	{
-		pid = fork();
-		if (pid != 0)
-			add_pid(info, exec, pid);
-	}
-	if (pid == 0)
-	{
-		if (out_fd == -2)
-			out_fd = 1;
-		if (ft_strcmp("export", lst->content))
-			i = bi_export(lst->next, info, out_fd);
-		else if (ft_strcmp("echo", lst->content))
-			i = bi_echo(lst->next, out_fd);
-		else if (ft_strcmp("env", lst->content))
-			i = bi_env(lst->next, info, out_fd);
-		else if (ft_strcmp("pwd", lst->content))
-			i = bi_pwd(info, out_fd);
-		else if (ft_strcmp("cd", lst->content))
-			i = bi_cd(lst->next, info);
-		else if (ft_strcmp("exit", lst->content))
-			i = bi_exit(lst->next, info);
-		else if (ft_strcmp("unset", lst->content))
-			i = bi_unset(lst->next, info);
-		if (pid != 0)
-			close_minishell(info, get_exitstatus());
-	}
+	if (out_fd == -2)
+		out_fd = 1;
+	if (ft_strcmp("export", lst->content))
+		i = bi_export(lst->next, info, out_fd);
+	else if (ft_strcmp("echo", lst->content))
+		i = bi_echo(lst->next, out_fd);
+	else if (ft_strcmp("env", lst->content))
+		i = bi_env(lst->next, info, out_fd);
+	else if (ft_strcmp("pwd", lst->content))
+		i = bi_pwd(info, out_fd);
+	else if (ft_strcmp("cd", lst->content))
+		i = bi_cd(lst->next, info);
+	else if (ft_strcmp("exit", lst->content))
+		i = bi_exit(lst->next, info);
+	else if (ft_strcmp("unset", lst->content))
+		i = bi_unset(lst->next, info);
 	return (i);
 }
 
