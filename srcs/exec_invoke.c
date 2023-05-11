@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:58:49 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/10 23:26:05 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/11 14:10:13 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	exec_bi_or_path(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	{
 		exec->path = get_path(info, exec->paths, cmd[0]);
 		if (!exec->path)
-			ft_error(ERROR2, info);
+			return ;
 		else
 			exec_command(info, exec, fd, cmd);
 	}
