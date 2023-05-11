@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:58:49 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/11 14:10:13 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/11 18:24:28 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,15 +97,18 @@ int	handle_command(t_info *info, t_exec *exec, char **cmd)
 	int		fd[2];
 	pid_t	pid;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, catch_signals_backslash);
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info), 1);
-	signal(SIGINT, catch_signals_child);
-	signal(SIGQUIT, catch_signals_backslash);
 	pid = fork();
 	if (pid == -1)
 		return (ft_error(ERROR10, info), 1);
 	else if (pid == 0)
+	{
+		signal(SIGINT, catch_signals_child);
 		search_and_exec(info, exec, fd, cmd);
+	}
 	add_pid(info, exec, pid);
 	close(fd[1]);
 	exec->fd = fd[0];
