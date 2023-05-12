@@ -15,7 +15,7 @@ SRCS		=	minishell.c minishell_utils.c \
 				bi_pwd.c bi_export.c bi_cd.c bi_exit.c \
 				exit_status.c error.c bi_unset.c prompt.c \
 				execution.c exec_utils.c exec_invoke.c \
-				exec_pid.c exec_redir.c
+				exec_pid.c exec_redir.c fd_utils.c
 
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
@@ -108,6 +108,7 @@ lib:
 	@${MAKE} --no-print-directory -C ${LIBFTDIR}
 
 leaks:	all
+		@${RM} valgrind.txt
 		echo "{" > valgrind_ignore_leaks.txt
 		echo "leak readline" >> valgrind_ignore_leaks.txt
 		echo "	Memcheck:Leak" >> valgrind_ignore_leaks.txt
@@ -123,7 +124,7 @@ leaks:	all
 		valgrind --suppressions=valgrind_ignore_leaks.txt --leak-check=full \
 			--show-leak-kinds=all --track-fds=yes \
 			--show-mismatched-frees=yes --read-var-info=yes \
-			--log-file=valgrind.txt ./${NAME}
+			 --log-file=valgrind.txt ./${NAME}
 
 PRINTMINISHELL	:
 	@echo "\033[1;34m\033[5G=========================================================="

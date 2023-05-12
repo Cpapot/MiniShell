@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/09 16:04:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:11:44 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	call_heredoc(t_info *info, t_commands lst_cmd)
 	{
 		signal(SIGINT, catch_signals_heredoc);
 		heredoc(info, lst_cmd, fd);
-		exit(0);
+		close_minishell(info, 0);
 	}
 	waitpid(pid, &exit_status, 2);
 	close(fd[1]);
@@ -106,6 +106,8 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 			exec->out_fd = open(lst_cmd.dir->dest, \
 			O_RDWR | O_APPEND | O_CREAT, 0644);
 		lst_cmd.dir = lst_cmd.dir->next;
+		add_fd(&exec->fd_list, exec->out_fd, info->exec_mem);
+		add_fd(&exec->fd_list, exec->in_fd, info->exec_mem);
 		if (exec->in_fd == -1)
 			return (ft_error(ERROR20, info), 1);
 		if (exec->out_fd == -1)

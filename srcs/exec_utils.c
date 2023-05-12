@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/20 06:59:17 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/12 18:27:57 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ char	**cmd_to_tab(t_info *info, t_commands cmd)
 	result[j] = NULL;
 	return (result);
 }
+
+
 
 int	contains_slash(char *cmd)
 {

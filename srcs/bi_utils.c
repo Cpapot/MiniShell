@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:20:54 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/10 23:02:59 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/12 16:05:09 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	is_builtins(t_list *lst)
 int	find_builtins(t_list *lst, t_info *info, int out_fd)
 {
 	int	i;
+
+	i = 0;
 	if (out_fd == -2)
 		out_fd = 1;
 	if (ft_strcmp("export", lst->content))

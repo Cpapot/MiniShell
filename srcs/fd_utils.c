@@ -1,44 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   fd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 18:23:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/12 18:22:27 by cpapot           ###   ########.fr       */
+/*   Created: 2023/05/12 18:38:24 by cpapot            #+#    #+#             */
+/*   Updated: 2023/05/12 19:24:42 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	catch_signals(int sig)
+void	*inttovoid(int nb, t_memlist *mem)
 {
-	(void)sig;
-	set_exitstatus(130);
-	rl_on_new_line();
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_redisplay();
+	void	*ptr;
+
+	ptr = stock_malloc(sizeof(int), &mem);
+	*((int*)ptr) = nb;
+	return (ptr);
 }
 
-void	catch_signals_child(int sig)
+void	add_fd(t_list **fd_list, int fd, t_memlist *mem)
 {
-	(void)sig;
-	write(2, "\n", 1);
-	set_exitstatus(130);
+	t_list	*tmp;
+
+	tmp = ft_lstnew(inttovoid(fd, mem), &mem);
+	ft_lstadd_back(fd_list, tmp);
 }
 
-void	catch_signals_heredoc(int sig)
+void	close_lst(t_list *fd)
 {
-	(void)sig;
-	ft_printf_fd(2, "\n");
-	exit(1);
-}
-
-void	catch_signals_backslash(int sig)
-{
-	(void)sig;
-	ft_printf_fd(2, "Quit\n");
-	set_exitstatus(131);
+	while (fd)
+	{
+		if (*((int*)fd->content) > 0)
+			close(*((int*)fd->content));
+		fd = fd->next;
+	}
 }

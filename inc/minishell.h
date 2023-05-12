@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/10 23:17:58 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:30:53 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_info
 
 typedef struct s_exec
 {
+	t_list	*fd_list;
 	char		*path;
 	char		**paths;
 	int			fd;
@@ -185,6 +186,11 @@ char		*get_path(t_info *info, char **path, char *cmd);
 int			handle_command(t_info *info, t_exec *exec, char **cmd);
 int			exec_file(t_info *info, t_exec *exec, char **cmd_tab);
 void		exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd);
+
+/*							fd							*/
+void		*inttovoid(int nb, t_memlist *mem);
+void		add_fd(t_list **fd_list, int fd, t_memlist *mem);
+void		close_lst(t_list *fd);
 
 void		printtest(t_info *info);
 

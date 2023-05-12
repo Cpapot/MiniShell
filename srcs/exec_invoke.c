@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:58:49 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/11 18:24:28 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/12 19:30:29 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,11 @@ static int	search_and_exec(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	else
 	{
 		if (exec_file(info, exec, cmd))
-			exit(get_exitstatus());
+			close_minishell(info, get_exitstatus());
 		exec_command(info, exec, fd, cmd);
 	}
-	exit(get_exitstatus());
+	close_minishell(info, get_exitstatus());
+	return (1);
 }
 
 void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
@@ -69,8 +70,8 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	else if (exec->end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (ft_error(ERROR13, info));
 	if (execve(exec->path, cmd, exec->envp) == -1)
-		return (ft_error(ERROR12, info), exit(1));
-	exit(0);
+		return (ft_error(ERROR12, info), close_minishell(info, 1));
+	close_minishell(info, 0);
 }
 
 int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
@@ -98,7 +99,7 @@ int	handle_command(t_info *info, t_exec *exec, char **cmd)
 	pid_t	pid;
 
 	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, catch_signals_backslash);
+	signal(SIGQUIT, SIG_IGN);
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info), 1);
 	pid = fork();
@@ -106,11 +107,14 @@ int	handle_command(t_info *info, t_exec *exec, char **cmd)
 		return (ft_error(ERROR10, info), 1);
 	else if (pid == 0)
 	{
-		signal(SIGINT, catch_signals_child);
+		signal(SIGINT, &catch_signals_child);
+		signal(SIGQUIT, &catch_signals_backslash);
 		search_and_exec(info, exec, fd, cmd);
+		close_minishell(info, 0);
 	}
 	add_pid(info, exec, pid);
 	close(fd[1]);
+	add_fd(&exec->fd_list, fd[0], info->exec_mem);
 	exec->fd = fd[0];
 	return (0);
 }

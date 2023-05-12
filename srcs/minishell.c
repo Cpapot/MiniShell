@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/11 18:24:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/12 18:22:04 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ void	prompt(t_info *info)
 {
 	while (1)
 	{
-		signal(SIGINT, catch_signals);
+		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, catch_signals);
 		info->prompt_string = readline(prompt_string(info));
 		if (info->prompt_string == NULL)
 		{
