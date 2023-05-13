@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/13 14:07:13 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/13 19:42:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static int	search_exec(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
+	if (!cmd)
+		return (1);
 	exec->actual_cmd = lst;
 	if (info->com_count == 2 && is_builtins(lst.command))
 	{
@@ -33,29 +35,28 @@ which we can send as a parameter to the search_exec function.
 */
 static int	start_exec(t_info *info, t_exec *exec)
 {
+	int			tmp;
 	int			i;
 	t_commands	*cmds;
 	char		**cmd_tab;
 
-	i = 0;
+	i = -1;
 	cmds = info->final_parse;
-	while (i + 1 < info->com_count)
+	while (++i + 1 < info->com_count)
 	{
+		exec->final_execstat = -1;
 		if (i + 2 >= info->com_count)
 			exec->end = 1;
-		if (redirect(info, exec, cmds[i]))
-			return (1);
-		if (cmds[i].command != NULL && cmds[i].command->content != NULL)
+		tmp = redirect(info, exec, cmds[i]);
+		if (cmds[i].command != NULL && cmds[i].command->content != NULL && tmp == 0)
 		{
 			cmd_tab = cmd_to_tab(info, cmds[i]);
-			if (!cmd_tab)
-				return (1);
 			if (search_exec(info, exec, cmds[i], cmd_tab))
 				return (1);
-			exec->in_fd = -2;
-			exec->out_fd = -2;
 		}
-		i++;
+		else
+			empty_pipe(exec, info);
+		r_fd(exec);
 	}
 	return (0);
 }
@@ -65,6 +66,7 @@ This function initialize all the values of our t_exec structure
 */
 static int	init_exec(t_info *info, t_exec *exec)
 {
+	exec->final_execstat = -1;
 	exec->fd_list = ft_lstintnew(-2, &info->exec_mem);
 	exec->paths = get_big_path(info, info->envp);
 	exec->envp = info->envp;

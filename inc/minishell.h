@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/13 14:06:31 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/13 19:33:00 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_info
 
 typedef struct s_exec
 {
+	int			final_execstat;
 	t_int_list	*fd_list;
 	char		*path;
 	char		**paths;
@@ -154,6 +155,7 @@ int			is_builtins(t_list *lst);
 char		*swap_exit(char *str, t_info *info, int *index);
 void		set_exitstatus(int status);
 int			get_exitstatus(void);
+void		set_final_exitstatus(int status, t_exec *exec);
 
 /*						signals							*/
 void		catch_signals(int sig);
@@ -190,6 +192,8 @@ void		exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd);
 /*							fd							*/
 void		add_fd(t_int_list **fd_list, int fd, t_memlist *mem);
 void		close_lst(t_int_list *fd);
+void		r_fd(t_exec	*exec);
+int			empty_pipe(t_exec *exec, t_info *info);
 
 void		printtest(t_info *info);
 

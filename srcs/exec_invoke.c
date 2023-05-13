@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:58:49 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/13 14:27:59 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/13 19:50:35 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	exec_bi_or_path(t_info *info, t_exec *exec, int fd[2], char **cmd)
 {
 	if (is_builtins(exec->actual_cmd.command))
 	{
-		if (exec->out_fd != -2)
+		if (exec->out_fd != -2 || exec->end == 1)
 			find_builtins(exec->actual_cmd.command, info, exec->out_fd);
 		else
 			find_builtins(exec->actual_cmd.command, info, fd[1]);
@@ -38,7 +38,7 @@ static int	search_and_exec(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	close(fd[0]);
 	if (!contains_slash(cmd[0]))
 	{
-		if (access(cmd[0], F_OK) != -1)
+		if (access(cmd[0], F_OK | X_OK) != -1)
 			exec_command(info, exec, fd, cmd);
 		else
 			exec_bi_or_path(info, exec, fd, cmd);
@@ -93,7 +93,7 @@ int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
 	}
 	else if (cmd_tab[0][0] == '/')
 		exec->path = cmd_tab[0];
-	if (access(exec->path, F_OK) == -1)
+	if (access(exec->path, F_OK | X_OK) == -1)
 		return (ft_error(ERROR2, info), 1);
 	return (0);
 }
