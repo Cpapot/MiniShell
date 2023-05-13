@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 18:43:11 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/13 14:07:13 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ This function initialize all the values of our t_exec structure
 */
 static int	init_exec(t_info *info, t_exec *exec)
 {
-	exec->fd_list = ft_lstnew(inttovoid(-2, info->exec_mem), &info->exec_mem);
+	exec->fd_list = ft_lstintnew(-2, &info->exec_mem);
 	exec->paths = get_big_path(info, info->envp);
 	exec->envp = info->envp;
 	exec->end = 0;

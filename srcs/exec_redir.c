@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 19:11:44 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/13 14:42:37 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	heredoc(t_info *info, t_commands lst_cmd, int fd[2])
 		ft_printf_fd(2, GREEN"> "WHITE);
 		result = get_next_line(0);
 		if (result == NULL)
-			return (ft_error(WARNING, info), close(fd[1]), 0);
+			return (ft_error(WARNING, info), 0);
 		tmp = ft_substr(result, 0, ft_strlen(result) - 1);
 		if (ft_strcmp(tmp, lst_cmd.dir->dest))
 			break ;
@@ -50,15 +50,15 @@ int	call_heredoc(t_info *info, t_commands lst_cmd)
 		return (ft_error(ERROR10, info), 1);
 	else if (pid == 0)
 	{
+		close(fd[0]);
 		signal(SIGINT, catch_signals_heredoc);
 		heredoc(info, lst_cmd, fd);
+		close(fd[1]);
 		close_minishell(info, 0);
 	}
 	waitpid(pid, &exit_status, 2);
 	close(fd[1]);
 	set_exitstatus(WEXITSTATUS(exit_status));
-	if (WEXITSTATUS(exit_status) == 1)
-		return (-1);
 	return (fd[0]);
 }
 
@@ -90,11 +90,7 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 	while (lst_cmd.dir)
 	{
 		if (ft_strcmp(lst_cmd.dir->type, "<<"))
-		{
 			exec->in_fd = call_heredoc(info, lst_cmd);
-			if (exec->in_fd == -1)
-				return (1);
-		}
 		else if (env_check(info, &lst_cmd))
 			return (1);
 		if (ft_strcmp(lst_cmd.dir->type, "<"))
@@ -105,13 +101,13 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 		else if (ft_strcmp(lst_cmd.dir->type, ">>"))
 			exec->out_fd = open(lst_cmd.dir->dest, \
 			O_RDWR | O_APPEND | O_CREAT, 0644);
-		lst_cmd.dir = lst_cmd.dir->next;
 		add_fd(&exec->fd_list, exec->out_fd, info->exec_mem);
 		add_fd(&exec->fd_list, exec->in_fd, info->exec_mem);
 		if (exec->in_fd == -1)
 			return (ft_error(ERROR20, info), 1);
 		if (exec->out_fd == -1)
 			return (ft_error(ERROR15, info), 1);
+		lst_cmd.dir = lst_cmd.dir->next;
 	}
 	return (0);
 }

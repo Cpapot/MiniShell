@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 15:20:49 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/05 16:16:34 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/13 14:04:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ typedef struct s_memstock
 
 typedef struct s_intlist
 {
-	int					nb;
 	int					cont;
 	struct s_intlist	*next;
 }					t_int_list;
@@ -72,8 +71,8 @@ void		stock_free(t_memlist **stock);
 void		*stock_malloc(size_t size, t_memlist **stock);
 void		ft_lstintiter(t_int_list *lst, int (*f)(int));
 t_int_list	*ft_lstintlast(t_int_list *lst);
-t_int_list	*ft_lstintmap(t_int_list *lst, int (*f)(int));
-t_int_list	*ft_lstintnew(int cont);
+t_int_list	*ft_lstintmap(t_int_list *lst, int (*f)(int), t_memlist **stock);
+t_int_list	*ft_lstintnew(int cont, t_memlist **mem);
 int			ft_lstintsize(t_int_list *lst);
 void		ft_lstclear(t_list **lst);
 void		*ft_calloc(size_t count, size_t size);

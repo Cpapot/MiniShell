@@ -124,7 +124,7 @@ leaks:	all
 		valgrind --suppressions=valgrind_ignore_leaks.txt --leak-check=full \
 			--show-leak-kinds=all --track-fds=yes \
 			--show-mismatched-frees=yes --read-var-info=yes \
-			 --log-file=valgrind.txt ./${NAME}
+			 --log-file=valgrind.txt -s ./${NAME}
 
 PRINTMINISHELL	:
 	@echo "\033[1;34m\033[5G=========================================================="

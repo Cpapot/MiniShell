@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:58:49 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/12 19:30:29 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/13 14:27:59 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,13 @@ static int	search_and_exec(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	else
 	{
 		if (exec_file(info, exec, cmd))
+		{
+			close(fd[1]);
 			close_minishell(info, get_exitstatus());
+		}
 		exec_command(info, exec, fd, cmd);
 	}
+	close(fd[1]);
 	close_minishell(info, get_exitstatus());
 	return (1);
 }
@@ -70,7 +74,8 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	else if (exec->end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (ft_error(ERROR13, info));
 	if (execve(exec->path, cmd, exec->envp) == -1)
-		return (ft_error(ERROR12, info), close_minishell(info, 1));
+		return (ft_error(ERROR12, info), close(fd[1]), close_minishell(info, 1));
+	close(fd[1]);
 	close_minishell(info, 0);
 }
 
@@ -102,6 +107,7 @@ int	handle_command(t_info *info, t_exec *exec, char **cmd)
 	signal(SIGQUIT, SIG_IGN);
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info), 1);
+	add_fd(&exec->fd_list, fd[0], info->exec_mem);
 	pid = fork();
 	if (pid == -1)
 		return (ft_error(ERROR10, info), 1);
@@ -114,7 +120,6 @@ int	handle_command(t_info *info, t_exec *exec, char **cmd)
 	}
 	add_pid(info, exec, pid);
 	close(fd[1]);
-	add_fd(&exec->fd_list, fd[0], info->exec_mem);
 	exec->fd = fd[0];
 	return (0);
 }
