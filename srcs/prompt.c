@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:20:22 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/02 14:09:14 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/16 17:17:05 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*prompt_string(t_info *info)
 
 	branch = get_gitbranch_in_parentdir(info);
 	path = get_prompt_path(info);
-	prompt = ft_strjoin("\e[36m➡️  ", path, &info->prompt_mem);
+	prompt = ft_strjoin("\n\e[36m➡️  ", path, &info->prompt_mem);
 	prompt = ft_strjoin(prompt, " "WHITE, &info->prompt_mem);
 	if (prompt == NULL)
 		ft_error(ERROR99, info);
