@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/08 18:41:32 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/19 15:47:03 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,8 @@ int	bi_export(t_list *lst, t_info *info, int fd)
 			return (ft_error(EXPORTERROR1, info), -1);
 		if (parsing_res == 2)
 			return (print_export(info->envp, info, fd), 1);
-		var_pos = is_var_already_exist(find_name(lst->content, info), info->envp, info);
+		var_pos = is_var_already_exist(find_name(lst->content, info),
+				info->envp, info);
 		var = find_var(lst->content, info);
 		if (var_pos < 0)
 			info->envp = add_to_envp(info->envp, find_name(lst->content, info),
@@ -130,5 +131,5 @@ int	bi_export(t_list *lst, t_info *info, int fd)
 			info->envp = modify_envp(var_pos, var, lst->content, info);
 		lst = lst->next;
 	}
-		return (1);
+	return (1);
 }

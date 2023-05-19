@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/02 14:11:30 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/19 16:29:29 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,28 @@ char	*ft_getenv(char *env, char **envp, t_memlist **stock)
 		i++;
 	}
 	return (NULL);
+}
+
+char	*find_var(char *str, t_info *info)
+{
+	int		i;
+	int		u;
+	char	*result;
+
+	i = 0;
+	while (str[i] && (i == 0 || str[i - 1] != '='))
+		i++;
+	if (str[i] == 0 && str[i - 1] != '=')
+		return (NULL);
+	u = i;
+	while (str[i] && str[i] != '$')
+		i++;
+	if (i == u && str[i - 1] == '=')
+		return (ft_strdup("", &info->exec_mem));
+	if (i == u)
+		return (NULL);
+	result = ft_stsubstr(str, u, i, &info->exec_mem);
+	if (result == NULL)
+		ft_error(ERROR99, info);
+	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/12 18:22:04 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/19 15:47:32 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,7 @@ void	loop(t_info *info)
 		if (info->is_finish != 0)
 			break ;
 		if (info->final_parse != NULL)
-		{
-			//printtest(info);
 			execution(info);
-		}
 		if (info->is_finish != 0)
 			break ;
 		if ((info->lastprompt_string \

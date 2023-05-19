@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/13 19:50:11 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/19 15:58:04 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*get_path(t_info *info, char **path, char *cmd)
 			return (stock_free(&mem), ft_error(ERROR99, info), NULL);
 		return (stock_free(&mem), res);
 	}
-	return (NULL);
+	return (ft_error(ERROR20, info), NULL);
 }
 
 char	**cmd_to_tab(t_info *info, t_commands cmd)
@@ -99,8 +99,6 @@ char	**cmd_to_tab(t_info *info, t_commands cmd)
 	result[j] = NULL;
 	return (result);
 }
-
-
 
 int	contains_slash(char *cmd)
 {

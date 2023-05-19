@@ -104,13 +104,13 @@ char	*prompt_string(t_info *info)
 
 	branch = get_gitbranch_in_parentdir(info);
 	path = get_prompt_path(info);
-	prompt = ft_strjoin("\n\e[36m➡️  ", path, &info->prompt_mem);
+	prompt = ft_strjoin("\001\e[36m\002\001➡️\002  ", path, &info->prompt_mem);
 	prompt = ft_strjoin(prompt, " "WHITE, &info->prompt_mem);
 	if (prompt == NULL)
 		ft_error(ERROR99, info);
 	if (branch != NULL)
 	{
-		prompt = ft_strjoin(prompt, "\e[34mgit:(\001\x1b[31m\002", \
+		prompt = ft_strjoin(prompt, "\001\e[34m\002git:(\001\x1b[31m\002", \
 			&info->prompt_mem);
 		if (prompt == NULL)
 			ft_error(ERROR99, info);

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:20:54 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/12 16:05:09 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/19 16:29:13 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,30 +100,6 @@ char	*find_name(char *str, t_info *info)
 	while (str[i] && str[i] != '+' && str[i] != '=')
 		i++;
 	result = ft_stsubstr(str, 0, i, &info->exec_mem);
-	if (result == NULL)
-		ft_error(ERROR99, info);
-	return (result);
-}
-
-char	*find_var(char *str, t_info *info)
-{
-	int		i;
-	int		u;
-	char	*result;
-
-	i = 0;
-	while (str[i] && (i == 0 || str[i - 1] != '='))
-		i++;
-	if (str[i] == 0 && str[i - 1] != '=')
-		return (NULL);
-	u = i;
-	while (str[i] && str[i] != '$')
-		i++;
-	if (i == u && str[i - 1] == '=')
-		return (ft_strdup("", &info->exec_mem));
-	if (i == u)
-		return (NULL);
-	result = ft_stsubstr(str, u, i, &info->exec_mem);
 	if (result == NULL)
 		ft_error(ERROR99, info);
 	return (result);
