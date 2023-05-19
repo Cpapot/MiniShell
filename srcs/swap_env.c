@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/09 18:59:15 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/19 15:45:49 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	swap_env(t_list *lst, t_info *info, char **envp)
 			else if (str[i] == '$')
 			{
 				if (is_contain_env(&str[i]) == 1)
-					str = swap_envstr(str , info, envp, &i);
+					str = swap_envstr(str, info, envp, &i);
 				else if (is_contain_env(&str[i]) == 2)
 					str = swap_exit(str, info, &i);
 			}

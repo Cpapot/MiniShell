@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/16 14:23:17 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/08 15:01:17 by cpapot           ###   ########.fr       */
+/*   Created: 2023/05/19 15:56:33 by cpapot            #+#    #+#             */
+/*   Updated: 2023/05/19 15:57:17 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define ERROR20 "\e[31m\e[1m[ERROR:20]\e[0m No such file or directory"
 # define ERROR98 "\e[31m\e[1m[ERROR:98]\e[0m Failure to access/create logs"
 # define ERROR99 "\e[31m\e[1m[ERROR:99]\e[0m Malloc cannot be created"
-# define WARNING "\n\e[35m\e[1m[WARNING]\e[0m here-document delimited by end-of-file"
+# define WARN "\n\e[35m\e[1m[WARNING]\e[0m here-document delimited by end-of-file"
 # define EXPORTERROR1 "\e[31m\e[1mexport\e[0m: not a valid identifier"
 # define UNSETERROR1 "\e[31m\e[1munset\e[0m: not a valid identifier"
 

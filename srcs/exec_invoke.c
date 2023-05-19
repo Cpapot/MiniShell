@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:58:49 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/13 19:50:35 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/19 16:22:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	else if (exec->end == 0 && dup2(fd[1], STDOUT_FILENO) == -1)
 		return (ft_error(ERROR13, info));
 	if (execve(exec->path, cmd, exec->envp) == -1)
-		return (ft_error(ERROR12, info), close(fd[1]), close_minishell(info, 1));
+	{
+		ft_error(ERROR12, info);
+		return (close(fd[1]), close_minishell(info, 1));
+	}
 	close(fd[1]);
 	close_minishell(info, 0);
 }

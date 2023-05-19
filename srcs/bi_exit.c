@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:15:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/09 20:08:56 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/19 16:00:59 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	bi_exit(t_list *lst, t_info *info)
 	if (lst != NULL)
 		status = ft_atoll_bool(lst->content, &b);
 	else
-		 status = 0;
+		status = 0;
 	printf("exit\n");
 	if (ft_lstsize(lst) == 0)
 		close_minishell(info, 0);

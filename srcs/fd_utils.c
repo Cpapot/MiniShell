@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 18:38:24 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/13 19:33:38 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/19 15:50:18 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	empty_pipe(t_exec *exec, t_info *info)
 	exec->fd = fd[0];
 	return (0);
 }
+
 void	r_fd(t_exec	*exec)
 {
 	exec->in_fd = -2;
