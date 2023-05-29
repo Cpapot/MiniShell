@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/29 11:29:19 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/29 15:00:13 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,74 @@ char	*swap_envstr(char *str, t_info *info, char **envp, int *index)
 	return (str);
 }
 
+char	*swap_envin_quote(char *str, t_info *info, char **envp, int *index)
+{
+	int	i;
+
+	i = *index;
+	i++;
+	while (str && str[i])
+	{
+		if (str[i] == '\"')
+			break;
+		else if (str[i] == '$')
+		{
+			if (is_contain_env(&str[i]) == 1)
+				str = swap_envstr(str, info, envp, &i);
+			else if (is_contain_env(&str[i]) == 2)
+				str = swap_exit(str, info, &i);
+		}
+		i++;
+	}
+	return (str);
+}
+
+char	**parse_env(char *str, t_info *info, char **envp, int index)
+{
+	char	**result;
+	char	*env;
+	int		i;
+
+	i = index + 1;
+	while (str[i] && str[i] != ' ' && str[i] != '$' && str[i] != '\''
+		&& str[i] != '\"')
+		i++;
+	env = getenv_instr(&str[index + 1], i - index - 1, info, envp);
+	result = ft_split(env, ' ', &info->parsing);
+	if (!result)
+		ft_error(ERROR99, info);
+	return (result);
+}
+
+char	*swap_env_parsed(t_list *lst, t_info *info, char **envp, int *index)
+{
+	int		i;
+	t_list	*next;
+	char	**parsedenv;
+
+	i = 1;
+	next = lst->next;
+	lst->next = NULL;
+	parsedenv = parse_env(lst->content, info, envp, *index);
+	if (*index != 0 && lst->content[*index - 1] != ' ')
+	{
+		parsedenv[0] = ft_strjoin(start(lst->content, *index, info), parsedenv[0], &info->parsing);
+		if (!lst->content)
+			ft_error(ERROR99, info);
+	}
+	else
+		lst->content = parsedenv[0];
+	while (parsedenv[i])
+	{
+		ft_lstadd_back(&lst, ft_lstnew(parsedenv[i], &info->final_memparse));
+		i++;
+	}
+	while (lst->next)
+		lst = lst->next;
+	lst->next = next;
+	return (parsedenv[0]);
+}
+
 /*
 	If the command contains any env, this function will find and replace it
 */
@@ -107,13 +175,10 @@ void	swap_env(t_list *lst, t_info *info, char **envp)
 		{
 			if (str[i] == '\'')
 				i += quote_size_env(&str[i], 0);
+			else if (str[i] == '\"')
+				str = swap_envin_quote(str, info, envp, &i);
 			else if (str[i] == '$')
-			{
-				if (is_contain_env(&str[i]) == 1)
-					str = swap_envstr(str, info, envp, &i);
-				else if (is_contain_env(&str[i]) == 2)
-					str = swap_exit(str, info, &i);
-			}
+				str = swap_env_parsed(lst, info, envp, &i);
 			i++;
 		}
 		lst->content = str;

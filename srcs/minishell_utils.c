@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/19 16:29:29 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/29 13:04:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char	*ft_getenv(char *env, char **envp, t_memlist **stock)
 	int		u;
 
 	i = 0;
+	if (!env)
+		return (NULL);
 	while (envp[i])
 	{
 		u = 0;
