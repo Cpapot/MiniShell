@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/29 11:37:56 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/29 12:21:54 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,15 @@ int			is_contain_env(char *str);
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);
 
+/*						parsing_redir					*/
+t_list		*find_redirection(t_list *lst, t_info *info, int id);
+int			is_redirection(char *str);
+
 /*						parsing utils					*/
 char		*ft_strndup(const char *s1, size_t n, t_memlist **stock);
 void		ft_lstdiradd_back(t_dir **lst, t_dir *new);
 t_dir		*ft_lstdirnew(char *type, char *dest, t_memlist **mem);
-int			is_redirection(char *str);
 char		*prompt_until_char(char c, t_memlist **stock, char *str);
-char		*swap_redir_env(char *str, t_info *info);
 
 /*						quote							*/
 char		*remove_actual_quote(char *str, t_memlist **stock);

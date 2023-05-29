@@ -15,7 +15,8 @@ SRCS		=	minishell.c minishell_utils.c \
 				bi_pwd.c bi_export.c bi_cd.c bi_exit.c \
 				exit_status.c error.c bi_unset.c prompt.c \
 				execution.c exec_utils.c exec_invoke.c \
-				exec_pid.c exec_redir.c fd_utils.c
+				exec_pid.c exec_redir.c fd_utils.c \
+				parsing_redir.c
 
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
@@ -94,7 +95,9 @@ clean:
 fclean:
 	@echo "${RED}🗑  ${NAME} cleanded"
 	@echo "${RED}🗑  .log cleanded"
+	@echo "${RED}🗑  valgrind.txt cleanded"
 	@${RM} .log
+	@${RM} valgrind.txt
 	@${RM} ${OBJS}
 	@${RM} ${OBJSDIR}
 	@${RM} ${NAME}
