@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/19 15:45:49 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/29 11:29:19 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*swap_envstr(char *str, t_info *info, char **envp, int *index)
 }
 
 /*
-	If the command contains any env  , this function will find and replace it
+	If the command contains any env, this function will find and replace it
 */
 void	swap_env(t_list *lst, t_info *info, char **envp)
 {

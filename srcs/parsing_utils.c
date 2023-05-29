@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:51:08 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/16 16:34:37 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/29 11:37:39 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,26 @@ void	ft_lstdiradd_back(t_dir **lst, t_dir *new)
 			last = last->next;
 		last->next = new;
 	}
+}
+char	*swap_redir_env(char *str, t_info *info)
+{
+	int		i;
+	char	**envp;
+
+	i = 0;
+	envp = info->envp;
+	while (str && str[i])
+	{
+		if (str[i] == '\'')
+			i += quote_size_env(&str[i], 0);
+		else if (str[i] == '$')
+		{
+			if (is_contain_env(&str[i]) == 1)
+				str = swap_envstr(str, info, envp, &i);
+			else if (is_contain_env(&str[i]) == 2)
+				str = swap_exit(str, info, &i);
+		}
+		i++;
+	}
+	return (str);
 }

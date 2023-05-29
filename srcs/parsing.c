@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/09 17:48:33 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/29 11:39:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 	if (is_redirection(lst->content))
 	{
 		ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content,
-				lst->next->content, &info->final_memparse));
+				swap_redir_env(lst->next->content, info), &info->final_memparse));
 		tmp = lst->next->next;
 	}
 	while (lst)
@@ -90,7 +90,7 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 		if (lst->next && is_redirection(lst->next->content))
 		{
 			ft_lstdiradd_back(&dir, ft_lstdirnew(lst->next->content,
-					lst->next->next->content, &info->final_memparse));
+				swap_redir_env(lst->next->next->content, info), &info->final_memparse));
 			lst->next = lst->next->next->next;
 		}
 		else
