@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 17:20:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/19 14:36:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/30 14:23:12 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char	*remove_actual_quote(char *str, t_memlist **stock)
 		else
 			i++;
 	}
+	save = 0;
 	return (str);
 }
 
@@ -90,8 +91,7 @@ int	quote_size(char *str, int mode)
 	if (mode == 0)
 	{
 		if (str[0] == '\'')
-			return (1);
-		i++;
+			return (0);
 		while (str[i] && str[i] != '\'')
 			i++;
 		return (i + 1);
@@ -99,14 +99,41 @@ int	quote_size(char *str, int mode)
 	else if (mode == 1)
 	{
 		if (str[0] == '\"')
-			return (1);
-		i++;
+			return (0);
 		while (str[i] && str[i] != '\"')
 			i++;
 		return (i + 1);
 	}
 	return (0);
 }
+
+// int	quote_size(char *str, int mode)
+// {
+// 	int			i;
+
+// 	i = 0;
+// 	if (!str[0])
+// 		return (0);
+// 	if (mode == 0)
+// 	{
+// 		if (str[0] == '\'')
+// 			return (1);
+// 		i++;
+// 		while (str[i] && str[i] != '\'')
+// 			i++;
+// 		return (i + 1);
+// 	}
+// 	else if (mode == 1)
+// 	{
+// 		if (str[0] == '\"')
+// 			return (1);
+// 		i++;
+// 		while (str[i] && str[i] != '\"')
+// 			i++;
+// 		return (i + 1);
+// 	}
+// 	return (0);
+// }
 
 int	quote_size_shellsplit(char *str, int mode)
 {

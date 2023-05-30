@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 13:47:51 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 13:36:32 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/30 14:22:43 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static char	*ft_next_char(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] == ' ')
+	while (str[i] == ' ' || str[i] == '\t')
 		i++;
 	return (&str[i]);
 }
@@ -27,8 +27,8 @@ static int	word_len(char *str)
 	int		u;
 
 	u = 0;
-	while ((str[u] != ' ' && str[u] && str[u] != '\''
-			&& str[u] != '\"'))
+	while (str[u] != ' ' && str[u] && str[u] != '\''
+			&& str[u] != '\"' && str[u] != '\t')
 	{
 		if (u == 0 && (str[u] == '<' || str[u] == '>'))
 		{
@@ -57,7 +57,7 @@ static int	splited_word(char *str)
 	i = 0;
 	buff = 0;
 	while (str[i] && str[i] != ' ' && str[i] != '>'
-		&& str[i] != '<' && str[i] != '|')
+		&& str[i] != '<' && str[i] != '|' && str[i] != '\t')
 	{
 		if (str[i] == '\"')
 		{

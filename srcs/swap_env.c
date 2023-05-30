@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/29 15:00:13 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/30 15:10:48 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,32 @@ char	*swap_envin_quote(char *str, t_info *info, char **envp, int *index)
 	return (str);
 }
 
+char	**set_endstartenv(char **parsedenv, t_info *info, int index, int end)
+{
+	int	i;
+	int	u;
+
+	u = 0;
+	i = end;
+	if (info->tmp_string[i] != ' ')
+	{
+		while (parsedenv[u + 1])
+			u++;
+		parsedenv[u] = ft_strjoin(parsedenv[u], &info->tmp_string[i], &info->parsing);
+		if (!parsedenv[u])
+			ft_error(ERROR99, info);
+	}
+	if (index != 0 && info->tmp_string[index - 1] != ' ')
+	{
+		parsedenv[0] = ft_strjoin(start(info->tmp_string, index, info), parsedenv[0], &info->parsing);
+		if (!info->tmp_string)
+			ft_error(ERROR99, info);
+	}
+	else
+		info->tmp_string = parsedenv[0];
+	return (parsedenv);
+}
+
 char	**parse_env(char *str, t_info *info, char **envp, int index)
 {
 	char	**result;
@@ -127,6 +153,8 @@ char	**parse_env(char *str, t_info *info, char **envp, int index)
 	result = ft_split(env, ' ', &info->parsing);
 	if (!result)
 		ft_error(ERROR99, info);
+	info->tmp_string = str;
+	result = set_endstartenv(result, info, index, i);
 	return (result);
 }
 

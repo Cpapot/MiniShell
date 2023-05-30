@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/29 12:21:54 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/30 15:00:27 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_info
 	char		*prompt_string;
 	char		*lastprompt_string;
 	char		**envp;
+	char		*tmp_string;
 	t_commands	*final_parse;
 	t_memlist	*exec_mem;
 	t_memlist	*parsing;

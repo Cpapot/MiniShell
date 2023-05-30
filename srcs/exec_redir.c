@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/19 16:32:28 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/30 15:34:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	call_heredoc(t_info *info, t_commands lst_cmd)
 	waitpid(pid, &exit_status, 2);
 	close(fd[1]);
 	set_exitstatus(WEXITSTATUS(exit_status));
+	if (WEXITSTATUS(exit_status) == 1)
+		return (-3);
 	return (fd[0]);
 }
 
@@ -109,7 +111,11 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 	while (lst_cmd.dir)
 	{
 		if (ft_strcmp(lst_cmd.dir->type, "<<"))
+		{
 			exec->in_fd = call_heredoc(info, lst_cmd);
+			if (exec->in_fd == -3)
+				return (-1);
+		}
 		else if (env_check(info, &lst_cmd))
 			return (1);
 		if (ft_strcmp(lst_cmd.dir->type, "<"))

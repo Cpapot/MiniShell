@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/19 18:15:13 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/30 15:34:22 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static int	start_exec(t_info *info, t_exec *exec)
 		if (i + 2 >= info->com_count)
 			exec->end = 1;
 		tmp = redirect(info, exec, cmds[i]);
+		if (tmp == -1)
+			return (1);
 		if (cmds[i].command != NULL && tmp == 0)
 		{
 			cmd_tab = cmd_to_tab(info, cmds[i]);
