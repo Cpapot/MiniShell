@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:58:49 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/19 17:42:05 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/31 18:13:20 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 		return (close(fd[1]), close_minishell(info, 1));
 	}
 	close(fd[1]);
-	close_minishell(info, 0);
+	exit(1);
 }
 
 int	exec_file(t_info *info, t_exec *exec, char **cmd_tab)
@@ -107,18 +107,18 @@ int	handle_command(t_info *info, t_exec *exec, char **cmd)
 	int		fd[2];
 	pid_t	pid;
 
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info), 1);
 	add_fd(&exec->fd_list, fd[0], info->exec_mem);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		return (ft_error(ERROR10, info), 1);
 	else if (pid == 0)
 	{
 		signal(SIGINT, &catch_signals_child);
-		signal(SIGQUIT, &catch_signals_backslash);
+		signal(SIGQUIT, &catch_signals_child);
 		search_and_exec(info, exec, fd, cmd);
 		close_minishell(info, 0);
 	}
