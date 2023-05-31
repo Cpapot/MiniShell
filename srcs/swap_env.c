@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/30 15:10:48 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/31 16:31:10 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,22 +93,24 @@ char	*swap_envstr(char *str, t_info *info, char **envp, int *index)
 
 char	*swap_envin_quote(char *str, t_info *info, char **envp, int *index)
 {
-	int	i;
-
-	i = *index;
-	i++;
-	while (str && str[i])
+	*index = *index + 1;
+	while (str && str[*index])
 	{
-		if (str[i] == '\"')
+		if (str[*index] == '\"')
 			break;
-		else if (str[i] == '$')
+		else if (str[*index] == '$' && str[*index + 1] == '\"')
 		{
-			if (is_contain_env(&str[i]) == 1)
-				str = swap_envstr(str, info, envp, &i);
-			else if (is_contain_env(&str[i]) == 2)
-				str = swap_exit(str, info, &i);
+			*index = *index + 1;
+			return (str);
 		}
-		i++;
+		else if (str[*index] == '$')
+		{
+			if (is_contain_env(&str[*index]) == 1 && str[*index + 1] != '\"')
+				str = swap_envstr(str, info, envp, index);
+			else if (is_contain_env(&str[*index]) == 2 && str[*index + 1] != '\"')
+				str = swap_exit(str, info, index);
+		}
+		*index = *index + 1;
 	}
 	return (str);
 }
@@ -131,7 +133,7 @@ char	**set_endstartenv(char **parsedenv, t_info *info, int index, int end)
 	if (index != 0 && info->tmp_string[index - 1] != ' ')
 	{
 		parsedenv[0] = ft_strjoin(start(info->tmp_string, index, info), parsedenv[0], &info->parsing);
-		if (!info->tmp_string)
+		if (!parsedenv[0])
 			ft_error(ERROR99, info);
 	}
 	else
@@ -147,10 +149,15 @@ char	**parse_env(char *str, t_info *info, char **envp, int index)
 
 	i = index + 1;
 	while (str[i] && str[i] != ' ' && str[i] != '$' && str[i] != '\''
-		&& str[i] != '\"')
+		&& str[i] != '\"' && str[i - 1] != '?')
 		i++;
-	env = getenv_instr(&str[index + 1], i - index - 1, info, envp);
-	result = ft_split(env, ' ', &info->parsing);
+	if (str[index + 1] != '?' && i != index + 1)
+		env = getenv_instr(&str[index + 1], i - index - 1, info, envp);
+	else if (str[index + 1] && str[index + 1] == '?'  && i != index + 1)
+		env = ft_itoa(get_exitstatus());
+	else
+		env = ft_strdup("$", &info->parsing);
+	result = ft_split(env, " \t", &info->parsing);
 	if (!result)
 		ft_error(ERROR99, info);
 	info->tmp_string = str;
@@ -168,14 +175,7 @@ char	*swap_env_parsed(t_list *lst, t_info *info, char **envp, int *index)
 	next = lst->next;
 	lst->next = NULL;
 	parsedenv = parse_env(lst->content, info, envp, *index);
-	if (*index != 0 && lst->content[*index - 1] != ' ')
-	{
-		parsedenv[0] = ft_strjoin(start(lst->content, *index, info), parsedenv[0], &info->parsing);
-		if (!lst->content)
-			ft_error(ERROR99, info);
-	}
-	else
-		lst->content = parsedenv[0];
+	lst->content = parsedenv[0];
 	while (parsedenv[i])
 	{
 		ft_lstadd_back(&lst, ft_lstnew(parsedenv[i], &info->final_memparse));

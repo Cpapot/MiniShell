@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/19 15:58:04 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/31 16:16:14 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**get_big_path(t_info *info, char **envp)
 	}
 	if (envp[i])
 	{
-		splitted = ft_split((envp[i] + 5), ':', &info->exec_mem);
+		splitted = ft_split((envp[i] + 5), ":", &info->exec_mem);
 		if (!splitted)
 			return (ft_error(ERROR99, info), NULL);
 		return (splitted);

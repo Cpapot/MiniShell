@@ -5,90 +5,120 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/11 10:35:50 by cpapot            #+#    #+#             */
-/*   Updated: 2023/02/24 17:11:05 by cpapot           ###   ########.fr       */
+/*   Created: 2022/08/21 13:42:03 by cpapot            #+#    #+#             */
+/*   Updated: 2023/05/31 16:27:35 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/libft.h"
 
-static char	*ft_next_char(char *str, char c)
+int	is_sep(char s, char *charset)
 {
 	int	i;
 
 	i = 0;
-	while (str[i] == c)
-		i++;
-	return (&str[i]);
-}
-
-static char	*ft_strndup(const char *s1, size_t n, t_memlist **stock)
-{
-	char	*result;
-	int		len;
-	size_t	i;
-
-	i = 0;
-	if (ft_strlen(s1) < n)
-		return (NULL);
-	result = stock_malloc(sizeof(char) * (n + 1), stock);
-	if (result == 0)
-		return (NULL);
-	while (i != n)
+	while (charset[i] != '\0')
 	{
-		result[i] = s1[i];
+		if (charset[i] == s)
+			return (1);
 		i++;
 	}
-	result[i] = '\0';
-	return (result);
+	return (0);
 }
 
-static int	ft_count_word(char const *str, char c)
+int	len_word(char *str, char *charset, int u)
+{
+	int		i;
+	int		y;
+
+	i = 0;
+	y = 0;
+	while (is_sep(str[i], charset) == 1)
+		i++;
+	while (str[i] != '\0')
+	{
+		if (!(is_sep(str[i], charset)) && y == u)
+			break ;
+		else if (is_sep(str[i], charset) && !(is_sep(str[i + 1], charset)))
+			y++;
+		i++;
+	}
+	y = 0;
+	while (str[i + y] != '\0' && (!is_sep(str[i + y], charset)))
+		y++;
+	return (y + 1);
+}
+
+int	count_word(char *str, char *charset)
 {
 	int	i;
 	int	count;
 
 	i = 0;
 	count = 0;
-	if (str[0] == c)
+	if (is_sep(str[0], charset) == 1)
 		count--;
 	while (str[i] != '\0')
 	{
-		if (str[i] == c && (!((str[i + 1] == c))
+		if (is_sep(str[i], charset) && (!(is_sep(str[i + 1], charset))
 				&& str[i + 1] != '\0'))
 			count++;
 		i++;
 	}
-	if (str[0] != '\0' || c == '\0')
-		count++;
-	return (count);
+	return (count + 1);
 }
 
-char	**ft_split(char const *str, char c, t_memlist **stock)
+void	cpy_word(char *str, char *charset, int n, char *result)
 {
-	int		word_len;
 	int		i;
+	int		count;
+	int		y;
+
+	i = 0;
+	count = 0;
+	y = 0;
+	if (is_sep(str[0], charset) == 1)
+		y--;
+	while (str[i] != '\0')
+	{
+		if (is_sep(str[i], charset) && !(is_sep(str[i + 1], charset)))
+			y++;
+		if (y > n)
+			break ;
+		if (!(is_sep(str[i], charset)) && y == n)
+		{
+			result[count] = str[i];
+			count++;
+		}
+		i++;
+	}
+	result[count] = '\0';
+}
+
+char	**ft_split(char *str, char *charset, t_memlist **stock)
+{
 	char	**result;
 	int		word_count;
+	int		i;
+	int		len;
 
-	if (!str)
-		return (NULL);
 	i = 0;
-	word_len = 0;
-	word_count = ft_count_word(str, c);
-	result = stock_malloc(sizeof(char *) * (word_count + 1), stock);
-	if (!result)
+	if (str[0] == '\0' || charset[0] == '\0')
 		return (NULL);
-	while (i != word_count)
+	word_count = count_word(str, charset);
+	result = stock_malloc(sizeof(char *) * (word_count + 1), stock);
+	if (result == NULL)
+		return (NULL);
+	while (i < word_count)
 	{
-		str = ft_next_char((char *)&str[word_len], c);
-		word_len = 0;
-		while (str[word_len] != c && str[word_len])
-			word_len++;
-		result[i] = ft_strndup(str, word_len, stock);
-		if (!result[i++])
-			return (stock_free(stock), NULL);
+		len = len_word(str, charset, i);
+		result[i] = stock_malloc(sizeof(char) * len, stock);
+		if (result[i] == NULL)
+			return (NULL);
+		cpy_word(str, charset, i, result[i]);
+		i++;
 	}
 	result[i] = NULL;
 	return (result);
 }
+

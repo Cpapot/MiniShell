@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 15:20:49 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/13 14:04:01 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/31 16:15:09 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char		*ft_strrchr(const char *s, int c);
 char		*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char		*ft_stsubstr(char const *s, int start, size_t len, t_memlist **st);
 char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-char		**ft_split(char const *str, char c, t_memlist **stock);
+char		**ft_split(char *str, char *charset, t_memlist **stock);
 int			ft_strcmp(const char *s1, const char *s2);
 size_t		ft_strlcat(char *dst, const char *src, size_t size);
 size_t		ft_strlcpy(char *dest, const char *src, size_t dstsize);
