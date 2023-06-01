@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:53:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/13 19:39:08 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/01 12:40:23 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,23 @@
 
 void	wait_close(t_exec *exec)
 {
+	int	signal;
 	int	i;
 	int	exit_status;
 
+	signal = 0;
 	i = 0;
 	exit_status = 0;
 	while (exec->pid_tab[i] >= 0)
 	{
 		waitpid(exec->pid_tab[i], &exit_status, 0);
-		if (get_exitstatus() != 131)
+		if (WIFEXITED(exit_status))
 			set_exitstatus(WEXITSTATUS(exit_status));
+		else if (WIFSIGNALED(exit_status) && signal == 0)
+		{
+			signal = 1;
+			catch_signals_child(WTERMSIG(exit_status));
+		}
 		if (i != 0)
 			close(exec->fd_tab[i]);
 		i++;
