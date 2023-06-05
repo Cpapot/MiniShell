@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:15:18 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/19 16:00:59 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 13:12:19 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,6 @@ int	bi_exit(t_list *lst, t_info *info)
 		ft_error("numeric argument required", info);
 		exit (2);
 	}
-	exit (status);
+	close_minishell(info, status);
 	return (1);
 }
