@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/06/05 15:46:30 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 16:36:17 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	**parse_env(char *str, t_info *info, char **envp, int index)
 		env = ft_itoa(get_exitstatus());
 	else
 		env = ft_strdup("$", &info->parsing);
-	if(!ft_strcmp("", env))
+	if (!ft_strcmp("", env))
 		result = ft_split(env, " \t", &info->parsing);
 	else
 		result = empty_tab(info);
