@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:53:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/06/05 14:58:23 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 15:35:11 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	wait_close(t_exec *exec, int i)
 			signal = 1;
 			catch_signals_child(WTERMSIG(exit_status));
 		}
-		if (i != 0)
+		if (exec->fd_tab[i] != 0 && exec->fd_tab[i] != 1)
 			close(exec->fd_tab[i]);
 	}
 	if (exec->final_execstat != -1)
