@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 11:43:39 by mgagne            #+#    #+#             */
-/*   Updated: 2023/06/05 11:58:02 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 16:17:48 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,20 @@ char	**set_endstartenv(char **parsedenv, t_info *info, int index, int end)
 	else
 		info->tmp_string = parsedenv[0];
 	return (parsedenv);
+}
+
+char	**empty_tab(t_info *info)
+{
+	char	**result;
+
+	result = stock_malloc(2 * sizeof(char *), &info->parsing);
+	if (!result)
+		ft_error(ERROR99, info);
+	result[0] = ft_strdup("", &info->parsing);
+	if (!result[0])
+		ft_error(ERROR99, info);
+	result[1] = NULL;
+	return (result);
 }
 
 char	*swap_envstr(char *str, t_info *info, char **envp, int *index)

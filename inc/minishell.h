@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/06/05 12:31:06 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 14:52:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ char		*start(char *str, int size, t_info *info);
 char		**set_endstartenv(char **parsedenv, t_info *info, int index, \
 			int end);
 char		*getenv_instr(char *str, int size, t_info *info, char **envp);
+char		**empty_tab(t_info *info);
 
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);
