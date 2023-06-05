@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 13:42:03 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/31 16:27:35 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 11:38:43 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,4 +121,3 @@ char	**ft_split(char *str, char *charset, t_memlist **stock)
 	result[i] = NULL;
 	return (result);
 }
-

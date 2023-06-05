@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/05/30 15:34:22 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 11:56:17 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,8 @@ This function loops on every command, if there are redirections they are handled
 after that we get the command from a chained list to an array of strings,
 which we can send as a parameter to the search_exec function.
 */
-static int	start_exec(t_info *info, t_exec *exec)
+static int	start_exec(t_info *info, t_exec *exec, int tmp)
 {
-	int			tmp;
 	int			i;
 	t_commands	*cmds;
 	char		**cmd_tab;
@@ -90,7 +89,7 @@ void	execution(t_info *info)
 
 	if (init_exec(info, &exec))
 		return ;
-	if (start_exec(info, &exec))
+	if (start_exec(info, &exec, 0))
 		return ;
 	wait_close(&exec);
 	stock_free(&info->exec_mem);

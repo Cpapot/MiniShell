@@ -11,12 +11,12 @@ SRCS		=	minishell.c minishell_utils.c \
 				parsing.c parsing_utils.c shell_split.c \
 				split_pipe.c history.c signals.c \
 				swap_env.c quote.c check_error.c \
-				TEST.c bi_echo.c bi_utils.c bi_env.c \
+				bi_echo.c bi_utils.c bi_env.c \
 				bi_pwd.c bi_export.c bi_cd.c bi_exit.c \
 				exit_status.c error.c bi_unset.c prompt.c \
 				execution.c exec_utils.c exec_invoke.c \
 				exec_pid.c exec_redir.c fd_utils.c \
-				parsing_redir.c
+				parsing_redir.c env_utils.c
 
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a

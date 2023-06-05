@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 11:47:35 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/29 12:21:41 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 12:12:46 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ static t_list	*go_next_redirection(t_list *lst)
 	return (lst);
 }
 
+static void	stock_redir(t_dir *dir, t_list *lst, t_info *info)
+{
+	ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content, \
+	swap_redir_env(lst->next->content, info), &info->final_memparse));
+}
+
 /*
  *This function takes in a linked list lst of parsed command arguments,
  *along with a pointer to a t_info struct and an integer id. It searches and
@@ -71,8 +77,7 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 	dir = ft_lstdirnew(NULL, NULL, &info->final_memparse);
 	if (is_redirection(lst->content))
 	{
-		ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content,
-				swap_redir_env(lst->next->content, info), &info->final_memparse));
+		stock_redir(dir, lst, info);
 		tmp = lst->next->next;
 	}
 	while (lst)
@@ -80,8 +85,7 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 		lst = go_next_redirection(lst);
 		if (lst->next && is_redirection(lst->next->content))
 		{
-			ft_lstdiradd_back(&dir, ft_lstdirnew(lst->next->content,
-				swap_redir_env(lst->next->next->content, info), &info->final_memparse));
+			stock_redir(dir, lst->next, info);
 			lst->next = lst->next->next->next;
 		}
 		else
