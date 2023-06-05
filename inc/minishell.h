@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/06/05 12:16:40 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 12:31:06 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void		ft_error(const char *error, t_info *info);
 /*						minishell_utils					*/
 void		print_error_exit(t_info *info, char *error, int status);
 void		print_error(char *error);
-void		free_all(t_info *info);
 char		*ft_getenv(char *env, char **envp, t_memlist **stock);
 int			is_char_in_str(char c, const char *str);
 
