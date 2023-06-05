@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bi_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:31:14 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 19:53:36 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/19 15:47:03 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,23 @@ static char	**modify_envp(int pos, char *var, char *str, t_info *info)
 	return (result);
 }
 
-static int	export_parsing(char *str, t_list *lst)
+static int	export_parsing(char *str)
 {
 	int	i;
 
 	i = 0;
+	if (str == NULL || ft_strcmp(str, ""))
+		return (2);
 	if (str[0] == '=' || str[0] == '+'
 		|| (str[0] <= '9' && str[0] >= '0'))
 		return (1);
-	if (str == NULL || ft_strcmp(str, ""))
-		return (2);
 	while (str[i] && str[i] != '=' && str[i] != '+')
 	{
 		if (is_char_in_str(str[i], INV_ID_EXPORT))
 			return (1);
 		i++;
 	}
-	if ((str[i] == '+' && str[i + 1] != '=') || ((str[i] != '='
-				&& str[i] != '+') && lst->next != NULL))
+	if ((str[i] == '+' && str[i + 1] != '='))
 		return (1);
 	return (0);
 }
@@ -110,24 +109,27 @@ int	bi_export(t_list *lst, t_info *info, int fd)
 {
 	int		parsing_res;
 	int		var_pos;
-	char	*str;
 	char	*var;
 
 	set_exitstatus(0);
 	if (lst == NULL)
 		return (print_export(info->envp, info, fd), 1);
-	str = lst->content;
-	parsing_res = export_parsing(str, lst);
-	if (parsing_res == 1)
-		return (ft_error(EXPORTERROR1, info), -1);
-	if (parsing_res == 2)
-		return (print_export(info->envp, info, fd), 1);
-	var_pos = is_var_already_exist(find_name(str, info), info->envp, info);
-	var = find_var(str, info);
-	if (var_pos < 0)
-		info->envp = add_to_envp(info->envp, find_name(str, info),
-				var, info);
-	else if (var_pos >= 0)
-		info->envp = modify_envp(var_pos, var, str, info);
+	while (lst)
+	{
+		parsing_res = export_parsing(lst->content);
+		if (parsing_res == 1)
+			return (ft_error(EXPORTERROR1, info), -1);
+		if (parsing_res == 2)
+			return (print_export(info->envp, info, fd), 1);
+		var_pos = is_var_already_exist(find_name(lst->content, info),
+				info->envp, info);
+		var = find_var(lst->content, info);
+		if (var_pos < 0)
+			info->envp = add_to_envp(info->envp, find_name(lst->content, info),
+					var, info);
+		else if (var_pos >= 0)
+			info->envp = modify_envp(var_pos, var, lst->content, info);
+		lst = lst->next;
+	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 20:05:38 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/13 13:36:07 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/05 17:04:56 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,5 @@ void	addto_logs(char *commands, t_info *info)
 	login = getenv("LOGNAME");
 	ft_printf_fd(log_fd, "LOGNAME: \"%s\"	PATH: \"%s\"\n", login, path);
 	ft_printf_fd(log_fd, "	COMMAND: \"%s\"\n", commands);
+	close(log_fd);
 }

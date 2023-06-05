@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 19:20:22 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/19 19:47:16 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/31 16:04:05 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,9 @@ static char	*get_prompt_path(t_info *info)
 	return (result);
 }
 
+/*
+	Return a string who contain the actual directory and the name of the branch
+*/
 char	*prompt_string(t_info *info)
 {
 	char	*prompt;
@@ -101,13 +104,13 @@ char	*prompt_string(t_info *info)
 
 	branch = get_gitbranch_in_parentdir(info);
 	path = get_prompt_path(info);
-	prompt = ft_strjoin("\e[36m➡️  ", path, &info->prompt_mem);
+	prompt = ft_strjoin("\001\e[36m\002\001➡️\002  ", path, &info->prompt_mem);
 	prompt = ft_strjoin(prompt, " "WHITE, &info->prompt_mem);
 	if (prompt == NULL)
 		ft_error(ERROR99, info);
 	if (branch != NULL)
 	{
-		prompt = ft_strjoin(prompt, "\e[34mgit:(\001\x1b[31m\002", \
+		prompt = ft_strjoin(prompt, "\001\e[34m\002git:(\001\x1b[31m\002", \
 			&info->prompt_mem);
 		if (prompt == NULL)
 			ft_error(ERROR99, info);

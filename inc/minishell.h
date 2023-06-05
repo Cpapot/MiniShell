@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/19 20:15:19 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 12:31:06 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_info
 	char		*prompt_string;
 	char		*lastprompt_string;
 	char		**envp;
+	char		*tmp_string;
 	t_commands	*final_parse;
 	t_memlist	*exec_mem;
 	t_memlist	*parsing;
@@ -69,15 +70,18 @@ typedef struct s_info
 
 typedef struct s_exec
 {
-	char	*path;
-	char	**paths;
-	int		fd;
-	int		in_fd;
-	int		out_fd;
-	char	**envp;
-	pid_t	*pid_tab;
-	int		*fd_tab;
-	int		end;
+	int			final_execstat;
+	t_int_list	*fd_list;
+	char		*path;
+	char		**paths;
+	int			fd;
+	int			in_fd;
+	int			out_fd;
+	char		**envp;
+	pid_t		*pid_tab;
+	t_commands	actual_cmd;
+	int			*fd_tab;
+	int			end;
 }				t_exec;
 
 /*						MINISHELL						*/
@@ -89,12 +93,12 @@ void		ft_error(const char *error, t_info *info);
 /*						minishell_utils					*/
 void		print_error_exit(t_info *info, char *error, int status);
 void		print_error(char *error);
-void		free_all(t_info *info);
 char		*ft_getenv(char *env, char **envp, t_memlist **stock);
 int			is_char_in_str(char c, const char *str);
 
 /*						parsing							*/
 t_commands	*parsing(t_info *info);
+int			quote_size_env(char *str, int mode);
 
 /*						split_pipe						*/
 t_commands	*split_pipe(t_info *info, t_list *lst);
@@ -104,17 +108,24 @@ t_list		*shell_split(t_info *info, char *str, t_memlist **stock);
 
 /*						swap_env						*/
 void		swap_env(t_list *lst, t_info *info, char **envp);
-char		*swap_envstr(char *str, t_info *info, char **envp);
+char		*swap_envstr(char *str, t_info *info, char **envp, int *index);
 int			is_contain_env(char *str);
+char		*start(char *str, int size, t_info *info);
+char		**set_endstartenv(char **parsedenv, t_info *info, int index, \
+			int end);
+char		*getenv_instr(char *str, int size, t_info *info, char **envp);
 
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);
+
+/*						parsing_redir					*/
+t_list		*find_redirection(t_list *lst, t_info *info, int id);
+int			is_redirection(char *str);
 
 /*						parsing utils					*/
 char		*ft_strndup(const char *s1, size_t n, t_memlist **stock);
 void		ft_lstdiradd_back(t_dir **lst, t_dir *new);
 t_dir		*ft_lstdirnew(char *type, char *dest, t_memlist **mem);
-int			is_redirection(char *str);
 char		*prompt_until_char(char c, t_memlist **stock, char *str);
 
 /*						quote							*/
@@ -145,15 +156,19 @@ char		*start(char *str, int size, t_info *info);
 char		*find_var(char *str, t_info *info);
 char		*find_name(char *str, t_info *info);
 int			is_var_already_exist(char *name, char **envp, t_info *info);
+int			is_builtins(t_list *lst);
 
 /*						exit_status						*/
-char		*swap_exit(char *str, t_info *info);
+char		*swap_exit(char *str, t_info *info, int *index);
 void		set_exitstatus(int status);
+int			get_exitstatus(void);
+void		set_final_exitstatus(int status, t_exec *exec);
 
 /*						signals							*/
 void		catch_signals(int sig);
 void		catch_signals_child(int sig);
 void		catch_signals_heredoc(int sig);
+void		catch_signals_backslash(int sig);
 
 /*						prompt							*/
 void		prompt(t_info *info);
@@ -179,6 +194,13 @@ char		*get_path(t_info *info, char **path, char *cmd);
 /*						exec_invoke						*/
 int			handle_command(t_info *info, t_exec *exec, char **cmd);
 int			exec_file(t_info *info, t_exec *exec, char **cmd_tab);
+void		exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd);
+
+/*							fd							*/
+void		add_fd(t_int_list **fd_list, int fd, t_memlist *mem);
+void		close_lst(t_int_list *fd);
+void		r_fd(t_exec	*exec);
+int			empty_pipe(t_exec *exec, t_info *info);
 
 void		printtest(t_info *info);
 

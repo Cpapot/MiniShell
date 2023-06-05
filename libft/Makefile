@@ -5,7 +5,9 @@
 #				| |    | | |  __/\__ \.
 #				|_|    |_|_|\___||___/
 
-HEADERS 	=	libft.h
+HEADERS 	=	libft.h get_next_line.h
+
+GNLSRC		=	get_next_line.c get_next_line_utils.c
 
 CHARSRC		=	ft_isalpha.c ft_isdigit.c \
 				ft_isalnum.c ft_isascii.c \
@@ -50,6 +52,8 @@ HEADERSDIR	=	includes/
 
 SRCSDIR		=	srcs/
 
+GNLDIR		=	gnl/
+
 CHARDIR		=	char/
 
 STRINGDIR	=	string/
@@ -74,6 +78,8 @@ SRCS		=	$(addprefix $(SRCSDIR)$(CHARDIR),$(CHARSRC)) \
 				$(addprefix $(SRCSDIR)$(WRITEDIR),$(WRITESRC)) \
 				$(addprefix $(SRCSDIR)$(LSTDIR),$(LSTSRC)) \
 				$(addprefix $(SRCSDIR)$(LSTINTDIR),$(INTLSTSRC)) \
+				$(addprefix $(SRCSDIR)$(GNLDIR),$(GNLSRC)) \
+
 
 PRINTF		=	$(addprefix $(SRCSDIR),$(PRINTFDIR))
 

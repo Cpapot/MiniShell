@@ -11,11 +11,12 @@ SRCS		=	minishell.c minishell_utils.c \
 				parsing.c parsing_utils.c shell_split.c \
 				split_pipe.c history.c signals.c \
 				swap_env.c quote.c check_error.c \
-				TEST.c bi_echo.c bi_utils.c bi_env.c \
+				bi_echo.c bi_utils.c bi_env.c \
 				bi_pwd.c bi_export.c bi_cd.c bi_exit.c \
 				exit_status.c error.c bi_unset.c prompt.c \
 				execution.c exec_utils.c exec_invoke.c \
-				exec_pid.c exec_redir.c
+				exec_pid.c exec_redir.c fd_utils.c \
+				parsing_redir.c env_utils.c
 
 
 LIBFTSRC	=	libftprintf.a libft.a printffd.a
@@ -59,7 +60,7 @@ NAME		=	minishell
 
 AR			=	ar rc
 
-CFLAGS		=	-Wall -Wextra -Werror -lreadline5 -g3
+CFLAGS		=	-Wall -Wextra -Werror -g3
 
 CC			=	cc
 
@@ -74,10 +75,9 @@ MKDIR		=	mkdir -p
 #				 | | \ \ |_| | |  __/\__ \.
 #				 |_|  \_\__,_|_|\___||___/
 
-all : PRINTMINISHELL ${NAME}
+all : PRINTMINISHELL lib ${NAME}
 
-${NAME}: $(OBJS)
-	@${MAKE} --no-print-directory lib
+${NAME}: $(OBJS) $(LIBFT)
 	@${CC} ${OBJS} ${LIBFT} -o ${NAME} -lreadline
 	@echo -n "${SUPPR}	${GREEN}${NAME} : 🆗${DEFAULT}\n\n"
 
@@ -95,7 +95,9 @@ clean:
 fclean:
 	@echo "${RED}🗑  ${NAME} cleanded"
 	@echo "${RED}🗑  .log cleanded"
+	@echo "${RED}🗑  valgrind.txt cleanded"
 	@${RM} .log
+	@${RM} valgrind.txt
 	@${RM} ${OBJS}
 	@${RM} ${OBJSDIR}
 	@${RM} ${NAME}
@@ -106,8 +108,26 @@ re:
 	@${MAKE} --no-print-directory all
 
 lib:
-	@echo -n "${YELLOW}${SUPPR}	⌛ Compiling libft & printf"
-	@${MAKE}	-C ${LIBFTDIR}
+	@${MAKE} --no-print-directory -C ${LIBFTDIR}
+
+leaks:	all
+		@${RM} valgrind.txt
+		echo "{" > valgrind_ignore_leaks.txt
+		echo "leak readline" >> valgrind_ignore_leaks.txt
+		echo "	Memcheck:Leak" >> valgrind_ignore_leaks.txt
+		echo "	..." >> valgrind_ignore_leaks.txt
+		echo "	fun:readline" >> valgrind_ignore_leaks.txt
+		echo "}" >> valgrind_ignore_leaks.txt
+		echo "{" >> valgrind_ignore_leaks.txt
+		echo "	leak add_history" >> valgrind_ignore_leaks.txt
+		echo "	Memcheck:Leak" >> valgrind_ignore_leaks.txt
+		echo "	..." >> valgrind_ignore_leaks.txt
+		echo "	fun:add_history" >> valgrind_ignore_leaks.txt
+		echo "}" >> valgrind_ignore_leaks.txt
+		valgrind --suppressions=valgrind_ignore_leaks.txt --leak-check=full \
+			--show-leak-kinds=all --track-fds=yes \
+			--show-mismatched-frees=yes --read-var-info=yes \
+			 --log-file=valgrind.txt -s --trace-children=yes ./${NAME}
 
 PRINTMINISHELL	:
 	@echo "\033[1;34m\033[5G=========================================================="

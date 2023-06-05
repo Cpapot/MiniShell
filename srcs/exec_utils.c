@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 06:12:28 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/20 06:59:17 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/31 16:16:14 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**get_big_path(t_info *info, char **envp)
 	}
 	if (envp[i])
 	{
-		splitted = ft_split((envp[i] + 5), ':', &info->exec_mem);
+		splitted = ft_split((envp[i] + 5), ":", &info->exec_mem);
 		if (!splitted)
 			return (ft_error(ERROR99, info), NULL);
 		return (splitted);
@@ -72,7 +72,7 @@ char	*get_path(t_info *info, char **path, char *cmd)
 			return (stock_free(&mem), ft_error(ERROR99, info), NULL);
 		return (stock_free(&mem), res);
 	}
-	return (NULL);
+	return (ft_error(ERROR20, info), NULL);
 }
 
 char	**cmd_to_tab(t_info *info, t_commands cmd)

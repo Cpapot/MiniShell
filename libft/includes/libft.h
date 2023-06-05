@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 15:20:49 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/12 20:00:01 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/31 16:15:09 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 
 # define LIBFT_H
+# include "get_next_line.h"
 # include "../srcs/ft_printf/ft_printf.h"
 # include "../srcs/ft_printf_fd/ft_printf_fd.h"
 # include <stdlib.h>
@@ -42,7 +43,6 @@ typedef struct s_memstock
 
 typedef struct s_intlist
 {
-	int					nb;
 	int					cont;
 	struct s_intlist	*next;
 }					t_int_list;
@@ -71,8 +71,8 @@ void		stock_free(t_memlist **stock);
 void		*stock_malloc(size_t size, t_memlist **stock);
 void		ft_lstintiter(t_int_list *lst, int (*f)(int));
 t_int_list	*ft_lstintlast(t_int_list *lst);
-t_int_list	*ft_lstintmap(t_int_list *lst, int (*f)(int));
-t_int_list	*ft_lstintnew(int cont);
+t_int_list	*ft_lstintmap(t_int_list *lst, int (*f)(int), t_memlist **stock);
+t_int_list	*ft_lstintnew(int cont, t_memlist **mem);
 int			ft_lstintsize(t_int_list *lst);
 void		ft_lstclear(t_list **lst);
 void		*ft_calloc(size_t count, size_t size);
@@ -100,7 +100,7 @@ char		*ft_strrchr(const char *s, int c);
 char		*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char		*ft_stsubstr(char const *s, int start, size_t len, t_memlist **st);
 char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-char		**ft_split(char const *str, char c, t_memlist **stock);
+char		**ft_split(char *str, char *charset, t_memlist **stock);
 int			ft_strcmp(const char *s1, const char *s2);
 size_t		ft_strlcat(char *dst, const char *src, size_t size);
 size_t		ft_strlcpy(char *dest, const char *src, size_t dstsize);

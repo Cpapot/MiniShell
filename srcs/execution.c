@@ -6,59 +6,25 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/20 06:54:05 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 11:56:17 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/*
-*/
-static int	search_exec2(t_info *info, t_exec *exec, t_commands lst, char **cmd)
-{
-	int	i;
-
-	i = find_builtins(lst.command, info, exec->out_fd);
-	if (i == -1)
-		return (1);
-	if (i == 0)
-	{
-		exec->path = get_path(info, exec->paths, cmd[0]);
-		if (!exec->path)
-			return (1);
-		else
-		{
-			if (handle_command(info, exec, cmd))
-				return (1);
-		}
-	}
-	return (0);
-}
-
-/*
-*/
 static int	search_exec(t_info *info, t_exec *exec, t_commands lst, char **cmd)
 {
-	if (!contains_slash(cmd[0]))
+	if (!cmd)
+		return (1);
+	exec->actual_cmd = lst;
+	if (info->com_count == 2 && is_builtins(lst.command))
 	{
-		if (access(cmd[0], F_OK) != -1)
-		{
-			if (handle_command(info, exec, cmd))
-				return (1);
-		}
-		else
-		{
-			if (search_exec2(info, exec, lst, cmd))
-				return (1);
-		}
+		find_builtins(lst.command, info, exec->out_fd);
+		return (0);
 	}
 	else
-	{
-		if (exec_file(info, exec, cmd))
-			return (1);
 		if (handle_command(info, exec, cmd))
 			return (1);
-	}
 	return (0);
 }
 
@@ -67,31 +33,31 @@ This function loops on every command, if there are redirections they are handled
 after that we get the command from a chained list to an array of strings,
 which we can send as a parameter to the search_exec function.
 */
-static int	start_exec(t_info *info, t_exec *exec)
+static int	start_exec(t_info *info, t_exec *exec, int tmp)
 {
 	int			i;
 	t_commands	*cmds;
 	char		**cmd_tab;
 
-	i = 0;
+	i = -1;
 	cmds = info->final_parse;
-	while (i + 1 < info->com_count)
+	while (++i + 1 < info->com_count)
 	{
+		exec->final_execstat = -1;
 		if (i + 2 >= info->com_count)
 			exec->end = 1;
-		if (redirect(info, exec, cmds[i]))
+		tmp = redirect(info, exec, cmds[i]);
+		if (tmp == -1)
 			return (1);
-		if (cmds[i].command != NULL && cmds[i].command->content != NULL)
+		if (cmds[i].command != NULL && tmp == 0)
 		{
 			cmd_tab = cmd_to_tab(info, cmds[i]);
-			if (!cmd_tab)
-				return (1);
 			if (search_exec(info, exec, cmds[i], cmd_tab))
 				return (1);
-			exec->in_fd = -2;
-			exec->out_fd = -2;
 		}
-		i++;
+		else
+			empty_pipe(exec, info);
+		r_fd(exec);
 	}
 	return (0);
 }
@@ -101,6 +67,8 @@ This function initialize all the values of our t_exec structure
 */
 static int	init_exec(t_info *info, t_exec *exec)
 {
+	exec->final_execstat = -1;
+	exec->fd_list = ft_lstintnew(-2, &info->exec_mem);
 	exec->paths = get_big_path(info, info->envp);
 	exec->envp = info->envp;
 	exec->end = 0;
@@ -121,7 +89,7 @@ void	execution(t_info *info)
 
 	if (init_exec(info, &exec))
 		return ;
-	if (start_exec(info, &exec))
+	if (start_exec(info, &exec, 0))
 		return ;
 	wait_close(&exec);
 	stock_free(&info->exec_mem);

@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 18:07:47 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/06 18:50:58 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/05/29 13:04:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,14 @@ int	is_char_in_str(char c, const char *str)
 	return (0);
 }
 
-void	print_error_exit(t_info *info, char *error, int status)
-{
-	ft_printf_fd(2, "\n%s\n", error);
-	close_minishell(info, status);
-}
-
-void	print_error(char *error)
-{
-	ft_printf_fd(2, "\n%s\n", error);
-}
-
 char	*ft_getenv(char *env, char **envp, t_memlist **stock)
 {
 	int		i;
 	int		u;
 
 	i = 0;
+	if (!env)
+		return (NULL);
 	while (envp[i])
 	{
 		u = 0;
@@ -53,4 +44,28 @@ char	*ft_getenv(char *env, char **envp, t_memlist **stock)
 		i++;
 	}
 	return (NULL);
+}
+
+char	*find_var(char *str, t_info *info)
+{
+	int		i;
+	int		u;
+	char	*result;
+
+	i = 0;
+	while (str[i] && (i == 0 || str[i - 1] != '='))
+		i++;
+	if (str[i] == 0 && str[i - 1] != '=')
+		return (NULL);
+	u = i;
+	while (str[i] && str[i] != '$')
+		i++;
+	if (i == u && str[i - 1] == '=')
+		return (ft_strdup("", &info->exec_mem));
+	if (i == u)
+		return (NULL);
+	result = ft_stsubstr(str, u, i, &info->exec_mem);
+	if (result == NULL)
+		ft_error(ERROR99, info);
+	return (result);
 }

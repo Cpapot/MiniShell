@@ -3,46 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   exec_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:48:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/04/20 04:04:35 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/05/30 15:34:01 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static int	heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
+static int	heredoc(t_info *info, t_commands lst_cmd, int fd[2])
 {
-	int		fd[2];
 	char	*result;
+	char	*tmp;
 
-	if (pipe(fd) == -1)
-		return (ft_error(ERROR11, info), 1);
 	while (42)
 	{
-		result = readline(BLACK"> "WHITE);
+		ft_printf_fd(2, GREEN"> "WHITE);
+		result = get_next_line(0);
 		if (result == NULL)
-			return (ft_error(WARNING, info), 1);
-		if (ft_strcmp(result, lst_cmd.dir->dest))
+			return (ft_error(WARN, info), 0);
+		tmp = ft_substr(result, 0, ft_strlen(result) - 1);
+		if (tmp == NULL)
+			ft_error(ERROR99, info);
+		if (ft_strcmp(tmp, lst_cmd.dir->dest))
 			break ;
-		write(fd[1], result, ft_strlen(result));
-		write(fd[1], "\n", 1);
+		ft_printf_fd(fd[1], result);
+		free(tmp);
 		free(result);
 	}
+	free(tmp);
 	free(result);
-	exec->in_fd = fd[0];
-	close(fd[1]);
 	return (0);
 }
-/*
-int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
+
+int	call_heredoc(t_info *info, t_commands lst_cmd)
 {
 	int		fd[2];
 	pid_t	pid;
 	int		exit_status;
 
 	exit_status = 0;
+	signal(SIGINT, SIG_IGN);
 	if (pipe(fd) == -1)
 		return (ft_error(ERROR11, info), 1);
 	pid = fork();
@@ -50,25 +52,57 @@ int	call_heredoc(t_info *info, t_exec *exec, t_commands lst_cmd)
 		return (ft_error(ERROR10, info), 1);
 	else if (pid == 0)
 	{
-		//signal(SIGINT, catch_signals_heredoc);
-		//heredoc(info, exec, lst_cmd, fd);
-		exit(1);
+		close(fd[0]);
+		signal(SIGINT, catch_signals_heredoc);
+		heredoc(info, lst_cmd, fd);
+		close(fd[1]);
+		close_minishell(info, 0);
 	}
-	printf("exit");
-	waitpid(pid, &exit_status, 0);
-	set_exitstatus(WEXITSTATUS(exit_status));
+	waitpid(pid, &exit_status, 2);
 	close(fd[1]);
-	return (0);
+	set_exitstatus(WEXITSTATUS(exit_status));
+	if (WEXITSTATUS(exit_status) == 1)
+		return (-3);
+	return (fd[0]);
 }
-*/
 
 static int	env_check(t_info *info, t_commands *lst_cmd)
 {
-	if (is_contain_env((*lst_cmd).dir->dest) == 1)
-		(*lst_cmd).dir->dest = \
-			swap_envstr((*lst_cmd).dir->dest, info, info->envp);
-	else if (is_contain_env((*lst_cmd).dir->dest) == 2)
-		(*lst_cmd).dir->dest = swap_exit((*lst_cmd).dir->dest, info);
+	int		i;
+	char	*str;
+
+	str = (*lst_cmd).dir->dest;
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == '\'')
+			i += quote_size(&str[i], 0);
+		else if (str[i] == '$')
+		{
+			if (is_contain_env(&str[i]) == 1)
+				str = swap_envstr(str, info, info->envp, &i);
+			else if (is_contain_env(&str[i]) == 2)
+				str = swap_exit(str, info, &i);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	check_redirect_fd(t_info *info, t_exec *exec)
+{
+	add_fd(&exec->fd_list, exec->out_fd, info->exec_mem);
+	add_fd(&exec->fd_list, exec->in_fd, info->exec_mem);
+	if (exec->in_fd == -1)
+	{
+		return (r_fd(exec), ft_error(ERROR20, info),
+			set_final_exitstatus(1, exec), 1);
+	}
+	if (exec->out_fd == -1)
+	{
+		return (r_fd(exec), ft_error(ERROR15, info),
+			set_final_exitstatus(1, exec), 1);
+	}
 	return (0);
 }
 
@@ -78,8 +112,9 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 	{
 		if (ft_strcmp(lst_cmd.dir->type, "<<"))
 		{
-			if (heredoc(info, exec, lst_cmd))
-				return (1);
+			exec->in_fd = call_heredoc(info, lst_cmd);
+			if (exec->in_fd == -3)
+				return (-1);
 		}
 		else if (env_check(info, &lst_cmd))
 			return (1);
@@ -91,11 +126,9 @@ int	redirect(t_info *info, t_exec *exec, t_commands lst_cmd)
 		else if (ft_strcmp(lst_cmd.dir->type, ">>"))
 			exec->out_fd = open(lst_cmd.dir->dest, \
 			O_RDWR | O_APPEND | O_CREAT, 0644);
+		if (check_redirect_fd(info, exec))
+			return (1);
 		lst_cmd.dir = lst_cmd.dir->next;
 	}
-	if (exec->in_fd == -1)
-		return (ft_error(ERROR14, info), 1);
-	if (exec->out_fd == -1)
-		return (ft_error(ERROR15, info), 1);
 	return (0);
 }

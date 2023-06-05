@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:15:15 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/19 19:46:08 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 13:11:21 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,11 @@ void	minishell_init(t_info *info, int argc, char **argv, char **envp)
 	info->envp_mem = NULL;
 	info->exec_mem = NULL;
 	info->prompt_mem = NULL;
-	info->final_memparse = NULL;
 	info->shell_mem = NULL;
 	info->is_finish = 0;
-	signal(SIGQUIT, SIG_IGN);
 }
 
-void	close_minishell(t_info	*info, int status)
+void	close_minishell(t_info *info, int status)
 {
 	rl_clear_history();
 	stock_free(&info->shell_mem);
@@ -45,10 +43,15 @@ void	prompt(t_info *info)
 {
 	while (1)
 	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, catch_signals);
 		info->prompt_string = readline(prompt_string(info));
 		if (info->prompt_string == NULL)
+		{
+			printf("exit\n");
 			close_minishell(info, 0);
+		}
 		stock_free(&info->final_memparse);
 		if (strlen(info->prompt_string) != 0)
 			break ;
@@ -64,10 +67,7 @@ void	loop(t_info *info)
 		if (info->is_finish != 0)
 			break ;
 		if (info->final_parse != NULL)
-		{
-			//printtest(info);
 			execution(info);
-		}
 		if (info->is_finish != 0)
 			break ;
 		if ((info->lastprompt_string \
