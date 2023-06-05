@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:53:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/06/05 15:35:11 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 15:49:52 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	wait_close(t_exec *exec, int i)
 	exit_status = 0;
 	while (--i >= 0)
 	{
-		ft_printf_fd(2, "%d\n", i);
 		waitpid(exec->pid_tab[i], &exit_status, 0);
 		if (WIFEXITED(exit_status))
 			set_exitstatus(WEXITSTATUS(exit_status));
