@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   swap_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
 /*   Updated: 2023/06/05 15:46:30 by mgagne           ###   ########.fr       */
@@ -78,7 +78,10 @@ char	**parse_env(char *str, t_info *info, char **envp, int index)
 		env = ft_itoa(get_exitstatus());
 	else
 		env = ft_strdup("$", &info->parsing);
-	result = ft_split(env, " \t", &info->parsing);
+	if(!ft_strcmp("", env))
+		result = ft_split(env, " \t", &info->parsing);
+	else
+		result = empty_tab(info);
 	if (!result)
 		ft_error(ERROR99, info);
 	info->tmp_string = str;
@@ -86,7 +89,7 @@ char	**parse_env(char *str, t_info *info, char **envp, int index)
 	return (result);
 }
 
-char	*swap_env_parsed(t_list *lst, t_info *info, char **envp, int *index)
+char	*swap_env_parsed(t_list *lst, t_info *info, char **envp, int index)
 {
 	int		i;
 	t_list	*next;
@@ -95,7 +98,9 @@ char	*swap_env_parsed(t_list *lst, t_info *info, char **envp, int *index)
 	i = 1;
 	next = lst->next;
 	lst->next = NULL;
-	parsedenv = parse_env(lst->content, info, envp, *index);
+	parsedenv = parse_env(lst->content, info, envp, index);
+	if (!parsedenv)
+		ft_error(ERROR99, info);
 	lst->content = parsedenv[0];
 	while (parsedenv[i])
 	{
@@ -127,7 +132,7 @@ void	swap_env(t_list *lst, t_info *info, char **envp)
 			else if (str[i] == '\"')
 				str = swap_envin_quote(str, info, envp, &i);
 			else if (str[i] == '$')
-				str = swap_env_parsed(lst, info, envp, &i);
+				str = swap_env_parsed(lst, info, envp, i);
 			i++;
 		}
 		lst->content = str;

@@ -114,6 +114,7 @@ char		*start(char *str, int size, t_info *info);
 char		**set_endstartenv(char **parsedenv, t_info *info, int index, \
 			int end);
 char		*getenv_instr(char *str, int size, t_info *info, char **envp);
+char		**empty_tab(t_info *info);
 
 /*						history							*/
 void		addto_logs(char *commands, t_info *info);
