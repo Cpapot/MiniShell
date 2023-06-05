@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 12:36:14 by mgagne            #+#    #+#             */
-/*   Updated: 2023/06/05 11:56:17 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 14:57:27 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	execution(t_info *info)
 		return ;
 	if (start_exec(info, &exec, 0))
 		return ;
-	wait_close(&exec);
+	wait_close(&exec, info->com_count - 1);
 	stock_free(&info->exec_mem);
 	return ;
 }

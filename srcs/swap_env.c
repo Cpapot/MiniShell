@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 23:54:59 by cpapot            #+#    #+#             */
-/*   Updated: 2023/06/05 16:29:47 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 15:46:30 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*getenv_instr(char *str, int size, t_info *info, char **envp)
 	if (result == NULL)
 		result = ft_strdup("", &info->parsing);
 	if (result == NULL)
-		return (NULL);
+		return (free(env), NULL);
 	free (env);
 	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 11:47:35 by cpapot            #+#    #+#             */
-/*   Updated: 2023/06/05 12:12:46 by mgagne           ###   ########.fr       */
+/*   Updated: 2023/06/05 16:10:16 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,14 @@ static t_list	*go_next_redirection(t_list *lst)
 
 static void	stock_redir(t_dir *dir, t_list *lst, t_info *info)
 {
-	ft_lstdiradd_back(&dir, ft_lstdirnew(lst->content, \
-	swap_redir_env(lst->next->content, info), &info->final_memparse));
+	t_dir	*new;
+
+	new = ft_lstdirnew(lst->content, \
+	swap_redir_env(lst->next->content, info), &info->final_memparse);
+	if (!new)
+		ft_error(ERROR99, info);
+	ft_lstdiradd_back(&dir, new);
+	return ;
 }
 
 /*
@@ -75,6 +81,8 @@ t_list	*find_redirection(t_list *lst, t_info *info, int id)
 
 	tmp = lst;
 	dir = ft_lstdirnew(NULL, NULL, &info->final_memparse);
+	if (!dir)
+		ft_error(ERROR99, info);
 	if (is_redirection(lst->content))
 	{
 		stock_redir(dir, lst, info);

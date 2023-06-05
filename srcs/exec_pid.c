@@ -3,25 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pid.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:53:56 by mgagne            #+#    #+#             */
-/*   Updated: 2023/06/05 14:02:43 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 15:49:52 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	wait_close(t_exec *exec)
+void	wait_close(t_exec *exec, int i)
 {
 	int	signal;
-	int	i;
 	int	exit_status;
 
 	signal = 0;
-	i = 0;
 	exit_status = 0;
-	while (exec->pid_tab[i] >= 0)
+	while (--i >= 0)
 	{
 		waitpid(exec->pid_tab[i], &exit_status, 0);
 		if (WIFEXITED(exit_status))
@@ -31,9 +29,8 @@ void	wait_close(t_exec *exec)
 			signal = 1;
 			catch_signals_child(WTERMSIG(exit_status));
 		}
-		if (i != 0)
+		if (exec->fd_tab[i] != 0 && exec->fd_tab[i] != 1)
 			close(exec->fd_tab[i]);
-		i++;
 	}
 	if (exec->final_execstat != -1)
 		set_exitstatus(exec->final_execstat);

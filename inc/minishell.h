@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 21:13:44 by cpapot            #+#    #+#             */
-/*   Updated: 2023/06/05 14:52:21 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 14:53:34 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ void		execution(t_info *info);
 
 /*						exec_pid						*/
 int			init_fd_pid(t_info *info, t_exec *exec);
-void		wait_close(t_exec *exec);
+void		wait_close(t_exec *exec, int i);
 void		add_pid(t_info *info, t_exec *exec, pid_t pid);
 
 /*						exec_redir						*/

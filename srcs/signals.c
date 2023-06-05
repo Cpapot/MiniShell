@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 18:23:58 by cpapot            #+#    #+#             */
-/*   Updated: 2023/06/05 15:37:06 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 15:38:28 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	catch_signals_child(int sig)
 		set_exitstatus(130);
 		ft_printf_fd(2, "\n");
 	}
-	else
+	else if (sig == SIGQUIT)
 	{
 		set_exitstatus(131);
 		ft_printf_fd(2, "Quit\n");
