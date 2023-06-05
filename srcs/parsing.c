@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 17:34:27 by cpapot            #+#    #+#             */
-/*   Updated: 2023/05/31 13:23:42 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 16:13:04 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,20 @@ static void	cpy_final_parse(t_commands command, t_info *info)
 	{
 		command.command->content = ft_strdup(command.command->content,
 				&info->final_memparse);
+		if (!command.command->content)
+			ft_error(ERROR99, info);
 		command.command = command.command->next;
 	}
 	while (command.dir)
 	{
 		command.dir->dest = ft_strdup(command.dir->dest,
 				&info->final_memparse);
+		if (!command.dir->dest)
+			ft_error(ERROR99, info);
 		command.dir->type = ft_strdup(command.dir->type,
 				&info->final_memparse);
+		if (!command.dir->type)
+			ft_error(ERROR99, info);
 		command.dir = command.dir->next;
 	}
 }

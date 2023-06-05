@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
+/*   By: mgagne <mgagne@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 14:06:38 by cpapot            #+#    #+#             */
-/*   Updated: 2023/04/14 13:11:09 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 15:55:16 by mgagne           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,3 @@ int	is_line_valid(t_list *lst, t_info *info)
 	}
 	return (0);
 }
-/*
-int	is_command_line(t_list *lst, t_info *info)
-{
-
-	if (lst != NULL && lst->content != NULL && lst->content[0] == '/')
-		return (ft_error(ERROR7, info), 0);
-	return (1);
-}*/
