@@ -6,7 +6,7 @@
 /*   By: cpapot <cpapot@student.42lyon.fr >         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/19 19:58:49 by mgagne            #+#    #+#             */
-/*   Updated: 2023/06/01 11:54:10 by cpapot           ###   ########.fr       */
+/*   Updated: 2023/06/05 14:32:29 by cpapot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static void	exec_bi_or_path(t_info *info, t_exec *exec, int fd[2], char **cmd)
 
 static int	search_and_exec(t_info *info, t_exec *exec, int fd[2], char **cmd)
 {
-	close(fd[0]);
 	if (!contains_slash(cmd[0]))
 	{
 		if (access(cmd[0], F_OK | X_OK) != -1)
@@ -47,13 +46,9 @@ static int	search_and_exec(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	else
 	{
 		if (exec_file(info, exec, cmd))
-		{
-			close(fd[1]);
 			close_minishell(info, get_exitstatus());
-		}
 		exec_command(info, exec, fd, cmd);
 	}
-	close(fd[1]);
 	close_minishell(info, get_exitstatus());
 	return (1);
 }
@@ -77,9 +72,8 @@ void	exec_command(t_info *info, t_exec *exec, int fd[2], char **cmd)
 	if (execve(exec->path, cmd, exec->envp) == -1)
 	{
 		ft_error(ERROR12, info);
-		return (close(fd[1]), close_minishell(info, 1));
+		return (close_minishell(info, 1));
 	}
-	close(fd[1]);
 	exit(1);
 }
 
@@ -119,11 +113,12 @@ int	handle_command(t_info *info, t_exec *exec, char **cmd)
 	{
 		signal(SIGINT, &catch_signals_child);
 		signal(SIGQUIT, &catch_signals_child);
+		close(fd[0]);
 		search_and_exec(info, exec, fd, cmd);
 		close_minishell(info, 0);
 	}
 	add_pid(info, exec, pid);
-	close(fd[1]);
 	exec->fd = fd[0];
+	close(fd[1]);
 	return (0);
 }
